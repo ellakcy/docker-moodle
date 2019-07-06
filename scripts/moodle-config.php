@@ -281,14 +281,14 @@ $CFG->admin = 'admin';
 //
 // Enable when setting up advanced reverse proxy load balancing configurations,
 // it may be also necessary to enable this when using port forwarding.``
-if(filter_var(getenv(MOODLE_REVERSE_LB),FILTER_VALIDATE_BOOLEAN)){
+if(filter_var(getenv('MOODLE_REVERSE_LB'),FILTER_VALIDATE_BOOLEAN)){
   $CFG->reverseproxy = true;
 }
 
 //
 // Enable when using external SSL appliance for performance reasons.
 // Please note that site may be accessible via https: or https:, but not both!
-if(filter_var(getenv(MOODLE_SSL),FILTER_VALIDATE_BOOLEAN)){
+if(filter_var(getenv('MOODLE_SSL'),FILTER_VALIDATE_BOOLEAN)){
      $CFG->sslproxy = true;
 }
 

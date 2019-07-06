@@ -15,7 +15,6 @@ COPY ./scripts/detect_mariadb.php /opt/detect_mariadb.php
 
 RUN chmod +x /usr/local/bin/entrypoint.sh && \
     apt-get update && \
-    apt-get install -y libmysqlclient-dev &&\
     docker-php-ext-install pdo mysqli pdo_mysql &&\
     apt-get autoremove -y &&\
     apt-get autoclean &&\
