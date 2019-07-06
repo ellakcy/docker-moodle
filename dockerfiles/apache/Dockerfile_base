@@ -1,12 +1,12 @@
 # Dockerfile for moodle instance.
 # Forked from Jonathan Hardison's <jmh@jonathanhardison.com> docker version. https://github.com/jmhardison/docker-moodle
 
-FROM  php:7.0-apache
+FROM  php:7-apache
 MAINTAINER Dimitrios Desyllas <pcmagas@disroot.org>
 #Original Maintainer Jon Auer <jda@coldshore.com>
 
 # Replace for later version
-ARG VERSION=34
+ARG VERSION=37
 
 VOLUME ["/var/moodledata"]
 EXPOSE 80
@@ -26,14 +26,13 @@ ENV DEBIAN_FRONTEND noninteractive \
 
 # Installing php and external tools
 RUN apt-get update && \
-		apt-get -f -y install --no-install-recommends rsync unzip netcat libxmlrpc-c++8-dev libxml2-dev libpng-dev libicu-dev libmcrypt-dev &&\
+		apt-get -f -y install --no-install-recommends rsync unzip netcat libxmlrpc-c++8-dev libxml2-dev libpng-dev libicu-dev libmcrypt-dev libzip-dev &&\
  		docker-php-ext-install xmlrpc && \
 		docker-php-ext-install mbstring && \
 		docker-php-ext-install zip && \
 		docker-php-ext-install xml && \
 		docker-php-ext-install intl && \
  		docker-php-ext-install soap && \
- 		docker-php-ext-install mcrypt && \
 		docker-php-ext-install gd && \
 		docker-php-ext-install opcache && \
 		echo "Installing moodle" && \

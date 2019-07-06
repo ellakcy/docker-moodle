@@ -13,15 +13,6 @@ EXPOSE 80
 COPY ./scripts/entrypoint.sh /usr/local/bin/entrypoint.sh
 COPY ./scripts/detect_mariadb.php /opt/detect_mariadb.php
 
-# Installing php and external tools
-#RUN chmod +x /usr/local/bin/entrypoint.sh && \
-#    apt-get update && \
-#    apt-get install mysql-client &&\
-#    docker-php-ext-install pdo mysqli pdo_mysql &&\
-#		apt-get autoremove -y &&\
-#		apt-get autoclean &&\
-#		rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* cache/* /var/lib/log/*
-
 RUN chmod +x /usr/local/bin/entrypoint.sh && \
     apt-get update && \
     apt-get install -y libmysqlclient-dev &&\
