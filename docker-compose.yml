@@ -29,7 +29,7 @@ services:
       - "moodle_mysql_db:moodle_db"
       - "moodle_apache_base"
     ports:
-      - "6080:80"
+      - "6880:80"
     environment:
       MOODLE_DB_HOST: "moodle_mysql_db"
       MOODLE_DB_NAME: "${MOODLE_DB_NAME}"
@@ -37,7 +37,7 @@ services:
       MOODLE_DB_PASSWORD: "${MOODLE_MYSQL_PASSWORD}"
       MOODLE_ADMIN: "${MOODLE_ADMIN}"
       MOODLE_ADMIN_PASSWORD: "${MOODLE_ADMIN_PASSWORD}"
-      MOODLE_URL: "http://0.0.0.0:6080"
+      MOODLE_URL: "http://0.0.0.0:6880"
 
   # postgresql running variant
   moodle_psql_db:
@@ -56,7 +56,7 @@ services:
       - "moodle_psql_db:moodle_db"
       - "moodle_apache_base"
     ports:
-      - "6082:80"
+      - "6882:80"
     environment:
       MOODLE_DB_HOST: "moodle_psql_db"
       MOODLE_DB_NAME: "${MOODLE_DB_NAME}"
@@ -64,7 +64,7 @@ services:
       MOODLE_DB_PASSWORD: "${MOODLE_MYSQL_PASSWORD}"
       MOODLE_ADMIN: "${MOODLE_ADMIN}"
       MOODLE_ADMIN_PASSWORD: "${MOODLE_ADMIN_PASSWORD}"
-      MOODLE_URL: "http://0.0.0.0:6082"
+      MOODLE_URL: "http://0.0.0.0:6882"
 
   # Testing mariadb support
   moodle_maria_db:
@@ -82,7 +82,7 @@ services:
         - "moodle_mysql"
         - "moodle_maria_db:moodle_db"
       ports:
-        - "6081:80"
+        - "6881:80"
       environment:
         MOODLE_DB_HOST: "moodle_maria_db"
         MOODLE_DB_NAME: "${MOODLE_DB_NAME}"
@@ -90,7 +90,7 @@ services:
         MOODLE_DB_PASSWORD: "${MOODLE_MYSQL_PASSWORD}"
         MOODLE_ADMIN: "${MOODLE_ADMIN}"
         MOODLE_ADMIN_PASSWORD: "${MOODLE_ADMIN_PASSWORD}"
-        MOODLE_URL: "http://0.0.0.0:6081"
+        MOODLE_URL: "http://0.0.0.0:6881"
 
 #Alpine fpm based images
   #Basic alpine fpm image
@@ -105,7 +105,7 @@ services:
   nginx_mysql:
    image: nginx:alpine
    ports:
-     - "7070:7070"
+     - "7870:7070"
    volumes:
      - './conf/nginx/nginx_mysql.conf:/etc/nginx/nginx.conf:ro'
    links:
@@ -137,13 +137,13 @@ services:
       MOODLE_DB_PASSWORD: "${MOODLE_MYSQL_PASSWORD}"
       MOODLE_ADMIN: "${MOODLE_ADMIN}"
       MOODLE_ADMIN_PASSWORD: "${MOODLE_ADMIN_PASSWORD}"
-      MOODLE_URL: "http://0.0.0.0:7070"
+      MOODLE_URL: "http://0.0.0.0:7870"
 
   #Mariadb for demοnstration
   nginx_maria:
    image: nginx:alpine
    ports:
-     - "7071:7071"
+     - "7871:7071"
    volumes:
      - './conf/nginx/nginx_mariadb.conf:/etc/nginx/nginx.conf:ro'
    links:
@@ -172,13 +172,13 @@ services:
       MOODLE_DB_PASSWORD: "${MOODLE_MYSQL_PASSWORD}"
       MOODLE_ADMIN: "${MOODLE_ADMIN}"
       MOODLE_ADMIN_PASSWORD: "${MOODLE_ADMIN_PASSWORD}"
-      MOODLE_URL: "http://0.0.0.0:7071"
+      MOODLE_URL: "http://0.0.0.0:7871"
 
   #Postgresql
   nginx_pgsql:
       image: nginx:alpine
       ports:
-        - "7072:7072"
+        - "7872:7072"
       volumes:
         - './conf/nginx/nginx_psql.conf:/etc/nginx/nginx.conf:ro'
       links:
