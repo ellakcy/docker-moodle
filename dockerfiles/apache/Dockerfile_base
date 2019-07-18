@@ -1,7 +1,7 @@
 # Dockerfile for moodle instance.
 # Forked from Jonathan Hardison's <jmh@jonathanhardison.com> docker version. https://github.com/jmhardison/docker-moodle
 
-FROM  php:7.0-apache
+FROM  php:7.2-apache
 MAINTAINER Dimitrios Desyllas <pcmagas@disroot.org>
 #Original Maintainer Jon Auer <jda@coldshore.com>
 
