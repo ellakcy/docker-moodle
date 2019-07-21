@@ -14,12 +14,8 @@ services:
    ports:
      - "7870:7070"
    volumes:
-     - './conf/nginx/nginx_mysql.conf:/etc/nginx/nginx.conf:ro'
+     - './conf/nginx/build/nginx_latest.conf:/etc/nginx/nginx.conf:ro'
    links:
-     - 'moodle_alpine_fpm_mysql'
-     - 'moodle_alpine_fpm_mariadb'
-     - 'moodle_alpine_fpm_psql'
-   volumes_from:
      - 'moodle_alpine_fpm_mysql'
      - 'moodle_alpine_fpm_mariadb'
      - 'moodle_alpine_fpm_psql'
@@ -68,6 +64,8 @@ services:
     links:
       - "moodle_mariadb_alpine_db:moodle_db"
       - "moodle_alpine_fpm_base"
+    volumes:
+      - "./volumes/latest/php/mariabd:/var/www/html"
     environment:
       MOODLE_DB_HOST: "moodle_mariadb_alpine_db"
       MOODLE_DB_NAME: "${MOODLE_DB_NAME}"
@@ -93,6 +91,8 @@ services:
       links:
         - "moodle_psql_alpine_db:moodle_db"
         - "moodle_alpine_fpm_base"
+      volumes:
+        - "./volumes/latest/php/psql:/var/www/html"
       environment:
         MOODLE_DB_HOST: "moodle_psql_alpine_db"
         MOODLE_DB_NAME: "${MOODLE_DB_NAME}"
