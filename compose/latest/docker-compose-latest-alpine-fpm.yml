@@ -10,7 +10,9 @@ services:
   nginx:
    image: nginx:alpine
    ports:
-    - "7870:7070"
+    - "7870:7870"
+    - "7871:7871"
+    - "7872:7872"
    volumes:
     - '../../conf/nginx/build/nginx_latest.conf:/etc/nginx/nginx.conf:ro'
     - "mysql-www:/var/www/html/mysql"

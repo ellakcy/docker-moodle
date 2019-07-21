@@ -31,8 +31,8 @@ services:
       - 'nginx_pgsql_reverse'
     restart: always
     volumes:
-      - './conf/nginx/nginx_ssl_reverse.conf:/etc/nginx/nginx.conf:ro'
-      - './conf/certs:/etc/nginx/certs:ro'
+      - '../../conf/nginx/nginx_ssl_reverse.conf:/etc/nginx/nginx.conf:ro'
+      - '../../conf/certs:/etc/nginx/certs:ro'
 
 ##################### Images for test ##########################################
 

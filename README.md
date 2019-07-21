@@ -5,13 +5,9 @@ A Docker image that installs and runs the latest Moodle stable, with external My
 
 ## Buidling
 
-```bash
-git clone https://github.com/ellakcy/docker-moodle.git
-cd docker-moodle
-docker build -t moodle .
-```
+Buidling the required images using this repo is a liitle laborious and the whole process is described in the `CONTRIBUTING.md` file.
 
-The build will produce the following images for now all images are running apache ang php7.0:
+## Available Images
 
 * `ellakcy/moodle:apache_base` : A base image over apache, where you just can base your own moodle image for the database you want.
 * `ellakcy/moodle:mysql_maria_apache`: An image where provides moodle installation supporting mysql or mariadb.
