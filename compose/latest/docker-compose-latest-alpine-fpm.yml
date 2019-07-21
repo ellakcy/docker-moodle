@@ -1,7 +1,6 @@
 version: '3'
 services:
-#Alpine fpm based images
-  #Basic alpine fpm image
+
   moodle_alpine_fpm_base:
     build:
       context: ../..
@@ -11,13 +10,13 @@ services:
   nginx:
    image: nginx:alpine
    ports:
-     - "7870:7070"
+    - "7870:7070"
    volumes:
-     - './conf/nginx/build/nginx_latest.conf:/etc/nginx/nginx.conf:ro'
+    - './conf/nginx/build/nginx_latest.conf:/etc/nginx/nginx.conf:ro'
    links:
-     - 'moodle_alpine_fpm_mysql'
-     - 'moodle_alpine_fpm_mariadb'
-     - 'moodle_alpine_fpm_psql'
+    - 'moodle_alpine_fpm_mysql'
+    - 'moodle_alpine_fpm_mariadb'
+    - 'moodle_alpine_fpm_psql'
   
   #Mysql variant
   moodle_mysql_alpine_db:
@@ -75,28 +74,28 @@ services:
       MOODLE_URL: "http://0.0.0.0:7871"
 
   #Postgresql
-   moodle_psql_alpine_db:
-      image: postgres
-      environment:
-        POSTGRES_DB: "${MOODLE_DB_NAME}"
-        POSTGRES_USER: '${MOODLE_MYSQL_USER}'
-        POSTGRES_PASSWORD: '${MOODLE_MYSQL_PASSWORD}'
+  moodle_psql_alpine_db:
+    image: postgres
+    environment:
+      POSTGRES_DB: "${MOODLE_DB_NAME}"
+      POSTGRES_USER: '${MOODLE_MYSQL_USER}'
+      POSTGRES_PASSWORD: '${MOODLE_MYSQL_PASSWORD}'
 
   moodle_alpine_fpm_psql:
-      build:
-        context: ../..
-        dockerfile: dockerfiles/fpm_alpine/Dockerfile_postgresql
-      image: ellakcy/moodle:postgresql_fpm_alpine
-      links:
-        - "moodle_psql_alpine_db:moodle_db"
-        - "moodle_alpine_fpm_base"
-      volumes:
-        - "./volumes/latest/php/psql:/var/www/html"
-      environment:
-        MOODLE_DB_HOST: "moodle_psql_alpine_db"
-        MOODLE_DB_NAME: "${MOODLE_DB_NAME}"
-        MOODLE_DB_USER: '${MOODLE_MYSQL_USER}'
-        MOODLE_DB_PASSWORD: "${MOODLE_MYSQL_PASSWORD}"
-        MOODLE_ADMIN: "${MOODLE_ADMIN}"
-        MOODLE_ADMIN_PASSWORD: "${MOODLE_ADMIN_PASSWORD}"
-        MOODLE_URL: "http://0.0.0.0:7072"
+    build:
+      context: ../..
+      dockerfile: dockerfiles/fpm_alpine/Dockerfile_postgresql
+    image: ellakcy/moodle:postgresql_fpm_alpine
+    links:
+      - "moodle_psql_alpine_db:moodle_db"
+      - "moodle_alpine_fpm_base"
+    volumes:
+      - "./volumes/latest/php/psql:/var/www/html"
+    environment:
+      MOODLE_DB_HOST: "moodle_psql_alpine_db"
+      MOODLE_DB_NAME: "${MOODLE_DB_NAME}"
+      MOODLE_DB_USER: '${MOODLE_MYSQL_USER}'
+      MOODLE_DB_PASSWORD: "${MOODLE_MYSQL_PASSWORD}"
+      MOODLE_ADMIN: "${MOODLE_ADMIN}"
+      MOODLE_ADMIN_PASSWORD: "${MOODLE_ADMIN_PASSWORD}"
+      MOODLE_URL: "http://0.0.0.0:7072"
