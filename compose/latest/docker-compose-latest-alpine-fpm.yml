@@ -109,7 +109,7 @@ services:
       MOODLE_DB_PASSWORD: "${MOODLE_MYSQL_PASSWORD}"
       MOODLE_ADMIN: "${MOODLE_ADMIN}"
       MOODLE_ADMIN_PASSWORD: "${MOODLE_ADMIN_PASSWORD}"
-      MOODLE_URL: "http://0.0.0.0:7072"
+      MOODLE_URL: "http://0.0.0.0:7872"
 
 volumes:
   mariadb-www:
