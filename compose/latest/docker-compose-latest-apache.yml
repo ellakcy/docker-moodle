@@ -6,7 +6,7 @@ services:
   # A base image for apache - based moodle builds
   moodle_apache_base:
       build:
-        context: .
+        context: ../..
         dockerfile: dockerfiles/apache/Dockerfile_base
       image: ellakcy/moodle:apache_base
 
@@ -22,7 +22,7 @@ services:
 
   moodle_mysql:
     build:
-      context: .
+      context: ../..
       dockerfile: dockerfiles/apache/Dockerfile_mysql
     image: ellakcy/moodle:mysql_maria_apache
     links:
@@ -49,7 +49,7 @@ services:
 
   moodle_psql:
     build:
-      context: .
+      context: ../..
       dockerfile: dockerfiles/apache/Dockerfile_postgrtesql
     image: ellakcy/moodle:postgresql_apache
     links:

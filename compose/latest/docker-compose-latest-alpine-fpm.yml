@@ -1,11 +1,10 @@
 version: '3'
 services:
-
 #Alpine fpm based images
   #Basic alpine fpm image
   moodle_alpine_fpm_base:
     build:
-      context: .
+      context: ../..
       dockerfile: dockerfiles/fpm_alpine/Dockerfile_base
     image: ellakcy/moodle:alpine_fpm_base
 
@@ -32,7 +31,7 @@ services:
 
   moodle_alpine_fpm_mysql:
     build:
-      context: .
+      context: ../..
       dockerfile: dockerfiles/fpm_alpine/Dockerfile_mysql
     image: ellakcy/moodle:mysql_maria_fpm_alpine
     links:
@@ -85,7 +84,7 @@ services:
 
   moodle_alpine_fpm_psql:
       build:
-        context: .
+        context: ../..
         dockerfile: dockerfiles/fpm_alpine/Dockerfile_postgresql
       image: ellakcy/moodle:postgresql_fpm_alpine
       links:
