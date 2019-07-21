@@ -1,14 +1,10 @@
 version: '2'
 services:
-
-# apache based images
-
-  # A base image for apache - based moodle builds
   moodle_apache_base:
-      build:
-        context: ../..
-        dockerfile: dockerfiles/apache/Dockerfile_base
-      image: ellakcy/moodle:apache_base
+    build:
+      context: ../..
+      dockerfile: dockerfiles/apache/Dockerfile_base
+    image: ellakcy/moodle:apache_base
 
   # Mysql running variant
   moodle_mysql_db:
@@ -68,26 +64,26 @@ services:
 
   # Testing mariadb support
   moodle_maria_db:
-      image: mariadb:10.2
-      environment:
-        MYSQL_RANDOM_ROOT_PASSWORD: "yes"
-        MYSQL_ONETIME_PASSWORD: "yes"
-        MYSQL_DATABASE: "${MOODLE_DB_NAME}"
-        MYSQL_USER: '${MOODLE_MYSQL_USER}'
-        MYSQL_PASSWORD: '${MOODLE_MYSQL_PASSWORD}'
+    image: mariadb:10.2
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+      MYSQL_ONETIME_PASSWORD: "yes"
+      MYSQL_DATABASE: "${MOODLE_DB_NAME}"
+      MYSQL_USER: '${MOODLE_MYSQL_USER}'
+      MYSQL_PASSWORD: '${MOODLE_MYSQL_PASSWORD}'
 
   moodle_maria:
-      image: ellakcy/moodle:mysql_maria_apache
-      links:
-        - "moodle_mysql"
-        - "moodle_maria_db:moodle_db"
-      ports:
-        - "6881:80"
-      environment:
-        MOODLE_DB_HOST: "moodle_maria_db"
-        MOODLE_DB_NAME: "${MOODLE_DB_NAME}"
-        MOODLE_DB_USER: '${MOODLE_MYSQL_USER}'
-        MOODLE_DB_PASSWORD: "${MOODLE_MYSQL_PASSWORD}"
-        MOODLE_ADMIN: "${MOODLE_ADMIN}"
-        MOODLE_ADMIN_PASSWORD: "${MOODLE_ADMIN_PASSWORD}"
-        MOODLE_URL: "http://0.0.0.0:6881"
+    image: ellakcy/moodle:mysql_maria_apache
+    links:
+      - "moodle_mysql"
+      - "moodle_maria_db:moodle_db"
+    ports:
+      - "6881:80"
+    environment:
+      MOODLE_DB_HOST: "moodle_maria_db"
+      MOODLE_DB_NAME: "${MOODLE_DB_NAME}"
+      MOODLE_DB_USER: '${MOODLE_MYSQL_USER}'
+      MOODLE_DB_PASSWORD: "${MOODLE_MYSQL_PASSWORD}"
+      MOODLE_ADMIN: "${MOODLE_ADMIN}"
+      MOODLE_ADMIN_PASSWORD: "${MOODLE_ADMIN_PASSWORD}"
+      MOODLE_URL: "http://0.0.0.0:6881"

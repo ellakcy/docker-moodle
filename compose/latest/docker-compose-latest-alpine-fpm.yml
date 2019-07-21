@@ -1,4 +1,4 @@
-version: '3'
+version: '3.7'
 services:
 
   moodle_alpine_fpm_base:
@@ -12,7 +12,13 @@ services:
    ports:
     - "7870:7070"
    volumes:
-    - './conf/nginx/build/nginx_latest.conf:/etc/nginx/nginx.conf:ro'
+    - '../../conf/nginx/build/nginx_latest.conf:/etc/nginx/nginx.conf:ro'
+    - "mysql-www:/var/www/html/mysql"
+    - "mysql-data:/var/moodledata/mysql"
+    - "psql-www:/var/www/html/psql"
+    - "psql-data:/var/moodledata/psql"
+    - "psql-www:/var/www/html/mariadb"
+    - "psql-data:/var/moodledata/mariadb"
    links:
     - 'moodle_alpine_fpm_mysql'
     - 'moodle_alpine_fpm_mariadb'
@@ -37,7 +43,8 @@ services:
       - "moodle_mysql_alpine_db:moodle_db"
       - "moodle_alpine_fpm_base"
     volumes:
-      - "./volumes/latest/php/mysql:/var/www/html"
+      - "mysql-www:/var/www/html"
+      - "mysql-data:/var/moodledata"
     environment:
       MOODLE_DB_HOST: "moodle_mysql_alpine_db"
       MOODLE_DB_NAME: "${MOODLE_DB_NAME}"
@@ -63,7 +70,8 @@ services:
       - "moodle_mariadb_alpine_db:moodle_db"
       - "moodle_alpine_fpm_base"
     volumes:
-      - "./volumes/latest/php/mariabd:/var/www/html"
+      - "mariadb-www:/var/www/html"
+      - "mariadb-data:/var/moodledata"
     environment:
       MOODLE_DB_HOST: "moodle_mariadb_alpine_db"
       MOODLE_DB_NAME: "${MOODLE_DB_NAME}"
@@ -90,7 +98,8 @@ services:
       - "moodle_psql_alpine_db:moodle_db"
       - "moodle_alpine_fpm_base"
     volumes:
-      - "./volumes/latest/php/psql:/var/www/html"
+      - "psql-www:/var/www/html"
+      - "psql-data:/var/moodledata"
     environment:
       MOODLE_DB_HOST: "moodle_psql_alpine_db"
       MOODLE_DB_NAME: "${MOODLE_DB_NAME}"
@@ -99,3 +108,11 @@ services:
       MOODLE_ADMIN: "${MOODLE_ADMIN}"
       MOODLE_ADMIN_PASSWORD: "${MOODLE_ADMIN_PASSWORD}"
       MOODLE_URL: "http://0.0.0.0:7072"
+
+volumes:
+  mariadb-www:
+  mariadb-data: 
+  mysql-www: 
+  mysql-data: 
+  psql-www: 
+  psql-data:
