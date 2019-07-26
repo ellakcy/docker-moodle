@@ -1,7 +1,7 @@
 # Dockerfile for moodle instance.
 # Forked from Jonathan Hardison's <jmh@jonathanhardison.com> docker version. https://github.com/jmhardison/docker-moodle
-
-FROM  ellakcy/moodle:apache_base
+ARG BASE_IMAGE = ellakcy/moodle:apache_base
+FROM  ${BASE_IMAGE}
 MAINTAINER Dimitrios Desyllas <pcmagas@disroot.org>
 #Original Maintainer Jon Auer <jda@coldshore.com>
 

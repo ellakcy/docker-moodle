@@ -8,7 +8,7 @@ services:
       build:
         context: .
         dockerfile: dockerfiles/apache/Dockerfile_base
-        arg:
+        args:
           VERSION: $MOODLE_LTS
       image: ellakcy/moodle:lts_apache_base
 
@@ -76,7 +76,7 @@ services:
         MYSQL_ONETIME_PASSWORD: "yes"
         MYSQL_DATABASE: "${MOODLE_DB_NAME}"
         MYSQL_USER: '${MOODLE_MYSQL_USER}'
-        MYSQL_PASSWORD: '${MOODLE_MYSQL_PASSWORD}'
+        MYSQL_PASSWORD: '${MOODLE_MYSQL_PASSWORD}'args
 
   moodle_maria:
       image: ellakcy/moodle:lts_mysql_maria_apache
@@ -100,6 +100,8 @@ services:
     build:
       context: .
       dockerfile: dockerfiles/fpm_alpine/Dockerfile_base
+      args:
+        VERSION: $MOODLE_LTS
     image: ellakcy/moodle:lts_alpine_fpm_base
 
   #Mysql variant

@@ -1,4 +1,5 @@
-FROM  ellakcy/moodle:alpine_fpm_base
+ARG BASE_IMAGE = ellakcy/moodle:alpine_fpm_base
+FROM  $BASE_IMAGE
 MAINTAINER Dimitrios Desyllas <pcmagas@disroot.org>
 
 COPY ./scripts/entrypoint.sh /usr/local/bin/entrypoint.sh
