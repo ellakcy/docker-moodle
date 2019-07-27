@@ -4,6 +4,8 @@ services:
     build:
       context: ../..
       dockerfile: dockerfiles/apache/Dockerfile_base
+      args: 
+        VERSION: ${MOODLE_LATEST}
     image: ellakcy/moodle:apache_base
 
   # Mysql running variant

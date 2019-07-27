@@ -5,6 +5,8 @@ services:
     build:
       context: ../..
       dockerfile: dockerfiles/fpm_alpine/Dockerfile_base
+      args: 
+        VERSION: ${MOODLE_LATEST}
     image: ellakcy/moodle:alpine_fpm_base
 
   nginx:
@@ -19,8 +21,8 @@ services:
     - "mysql-data:/var/moodledata/mysql"
     - "psql-www:/var/www/html/psql"
     - "psql-data:/var/moodledata/psql"
-    - "psql-www:/var/www/html/mariadb"
-    - "psql-data:/var/moodledata/mariadb"
+    - "mariadb-www:/var/www/html/mariadb"
+    - "mariadb-data:/var/moodledata/mariadb"
    links:
     - 'moodle_alpine_fpm_mysql'
     - 'moodle_alpine_fpm_mariadb'
