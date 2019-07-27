@@ -3,3 +3,4 @@ pg_test
 volume
 *.orig
 volumes
+*~HEAD
