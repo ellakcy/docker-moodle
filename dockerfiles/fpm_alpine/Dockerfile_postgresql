@@ -1,4 +1,4 @@
-ARG BASE_IMAGE=ellakcy/moodle:alpine_fpm_base
+ARG BASE_IMAGE=alpine_fpm_base
 FROM ellakcy/moodle:${BASE_IMAGE}
 MAINTAINER Dimitrios Desyllas <pcmagas@disroot.org>
 
