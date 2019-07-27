@@ -14,7 +14,7 @@ services:
       context: ../..
       dockerfile: dockerfiles/fpm_alpine/Dockerfile_postgresql
       args: 
-       BASE_IMAGE: ellakcy/moodle:alpine_fpm_base_lts
+       BASE_IMAGE: alpine_fpm_base_lts
     image: ellakcy/moodle:postgresql_fpm_alpine
     links:
       - "moodle_psql_alpine_db:moodle_db"
@@ -36,7 +36,7 @@ services:
       context: ../..
       dockerfile: dockerfiles/fpm_alpine/Dockerfile_mysql
       args: 
-       BASE_IMAGE: ellakcy/moodle:alpine_fpm_base_lts
+       BASE_IMAGE: alpine_fpm_base_lts
     image: ellakcy/moodle:mysql_maria_fpm_alpine
     links:
       - "moodle_mysql_alpine_db:moodle_db"
@@ -54,7 +54,7 @@ services:
       MOODLE_URL: "http://0.0.0.0:7870"
 
   moodle_alpine_fpm_mariadb:
-    image: ellakcy/moodle:mysql_maria_fpm_alpine_lts
+    image: mysql_maria_fpm_alpine_lts
     links:
       - "moodle_mariadb_alpine_db:moodle_db"
       - "moodle_alpine_fpm_base"
