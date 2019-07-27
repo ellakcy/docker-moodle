@@ -1,6 +1,6 @@
 # Dockerfile for moodle instance.
 
-FROM  php:7.0-fpm-alpine
+FROM  php:7.2-fpm-alpine
 MAINTAINER Dimitrios Desyllas <pcmagas@disroot.org>
 #Original Maintainer Jon Auer <jda@coldshore.com>
 
