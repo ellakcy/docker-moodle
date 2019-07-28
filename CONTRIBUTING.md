@@ -9,3 +9,13 @@ Compose File | Puproce
 `docker-compose-latest-apache.yml` | For apache based variants
 `docker-compose-ssl-reverse-nginx.yml` | For testing the nginx as SSL reverse proxy.
 
+# Port conventions used for launching the containers
+
+In this project the following ports are being used:
+
+Port Range | Usage by | LTS VERSION
+--- | --- | ---
+7880-7882 | Alpine FPM IMAGES | YES
+7870-7872 | Alpine FPM IMAGES | NO
+6880-6882 | Apache Based Images | YES
+6
