@@ -6,18 +6,18 @@ services:
       dockerfile: dockerfiles/apache/Dockerfile_base
       args: 
         VERSION: ${MOODLE_LTS}
-    image: ellakcy/moodle:apache_base
+    image: ellakcy/moodle:apache_base_lts
 
   moodle_psql:
     build:
       context: ../..
       dockerfile: dockerfiles/apache/Dockerfile_postgrtesql
-    image: ellakcy/moodle:postgresql_apache
+    image: ellakcy/moodle:postgresql_apache_lts
     links:
       - "moodle_psql_db:moodle_db"
       - "moodle_apache_base"
     ports:
-      - "6882:80"
+      - "6082:80"
     environment:
       MOODLE_DB_HOST: "moodle_psql_db"
       MOODLE_DB_NAME: "${MOODLE_DB_NAME}"
@@ -31,12 +31,12 @@ services:
     build:
       context: ../..
       dockerfile: dockerfiles/apache/Dockerfile_mysql
-    image: ellakcy/moodle:mysql_maria_apache
+    image: ellakcy/moodle:mysql_maria_apache_lts
     links:
       - "moodle_mysql_db:moodle_db"
       - "moodle_apache_base"
     ports:
-      - "6880:80"
+      - "6080:80"
     environment:
       MOODLE_DB_HOST: "moodle_mysql_db"
       MOODLE_DB_NAME: "${MOODLE_DB_NAME}"
@@ -47,12 +47,12 @@ services:
       MOODLE_URL: "http://0.0.0.0:6880"
   
   moodle_maria:
-    image: ellakcy/moodle:mysql_maria_apache
+    image: ellakcy/moodle:mysql_maria_apache_lts
     links:
       - "moodle_mysql"
       - "moodle_maria_db:moodle_db"
     ports:
-      - "6881:80"
+      - "6081:80"
     environment:
       MOODLE_DB_HOST: "moodle_maria_db"
       MOODLE_DB_NAME: "${MOODLE_DB_NAME}"
