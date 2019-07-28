@@ -29,7 +29,7 @@ services:
       MOODLE_DB_PASSWORD: "${MOODLE_MYSQL_PASSWORD}"
       MOODLE_ADMIN: "${MOODLE_ADMIN}"
       MOODLE_ADMIN_PASSWORD: "${MOODLE_ADMIN_PASSWORD}"
-      MOODLE_URL: "http://0.0.0.0:7872"
+      MOODLE_URL: "http://0.0.0.0:7882"
 
   moodle_alpine_fpm_mysql:
     build:
@@ -51,7 +51,7 @@ services:
       MOODLE_DB_PASSWORD: "${MOODLE_MYSQL_PASSWORD}"
       MOODLE_ADMIN: "${MOODLE_ADMIN}"
       MOODLE_ADMIN_PASSWORD: "${MOODLE_ADMIN_PASSWORD}"
-      MOODLE_URL: "http://0.0.0.0:7870"
+      MOODLE_URL: "http://0.0.0.0:7880"
 
   moodle_alpine_fpm_mariadb:
     image: ellakcy/moodle:mysql_maria_fpm_alpine_lts
@@ -68,17 +68,17 @@ services:
       MOODLE_DB_PASSWORD: "${MOODLE_MYSQL_PASSWORD}"
       MOODLE_ADMIN: "${MOODLE_ADMIN}"
       MOODLE_ADMIN_PASSWORD: "${MOODLE_ADMIN_PASSWORD}"
-      MOODLE_URL: "http://0.0.0.0:7871"
+      MOODLE_URL: "http://0.0.0.0:7881"
 
   # Non - building Images
   nginx:
    image: nginx:alpine
    ports:
-    - "7080:7080"
-    - "7071:7071"
-    - "7072:7072"
+    - "7880:7880"
+    - "7881:7881"
+    - "7882:7882"
    volumes:
-    - '../../conf/nginx/build/nginx_latest.conf:/etc/nginx/nginx.conf:ro'
+    - '../../conf/nginx/build/nginx_lts.conf:/etc/nginx/nginx.conf:ro'
     - "mysql-www:/var/www/html/mysql"
     - "mysql-data:/var/moodledata/mysql"
     - "psql-www:/var/www/html/psql"
