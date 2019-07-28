@@ -27,7 +27,7 @@ services:
       - "moodle_mysql_db:moodle_db"
       - "moodle_apache_base"
     ports:
-      - "6880:80"
+      - "6870:80"
     environment:
       MOODLE_DB_HOST: "moodle_mysql_db"
       MOODLE_DB_NAME: "${MOODLE_DB_NAME}"
@@ -35,7 +35,7 @@ services:
       MOODLE_DB_PASSWORD: "${MOODLE_MYSQL_PASSWORD}"
       MOODLE_ADMIN: "${MOODLE_ADMIN}"
       MOODLE_ADMIN_PASSWORD: "${MOODLE_ADMIN_PASSWORD}"
-      MOODLE_URL: "http://0.0.0.0:6880"
+      MOODLE_URL: "http://0.0.0.0:6870"
 
   # postgresql running variant
   moodle_psql_db:
@@ -54,7 +54,7 @@ services:
       - "moodle_psql_db:moodle_db"
       - "moodle_apache_base"
     ports:
-      - "6882:80"
+      - "6872:80"
     environment:
       MOODLE_DB_HOST: "moodle_psql_db"
       MOODLE_DB_NAME: "${MOODLE_DB_NAME}"
@@ -62,7 +62,7 @@ services:
       MOODLE_DB_PASSWORD: "${MOODLE_MYSQL_PASSWORD}"
       MOODLE_ADMIN: "${MOODLE_ADMIN}"
       MOODLE_ADMIN_PASSWORD: "${MOODLE_ADMIN_PASSWORD}"
-      MOODLE_URL: "http://0.0.0.0:6882"
+      MOODLE_URL: "http://0.0.0.0:6872"
 
   # Testing mariadb support
   moodle_maria_db:
@@ -80,7 +80,7 @@ services:
       - "moodle_mysql"
       - "moodle_maria_db:moodle_db"
     ports:
-      - "6881:80"
+      - "6871:80"
     environment:
       MOODLE_DB_HOST: "moodle_maria_db"
       MOODLE_DB_NAME: "${MOODLE_DB_NAME}"
@@ -88,4 +88,4 @@ services:
       MOODLE_DB_PASSWORD: "${MOODLE_MYSQL_PASSWORD}"
       MOODLE_ADMIN: "${MOODLE_ADMIN}"
       MOODLE_ADMIN_PASSWORD: "${MOODLE_ADMIN_PASSWORD}"
-      MOODLE_URL: "http://0.0.0.0:6881"
+      MOODLE_URL: "http://0.0.0.0:6871"
