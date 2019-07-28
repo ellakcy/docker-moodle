@@ -18,3 +18,14 @@ Port Range | Usage by | LTS VERSION
 7880-7882 | Alpine FPM IMAGES | YES
 7870-7872 | Alpine FPM IMAGES | NO
 6880-6882 | Apache Based Images | YES
+
+For more info consult the *.yml files located in the subfolders of the `./compose` folder.
+
+# In case that images fail to launch with `docker-compose up`
+
+Run the following command:
+
+```
+docker-compose -f ^docker-compose-yml-file^ down -v --remove-orphans
+```
+Where `^docker-compose-yml-file^` is the directory path of the approrpiate `docker-compose.yml` file located in the `./compose` directory.
