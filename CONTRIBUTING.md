@@ -18,4 +18,3 @@ Port Range | Usage by | LTS VERSION
 7880-7882 | Alpine FPM IMAGES | YES
 7870-7872 | Alpine FPM IMAGES | NO
 6880-6882 | Apache Based Images | YES
-6
