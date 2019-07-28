@@ -5,8 +5,8 @@ For each purpoce in the folder `./compose` are located all `docker-compose.yml` 
 
 Compose File | Puproce
 --- | ---
-`docker-compose-latest-alpine-fpm.yml` | For building the images based upon alpine php images.
-`docker-compose-latest-apache.yml` | For apache based variants
+`docker-compose-alpine-fpm.yml` | For building the images based upon alpine php images.
+`docker-compose-apache.yml` | For apache based variants
 `docker-compose-ssl-reverse-nginx.yml` | For testing the nginx as SSL reverse proxy.
 
 # Port conventions used for launching the containers
