@@ -59,98 +59,11 @@ http://0.0.0.0:8080
 
 ```
 
+> NOTICE: In case you need to keep the data persisted use volumes both in database and moodle containers.
+
 ##### Alpine with Fpm based solutions
 
 For fpm solutions is recomended to use docker-compose. For **production** use is reccomended the to use the repo https://github.com/ellakcy/moodle-compose .
-
-### Via docker-compose
-
-> We also developed a [docker-compose](https://github.com/ellakcy/moodle-compose) solution.
-> We strongly reccomend using this one.
-
-#### All available images and varieties
-
-You can run all build containers of this repo via:
-
-```bash
-docker compose up
-```
-
-For production is recomended to create your own `docker-compose.yml` file and provide your own settings.
-
-#### Apache based solutions
-
-* Mysql variant
-
-You can run all build containers of this repo via:
-
-```bash
-docker-compose up moodle_mysql moodle_mysql_db
-```
-
-* Mariadb variant (uses the very same image)
-
-```bash
-docker-compose up moodle_maria_db moodle_maria
-```
-
-* Postgresql variant
-
-```bash
-docker-compose up moodle_psql_db moodle_psql
-```
-
-For production is recomended to create your own `docker-compose.yml` file and provide your own settings.
-
-Then you can visit the following urls depending the database - image variant - you want to test:
-
-Variant (database using) | Docker image | url
---- | --- | ---
-mysql | `ellakcy/moodle:mysql_maria_apache` | http://0.0.0.0:6080
-mariadb | `ellakcy/moodle:mysql_maria_apache` | http://0.0.0.0:6081
-postgresql | `ellakcy/moodle:postgresql_apache` | http://0.0.0.0:6082
-
-You can login with the following credentials (development, testing & demonstration purpoces):
-
-\*\*\* | \*\*\*  
---- | ---
-**Usernane:** | *admin*
-**Password:** | *Admin~1234*
-
-#### Alpine with fpm based solutions
-
-* Mysql variant
-
-```bash
-docker-compose up nginx_mysql moodle_mysql_alpine_db moodle_alpine_fpm_mysql
-```
-
-* Mariadb variant
-
-```bash
-docker-compose up nginx_maria moodle_mariadb_alpine_db moodle_alpine_fpm_mariadb
-```
-
-* Postgresql variant
-
-```bash
-docker-compose up nginx_pgsql moodle_psql_alpine_db moodle_alpine_fpm_psql
-```
-
-Then you can visit the following urls depending the database - image variant - you want to test:
-
-Variant (database using) | Docker image | url
---- | --- | ---
-mysql | `ellakcy/moodle:mysql_maria_apache` | http://0.0.0.0:7070
-mariadb | `ellakcy/moodle:mysql_maria_apache` | http://0.0.0.0:7071
-postgresql | `ellakcy/moodle:postgresql_apache` | http://0.0.0.0:7072
-
-You can login with the following credentials (development, testing & demonstration purpoces):
-
-\*\*\* | \*\*\*  
---- | ---
-**Usernane:** | *admin*
-**Password:** | *Admin~1234*
 
 ## Enviromental variables
 
@@ -186,6 +99,8 @@ Variable Name | Default value | Description
 
 ### Enviromental Variables for reverse proxy
 
+Variable Name | Default value | Description
+---- | ------ | ------
 `MOODLE_REVERSE_LB` | false | Whether the moodle rins behind a load balancer or not.
 `MOODLE_SSL` | false | Whether the moodle runs behind an ssl-enabled load balancer.
 
@@ -194,6 +109,7 @@ Variable Name | Default value | Description
 For now you can use the following volumes:
 
 * **/var/moodledata** In order to get all the stored  data.
+* **/var/www/html** Containing the moodle source code. This is used by nginx as well.
 
 ## Using SSL Reverse proxy
 
@@ -264,4 +180,4 @@ export COMPOSE_HTTP_TIMEOUT=120
 
 ## Credits
 
-This is a fork of [mhardison/docker-moodle](https://github.com/jmhardison/docker-moodle).
+This is a fork of [jmhardison/docker-moodle](https://github.com/jmhardison/docker-moodle).
