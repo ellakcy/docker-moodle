@@ -95,7 +95,7 @@ Variable Name | Default value | Description
 Variable Name | Default value | Description
 ---- | ------ | ------
 `MOODLE_EMAIL_TYPE_QMAIL` | false | Whether will use qmail as email (MTA)[https://en.wikipedia.org/wiki/Message_transfer_agent].
-`MOODLE_EMAIL_HOST` | | The host of the smtp server. If non provided then it won't send emails.
+`MOODLE_EMAIL_HOST` | | The host of the smtp server. If not provided then it won't send emails.
 
 ### Enviromental Variables for reverse proxy
 
