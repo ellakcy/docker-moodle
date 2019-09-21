@@ -165,7 +165,7 @@ The following aren't handled, considered, or need work:
 
 ### Docker related
 
-Also in case of an arror that mentions:
+Also in case of an error that mentions:
 
 ```
 UnixHTTPConnectionPool(host='localhost', port=None): Read timed out. (read timeout=60)
