@@ -34,7 +34,7 @@ To spawn a new instance of Moodle:
   docker run -d -P --name moodle --link DB:DB -e MOODLE_DB_HOST=DB -e MOODLE_URL=http://0.0.0.0:8080 -p 8080:80 ellakcy/moodle:mysql_maria_apache
   ```
   > ** NOTICE **
-  > For now due to the way that mysl authenticates its users is is working  5.7 version of mysql and earlier
+  > For now due to the way that mysql authenticates its users, is working with vesrsion 5.7 version of mysql and **earlier**
 
 * ... using MariaDB:
 
@@ -43,7 +43,7 @@ To spawn a new instance of Moodle:
   docker run -d -P --name moodle --link DB:DB -e MOODLE_DB_HOST=DB -e MOODLE_URL=http://0.0.0.0:8080 -e MOODLE_DB_TYPE="mariadb" -p 8080:80 ellakcy/moodle
   ```
   > ** NOTICE **
-  > Please use Mariadb 10.2 and earlier for reaseons same as mysql one.
+  > Please use Mariadb 10.2 and **earlier** for the same reasons as mysql one.
 
 * ... using PostgreSQL:
 
