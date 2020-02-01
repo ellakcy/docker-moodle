@@ -32,7 +32,7 @@ jobs:
         - chmod +x docker-compose
         - sudo mv docker-compose /usr/local/bin
       script:
-        - docker-compose -f ${DOCKER_COMPOSE_FILE} build
+        - docker-compose -f $DOCKER_COMPOSE_FILE build
 
 deploy:
   - provider: script
