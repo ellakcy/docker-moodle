@@ -22,13 +22,8 @@ script: docker-compose -f $DOCKER_COMPOSE_FILE build
 
 deploy:
   - provider: script
-    on:
-      branch: master
+    # on:
+    #   branch: master
     script: |
         echo "$DOCKER_TOKEN" | docker login -u "$DOCKER_USER" --password-stdin &&\
-        docker-compose \
-          -f ./compose/latest/docker-compose-alpine-fpm.yml \
-          -f ./compose/lts/docker-compose-apache.yml \
-          -f ./compose/latest/docker-compose-apache.yml \
-          -f ./compose/lts/docker-compose-alpine-fpm.yml \
-        push
+        echo "I will deploy using the command: docker-compose -f .$DOCKER_COMPOSE_FILE push"
