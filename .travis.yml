@@ -22,6 +22,8 @@ script: docker-compose -f $DOCKER_COMPOSE_FILE build
 
 deploy:
   - provider: script
+    on:
+       branch: master
     script: |
-        echo "$DOCKER_TOKEN" | docker login -u "$DOCKER_USER" --password-stdin &&\
-        echo "I will deploy using the command: docker-compose -f .$DOCKER_COMPOSE_FILE push"
+       echo "$DOCKER_TOKEN" | docker login -u "$DOCKER_USER" --password-stdin &&\
+       docker-compose -f .$DOCKER_COMPOSE_FILE push
