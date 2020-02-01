@@ -1,0 +1,35 @@
+os: linux
+dist: xenial
+git:
+  depth: false
+
+branches:
+  only:
+    - master
+    - dev
+
+services:
+  - docker
+
+env:
+  - DOCKER_COMPOSE_VERSION=1.24.0
+
+jobs:
+  include:
+    - stage: "build latest alpine fpm"
+        before_install:
+          - sudo rm /usr/local/bin/docker-compose
+          - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+          - chmod +x docker-compose
+          - sudo mv docker-compose /usr/local/bin
+          - echo ${DOKER_TOKEN} | docker login -u ${DOCKER_USER} --password-stdin
+        script:
+          - docker-compose -f ./compose/latest/docker-compose-alpine-fpm.yml build
+          - docker-compose -f ./compose/latest/docker-compose-apache.yml build
+          - docker-compose -f ./compose/lts/docker-compose-alpine-fpm.yml build
+          - docker-compose -f ./compose/lts/docker-compose-apache.yml build
+        deploy:
+          - docker-compose -f ./compose/latest/docker-compose-alpine-fpm.yml push
+          - docker-compose -f ./compose/latest/docker-compose-apache.yml  push
+          - docker-compose -f ./compose/lts/docker-compose-alpine-fpm.yml push
+          - docker-compose -f ./compose/lts/docker-compose-apache.yml push
