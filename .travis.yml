@@ -24,11 +24,13 @@ before_install:
 jobs:
   include:
     - stage: "build latest alpine fpm"
+      env:
+        - DOCKER_COMPOSE_FILE=./compose/latest/docker-compose-alpine-fpm.yml
+        - DOCKER_COMPOSE_FILE=./compose/latest/docker-compose-apache.yml
+        - DOCKER_COMPOSE_FILE=./compose/lts/docker-compose-alpine-fpm.yml
+        - DOCKER_COMPOSE_FILE=./compose/lts/docker-compose-apache.yml
       script:
-        - docker-compose -f ./compose/latest/docker-compose-alpine-fpm.yml build
-        - docker-compose -f ./compose/latest/docker-compose-apache.yml build
-        - docker-compose -f ./compose/lts/docker-compose-alpine-fpm.yml build
-        - docker-compose -f ./compose/lts/docker-compose-apache.yml build
+        - docker-compose -f $DOCKER_COMPOSE_FILE build
 
 deploy:
   - provider: script
