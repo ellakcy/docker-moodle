@@ -14,6 +14,11 @@ services:
 
 env:
   - DOCKER_COMPOSE_VERSION=1.24.0
+  - DOCKER_COMPOSE_FILE=./compose/latest/docker-compose-alpine-fpm.yml
+  - DOCKER_COMPOSE_FILE=./compose/latest/docker-compose-apache.yml
+  - DOCKER_COMPOSE_FILE=./compose/lts/docker-compose-alpine-fpm.yml
+  - DOCKER_COMPOSE_FILE=./compose/lts/docker-compose-apache.yml
+
 
 before_install:
   - sudo rm /usr/local/bin/docker-compose
@@ -24,11 +29,6 @@ before_install:
 jobs:
   include:
     - stage: "build latest alpine fpm"
-      env:
-        - DOCKER_COMPOSE_FILE=./compose/latest/docker-compose-alpine-fpm.yml
-        - DOCKER_COMPOSE_FILE=./compose/latest/docker-compose-apache.yml
-        - DOCKER_COMPOSE_FILE=./compose/lts/docker-compose-alpine-fpm.yml
-        - DOCKER_COMPOSE_FILE=./compose/lts/docker-compose-apache.yml
       script:
         - docker-compose -f ${DOCKER_COMPOSE_FILE} build
 
