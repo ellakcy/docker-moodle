@@ -30,7 +30,7 @@ jobs:
         - DOCKER_COMPOSE_FILE=./compose/lts/docker-compose-alpine-fpm.yml
         - DOCKER_COMPOSE_FILE=./compose/lts/docker-compose-apache.yml
       script:
-        - docker-compose -f $DOCKER_COMPOSE_FILE build
+        - docker-compose -f ${DOCKER_COMPOSE_FILE} build
 
 deploy:
   - provider: script
