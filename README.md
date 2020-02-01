@@ -16,7 +16,7 @@ Buidling the required images using this repo is a liitle laborious and the whole
 * `ellakcy/moodle:mysql_maria_fpm_alpine`: An alpine-based image using fpm supporting mysql and mariadb.
 * `ellakcy/moodle:postgresql_fpm_alpine`: An alpine-based image using fpm supporting postgresql.
 
-## Run
+## Run [![Build Status](https://travis-ci.org/ellakcy/docker-moodle.svg?branch=master)](https://travis-ci.org/ellakcy/docker-moodle)
 
 > We also developed a [docker-compose](https://github.com/ellakcy/moodle-compose) solution.
 > We strongly reccomend using this one.
