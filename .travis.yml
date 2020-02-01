@@ -14,29 +14,20 @@ services:
 
 env:
   - DOCKER_COMPOSE_VERSION=1.24.0
+  - DOCKER_COMPOSE_FILE=compose/lts/docker-compose-alpine-fpm.yml
+  - DOCKER_COMPOSE_FILE=compose/lts/docker-compose-alpine-fpm.yml
+  - DOCKER_COMPOSE_FILE=compose/latest/docker-compose-alpine-fpm.yml
+  - DOCKER_COMPOSE_FILE=compose/latest/docker-compose-apache.yml
 
- before_install:
+before_install:
   - sudo rm /usr/local/bin/docker-compose
   - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
 
 
-jobs:
-  include:
-    - stage: "build docker lts alpine fpm"     
-      script:
-        - docker-compose -f compose/lts/docker-compose-alpine-fpm.yml build
-    - stage: "build docker lts apache"
-      script:
-        - docker-compose -f compose/lts/docker-compose-alpine-fpm.yml build
-    - stage: "build docker latest alpine fpm"     
-      script:
-        - docker-compose -f compose/latest/docker-compose-alpine-fpm.yml build
-    - stage: "build docker latest apache"
-      script:
-        - docker-compose -f compose/latest/docker-compose-apache.yml build
-        
+script: docker-compose -f $DOCKER_COMPOSE_FILE build
+
 deploy:
   - provider: script
     on:
