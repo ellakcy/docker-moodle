@@ -1,4 +1,4 @@
-docker-moodle
+docker-moodle [![Build Status](https://travis-ci.org/ellakcy/docker-moodle.svg?branch=master)](https://travis-ci.org/ellakcy/docker-moodle)
 =============
 
 A Docker image that installs and runs the latest Moodle stable, with external MySQL, Mariadb or Postgresql Database and automated installation with a default predefined administrator user. Also all the images are availalbe via [docker hub](https://hub.docker.com/r/ellakcy/moodle/).
@@ -16,7 +16,7 @@ Buidling the required images using this repo is a liitle laborious and the whole
 * `ellakcy/moodle:mysql_maria_fpm_alpine`: An alpine-based image using fpm supporting mysql and mariadb.
 * `ellakcy/moodle:postgresql_fpm_alpine`: An alpine-based image using fpm supporting postgresql.
 
-## Run [![Build Status](https://travis-ci.org/ellakcy/docker-moodle.svg?branch=master)](https://travis-ci.org/ellakcy/docker-moodle)
+## Run
 
 > We also developed a [docker-compose](https://github.com/ellakcy/moodle-compose) solution.
 > We strongly reccomend using this one.
