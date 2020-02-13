@@ -13,10 +13,14 @@ services:
   - docker
 
 env:
-  - DOCKER_COMPOSE_FILE=compose/lts/docker-compose-alpine-fpm.yml
-  - DOCKER_COMPOSE_FILE=compose/lts/docker-compose-apache.yml
-  - DOCKER_COMPOSE_FILE=compose/latest/docker-compose-alpine-fpm.yml
-  - DOCKER_COMPOSE_FILE=compose/latest/docker-compose-apache.yml
+  - VERSION=36
+  - VERSION=37
+  - VERSION=38
+  - LATEST_LTS=36
+  - LATEST=38
+  - DB_TYPE=all
+  - DB_TYPE=mysql
+  - DB_TYPE=postgresql
 
 script: docker-compose -f $DOCKER_COMPOSE_FILE build
 
