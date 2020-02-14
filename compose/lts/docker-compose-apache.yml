@@ -6,6 +6,7 @@ services:
       dockerfile: dockerfiles/apache/Dockerfile
       args: 
         VERSION: ${MOODLE_LTS}
+        DB_TYPE: pgsql
     image: ellakcy/moodle:postgresql_apache_lts
     links:
       - "moodle_psql_db:moodle_db"
@@ -26,6 +27,7 @@ services:
       dockerfile: dockerfiles/apache/Dockerfile
       args: 
         VERSION: ${MOODLE_LTS}
+        DB_TYPE: pgsql
     image: ellakcy/moodle:mysql_maria_apache_lts
     links:
       - "moodle_mysql_db:moodle_db"

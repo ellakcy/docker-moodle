@@ -3,7 +3,30 @@
 # Event though some containers may not have some support for a specific db
 # We provide a generic entrypoint for better maintainance
 
-echo "Installing moodle"
+function pingdb {
+    OK=0
+    for count in {1..100}; do
+      echo "Pinging database attempt "${count}
+      if  $(nc -z ${MOODLE_DB_HOST} ${MOODLE_DB_PORT}) ; then
+        echo "Can connect into databaze"
+        OK=1
+        break
+      fi
+      sleep 5
+    done
+
+    echo "Is ok? "$OK
+
+    if [ $OK -eq 1 ]; then
+      echo "Database type: "${MOODLE_DB_TYPE}
+      echo "DB Type: "${MOODLE_DB_TYPE}
+    else
+      echo >&2 "Can't connect into database"
+      exit 1
+    fi
+}
+
+echo "Installing moodle with ${MOODLE_DB_TYPE} support"
 
 echo "Moving files into web folder"
 rsync -rvad --chown www-data:www-data /usr/src/moodle/* /var/www/html/
@@ -21,12 +44,9 @@ echo "Setting up database"
 HAS_MySQL_SUPPORT=$(php -m | grep -i mysql | grep -v "mysqlnd" | wc -w)
 HAS_POSTGRES_SUPPORT=$(php -m | grep -i pgsql |wc -w)
 
-echo "Postgres: "$HAS_POSTGRES_SUPPORT
-echo "Mysql: "$HAS_MySQL_SUPPORT
-
 # A cointainer WONT have multi db support
 # Each container will provide support for a specific db only
-if [ $HAS_MySQL_SUPPORT -gt 0 ]; then
+if [ $HAS_MySQL_SUPPORT -gt 0 ] && [ "$MOODLE_DB_TYPE" = "mysqli" ] ; then
 
   echo "Trying for mysql database"
 
@@ -43,29 +63,11 @@ if [ $HAS_MySQL_SUPPORT -gt 0 ]; then
   : ${MOODLE_DB_PASSWORD:=$DB_ENV_MYSQL_PASSWORD}
     fi
 
-    OK=0
-    for count in {1..100}; do
-      echo "Pinging mysql database attempt "${count}
-      if  $(nc -z ${MOODLE_DB_HOST} ${MOODLE_DB_PORT}) ; then
-        echo "Can connect into databaze"
-        OK=1
-        break
-      fi
-      sleep 5
-    done
+  pingdb
+  MOODLE_DB_TYPE=$(php /opt/detect_mariadb.php)
 
-    echo "Is ok? "$OK
 
-    if [ $OK -eq 1 ]; then
-      MOODLE_DB_TYPE=$(php /opt/detect_mariadb.php)
-      echo "Database type: "${MOODLE_DB_TYPE}
-      echo "DB Type: "${MOODLE_DB_TYPE}
-    else
-      echo >&2 "Can't connect into database"
-      exit 1
-    fi
-
-elif [ $HAS_POSTGRES_SUPPORT -gt 0 ]; then
+elif [ $HAS_POSTGRES_SUPPORT -gt 0 ] && [ "$MOODLE_DB_TYPE" = "pgsql" ]; then
 
   MOODLE_DB_TYPE="pgsql"
 
@@ -78,21 +80,7 @@ elif [ $HAS_POSTGRES_SUPPORT -gt 0 ]; then
   : ${MOODLE_DB_USER:=${DB_ENV_POSTGRES_USER}}
   : ${MOODLE_DB_PASSWORD:=$DB_ENV_POSTGRES_PASSWORD}
 
-  OK=0
-  for count in {1..20}; do
-    echo "Pinging postgresql database attempt "${count}
-    if  $(nc -z ${MOODLE_DB_HOST} ${MOODLE_DB_PORT}) ; then
-      echo "Can connect into databaze"
-      OK=1
-      break
-    fi
-    sleep 5
-  done
-
-  if [ $OK -eq 0 ]; then
-    echo >&2 "Can't connect into database"
-    exit 1
-  fi
+  pingdb
 
 else
   echo >&2 "No database support found"
