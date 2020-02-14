@@ -1,0 +1,34 @@
+language: shell
+os: linux
+dist: xenial
+git:
+  depth: false
+
+branches:
+  only:
+    - master
+    - dev
+
+services:
+  - docker
+
+env:
+  - VERSION=36
+  - VERSION=37
+  - VERSION=38
+  - LATEST_LTS=36
+  - LATEST=38
+  - DB_TYPE=all
+  - DB_TYPE=mysql
+  - DB_TYPE=pgsql
+  - DOCKERFILE=dockerfiles/apache/Dockerfile
+  - DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile_base
+
+script: docker-compose -f $DOCKER_COMPOSE_FILE build
+
+deploy:
+  - provider: script
+    on:
+       branch: master
+    script: bash travis_deploy.sh
+       
