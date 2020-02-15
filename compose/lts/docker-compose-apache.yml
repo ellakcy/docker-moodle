@@ -27,7 +27,7 @@ services:
       dockerfile: dockerfiles/apache/Dockerfile
       args: 
         VERSION: ${MOODLE_LTS}
-        DB_TYPE: pgsql
+        DB_TYPE: mysqli
     image: ellakcy/moodle:mysql_maria_apache_lts
     links:
       - "moodle_mysql_db:moodle_db"
