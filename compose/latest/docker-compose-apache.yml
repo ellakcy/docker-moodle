@@ -1,13 +1,5 @@
 version: '2'
 services:
-  moodle_apache_base:
-    build:
-      context: ../..
-      dockerfile: dockerfiles/apache/Dockerfile_base
-      args: 
-        VERSION: ${MOODLE_LATEST}
-    image: ellakcy/moodle:apache_base
-
   # Mysql running variant
   moodle_mysql_db:
     image: mysql:5.7
@@ -21,11 +13,13 @@ services:
   moodle_mysql:
     build:
       context: ../..
-      dockerfile: dockerfiles/apache/Dockerfile_mysql
+      dockerfile: dockerfiles/apache/Dockerfile
+      args: 
+        VERSION: ${MOODLE_LATEST}
+        DB_TYPE: mysqli
     image: ellakcy/moodle:mysql_maria_apache
     links:
       - "moodle_mysql_db:moodle_db"
-      - "moodle_apache_base"
     ports:
       - "6870:80"
     environment:
@@ -48,11 +42,13 @@ services:
   moodle_psql:
     build:
       context: ../..
-      dockerfile: dockerfiles/apache/Dockerfile_postgrtesql
+      dockerfile: dockerfiles/apache/Dockerfile
+      args: 
+        VERSION: ${MOODLE_LATEST}
+        DB_TYPE: pgsql
     image: ellakcy/moodle:postgresql_apache
     links:
       - "moodle_psql_db:moodle_db"
-      - "moodle_apache_base"
     ports:
       - "6872:80"
     environment:
