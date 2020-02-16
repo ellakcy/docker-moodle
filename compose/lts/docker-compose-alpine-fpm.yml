@@ -25,7 +25,7 @@ services:
   moodle_alpine_fpm_mysql:
     build:
       context: ../..
-      dockerfile: dockerfiles/fpm_alpine/Dockerfile_mysql
+      dockerfile: dockerfiles/fpm_alpine/Dockerfile
       args: 
         VERSION: ${MOODLE_LTS}
         DB_TYPE: mysqli
@@ -48,7 +48,6 @@ services:
     image: ellakcy/moodle:mysql_maria_fpm_alpine_lts
     links:
       - "moodle_mariadb_alpine_db:moodle_db"
-      - "moodle_alpine_fpm_base"
     volumes:
       - "mariadb-www:/var/www/html"
       - "mariadb-data:/var/moodledata"
