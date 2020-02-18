@@ -19,16 +19,16 @@ env:
   - LATEST_LTS=36
   - LATEST=38
   - DB_TYPE=all
-  - DB_TYPE=mysql
+  - DB_TYPE=mysqli
   - DB_TYPE=pgsql
   - DOCKERFILE=dockerfiles/apache/Dockerfile
-  - DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile_base
+  - DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile
 
-script: docker-compose -f $DOCKER_COMPOSE_FILE build
+script: bash travis/build.sh
 
 deploy:
   - provider: script
     on:
        branch: master
-    script: bash travis_deploy.sh
+    script: bash travis/~/co  deploy.sh
        
