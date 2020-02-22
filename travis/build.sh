@@ -24,4 +24,4 @@ case $VERSION in
     ${LATEST} ) VERSION_TYPE_TAG="-t ${DB_FLAVOR}_${SERVER_FAVOR}_latest" ;;
 esac 
 
-docker build -f ${DOCKERFILE} ${VERSION_TYPE_TAG} ${VERSION_TAG} --no-cache --force-rm
+docker build -f ${DOCKERFILE} ${VERSION_TYPE_TAG} ${VERSION_TAG} --no-cache --force-rm .
