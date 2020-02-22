@@ -9,7 +9,7 @@ if [ $DOCKERFILE == $DOCKERFILE_ALPINE_FPM ]; then
 fi
 
 DB_FLAVOR=""
-case $DB_TYPE; in
+case $DB_TYPE in
     "mysqli") DB_FLAVOR="mysql_maria"
     "pgsql") DB_FLAVOR="postgresql"
     *) DB_FLAVOR="mulitbase"
@@ -19,7 +19,7 @@ VERSION_TAG="-t ${DB_FLAVOR}_${SERVER_FAVOR}_${VERSION}"
 
 VERSION_TYPE_TAG=""
 
-case $VERSION; in
+case $VERSION in
     ${LATEST_LTS}) VERSION_TYPE_TAG="-t ${DB_FLAVOR}_${SERVER_FAVOR}_lts"
     ${LATEST}) VERSION_TYPE_TAG="-t ${DB_FLAVOR}_${SERVER_FAVOR}_latest"
 esac 
