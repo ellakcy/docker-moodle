@@ -15,13 +15,17 @@ case $DB_TYPE in
     *) DB_FLAVOR="mulitbase"
 esac
 
-VERSION_TAG="-t ${DB_FLAVOR}_${SERVER_FAVOR}_${VERSION}"
+VERSION_TAG="-t ellakcy/moodle:${DB_FLAVOR}_${SERVER_FAVOR}_${VERSION}"
 
 VERSION_TYPE_TAG=""
 
 case $VERSION in
-    ${LATEST_LTS} ) VERSION_TYPE_TAG="-t ${DB_FLAVOR}_${SERVER_FAVOR}_lts" ;;
-    ${LATEST} ) VERSION_TYPE_TAG="-t ${DB_FLAVOR}_${SERVER_FAVOR}_latest" ;;
+    "${LATEST_LTS}" ) VERSION_TYPE_TAG="-t ellakcy/moodle:${DB_FLAVOR}_${SERVER_FAVOR}_lts" ;;
+    "${LATEST}" ) VERSION_TYPE_TAG="-t ellakcy/moodle:${DB_FLAVOR}_${SERVER_FAVOR}_latest" 
+    if [[ $SERVER_FAVOR == "apache" ]]; then
+        VERSION_TYPE_TAG=" ${VERSION_TYPE_TAG} -t  ellakcy/moodle:latest"
+    fi;;
 esac 
+
 
 docker build -f ${DOCKERFILE} ${VERSION_TYPE_TAG} ${VERSION_TAG} --no-cache --force-rm .
