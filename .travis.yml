@@ -4,11 +4,6 @@ dist: xenial
 git:
   depth: false
 
-branches:
-  only:
-    - master
-    - dev
-
 services:
   - docker
 
@@ -30,5 +25,5 @@ deploy:
   - provider: script
     on:
        branch: master
-    script: bash travis/~/co  deploy.sh
+    script: bash travis/deploy.sh
        
