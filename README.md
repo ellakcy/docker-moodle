@@ -9,12 +9,34 @@ Buidling the required images using this repo is a liitle laborious and the whole
 
 ## Available Images
 
+With apache based on `php:7.2-apache` image:
+
+VERSION | mysql or mariadb | postgresql | all databases (mysql, mariadb, postgresql)
+--- | --- | --- | ---
+3.5 | `ellakcy/moodle:mysql_maria_apache_35` `ellakcy/moodle:mysql_maria_apache_lts`  | `ellakcy/moodle:postgresql__apache_35` `ellakcy/moodle:postgresql_apache_lts` |  `ellakcy/moodle:multibase_apache_35` `ellakcy/moodle:multibase_apache_lts` 
+3.6 | `ellakcy/moodle:mysql_maria_apache_36` | `ellakcy/moodle:postgresql_apache_36` | `ellakcy/moodle:multibase_apache_36`
+3.7 | `ellakcy/moodle:mysql_maria_apache_37` | `ellakcy/moodle:postgresql_apache_37` | `ellakcy/moodle:multibase_apache_37`
+3.8 | `ellakcy/moodle:mysql_maria_apache_38` `ellakcy/moodle:mysql_maria_apache_latest` `ellakcy/moodle:mysql_maria_apache`  | `ellakcy/moodle:postgresql__apache_38` `ellakcy/moodle:postgresql_apache_latest` `ellakcy/moodle:postgresql_apache` |  `ellakcy/moodle:multibase_apache_38` `ellakcy/moodle:multibase_apache_latest`  `ellakcy/moodle:multibase_apache` `ellakcy/moodle:latest`
+
+With fpm based on `php:7.2-fpm-alpine` image:
+
+VERSION | mysql or mariadb | postgresql | all databases
+--- | --- | --- | ---
+3.5 | `ellakcy/moodle:mysql_maria_apache_35` `ellakcy/moodle:mysql_maria_apache_lts`  | `ellakcy/moodle:postgresql__apache_35` `ellakcy/moodle:postgresql_apache_lts` |  `ellakcy/moodle:multibase_apache_35` `ellakcy/moodle:multibase_apache_lts` 
+3.6 | `ellakcy/moodle:mysql_maria_apache_36` | `ellakcy/moodle:postgresql_apache_36` | `ellakcy/moodle:multibase_apache_36`
+3.7 | `ellakcy/moodle:mysql_maria_apache_37` | `ellakcy/moodle:postgresql_apache_37` | `ellakcy/moodle:multibase_apache_37`
+3.8 | `ellakcy/moodle:mysql_maria_apache_38` `ellakcy/moodle:mysql_maria_apache_latest` `ellakcy/moodle:mysql_maria_apache`  | `ellakcy/moodle:postgresql__apache_38` `ellakcy/moodle:postgresql_fpm_alpine_latest` `ellakcy/moodle:postgresql_apache` |  `ellakcy/moodle:multibase_apache_38` `ellakcy/moodle:multibase_fpm_alpine_latest`  `ellakcy/moodle:multibase_fpm_alpine_latest`
+
+The following images are not maintained any more, though there are still archived for historical reasons and available in docker hub:
+
 * `ellakcy/moodle:apache_base` : A base image over apache, where you just can base your own moodle image for the database you want.
 * `ellakcy/moodle:mysql_maria_apache`: An image where provides moodle installation supporting mysql or mariadb.
 * `ellakcy/moodle:postgresql_apache`:  An image where provides moodle installation supporting postgresql.
 * `ellakcy/moodle:alpine_fpm_base`: A base image over alpine and fpm, where you just can base your own moodle image for the database you want.
 * `ellakcy/moodle:mysql_maria_fpm_alpine`: An alpine-based image using fpm supporting mysql and mariadb.
 * `ellakcy/moodle:postgresql_fpm_alpine`: An alpine-based image using fpm supporting postgresql.
+
+
 
 ## Run
 
