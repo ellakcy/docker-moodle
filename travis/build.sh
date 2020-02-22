@@ -4,7 +4,7 @@ DOCKERFILE_ALPINE_FPM="dockerfiles/fpm_alpine/Dockerfile"
 
 SERVER_FAVOR="apache"
 
-if [ $DOCKERFILE == $DOCKERFILE_ALPINE_FPM ]; then
+if [[ $DOCKERFILE == $DOCKERFILE_ALPINE_FPM ]]; then
     SERVER_FAVOR="fpm_alpine"
 fi
 
