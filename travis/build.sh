@@ -10,8 +10,8 @@ fi
 
 DB_FLAVOR=""
 case $DB_TYPE in
-    "mysqli") DB_FLAVOR="mysql_maria"
-    "pgsql") DB_FLAVOR="postgresql"
+    "mysqli" ) DB_FLAVOR="mysql_maria" ;;
+    "pgsql" ) DB_FLAVOR="postgresql" ;;
     *) DB_FLAVOR="mulitbase"
 esac
 
@@ -20,8 +20,8 @@ VERSION_TAG="-t ${DB_FLAVOR}_${SERVER_FAVOR}_${VERSION}"
 VERSION_TYPE_TAG=""
 
 case $VERSION in
-    ${LATEST_LTS}) VERSION_TYPE_TAG="-t ${DB_FLAVOR}_${SERVER_FAVOR}_lts"
-    ${LATEST}) VERSION_TYPE_TAG="-t ${DB_FLAVOR}_${SERVER_FAVOR}_latest"
+    ${LATEST_LTS} ) VERSION_TYPE_TAG="-t ${DB_FLAVOR}_${SERVER_FAVOR}_lts" ;;
+    ${LATEST} ) VERSION_TYPE_TAG="-t ${DB_FLAVOR}_${SERVER_FAVOR}_latest" ;;
 esac 
 
 docker build -f ${DOCKERFILE} ${VERSION_TYPE_TAG} ${VERSION_TAG} --no-cache --force-rm
