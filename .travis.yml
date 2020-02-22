@@ -19,11 +19,11 @@ env:
   - DOCKERFILE=dockerfiles/apache/Dockerfile
   - DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile
 
-script: bash travis/build.sh
+script: bash ./travis/build.sh
 
 deploy:
   - provider: script
     on:
        branch: master
-    script: bash travis/deploy.sh
+    script: bash ./travis/deploy.sh
        
