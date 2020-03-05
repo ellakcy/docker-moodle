@@ -37,7 +37,6 @@ The following images are not maintained any more, though there are still archive
 * `ellakcy/moodle:postgresql_fpm_alpine`: An alpine-based image using fpm supporting postgresql.
 
 
-
 ## Run
 
 > We also developed a [docker-compose](https://github.com/ellakcy/moodle-compose) solution.
@@ -53,7 +52,7 @@ To spawn a new instance of Moodle:
 
   ```
   docker run -d --name DB -e MYSQL_DATABASE=moodle -e MYSQL_RANDOM_ROOT_PASSWORD=yes -e MYSQL_ONETIME_PASSWORD=yes -e MYSQL_USER=^a database user^ -e MYSQL_PASSWORD=^a database password^ mysql:5.7
-  docker run -d -P --name moodle --link DB:DB -e MOODLE_DB_HOST=DB -e MOODLE_URL=http://0.0.0.0:8080 -p 8080:80 ellakcy/moodle:mysql_maria_apache
+  docker run -d -P --name moodle --link DB:DB -e MOODLE_DB_HOST=DB -e MOODLE_URL=http://0.0.0.0:8080 -p 8080:80 ellakcy/moodle:mysql_maria_apache_^VERSION^
   ```
   > ** NOTICE **
   > For now due to the way that mysql authenticates its users, is working with vesrsion 5.7 version of mysql and **earlier**
@@ -62,7 +61,7 @@ To spawn a new instance of Moodle:
 
   ```
   docker run -d --name DB -e MYSQL_DATABASE=^a database name^ -e MYSQL_RANDOM_ROOT_PASSWORD=yes -e MYSQL_ONETIME_PASSWORD=yes -e MYSQL_USER=^a database user^ -e MYSQL_PASSWORD=^a database password^ mariadb:10.2
-  docker run -d -P --name moodle --link DB:DB -e MOODLE_DB_HOST=DB -e MOODLE_URL=http://0.0.0.0:8080 -e MOODLE_DB_TYPE="mariadb" -p 8080:80 ellakcy/moodle
+  docker run -d -P --name moodle --link DB:DB -e MOODLE_DB_HOST=DB -e MOODLE_URL=http://0.0.0.0:8080 -e MOODLE_DB_TYPE="mariadb" -p 8080:80 ellakcy/moodle:mysql_maria_apache_^VERSION^
   ```
   > ** NOTICE **
   > Please use Mariadb 10.2 and **earlier** for the same reasons as mysql one.
@@ -71,7 +70,7 @@ To spawn a new instance of Moodle:
 
   ```
   docker run --name=DB -e POSTGRES_USER=^a database user^ -e POSTGRES_PASSWORD=^a database password^ -e POSTGRES_DB=^a database name^ -d postgres
-  docker run -d -P --name moodle --link DB:DB -e MOODLE_DB_HOST=DB -e MOODLE_URL=http://0.0.0.0:8080 -e MOODLE_DB_TYPE="pgsql" -p 8080:80 ellakcy/moodle
+  docker run -d -P --name moodle --link DB:DB -e MOODLE_DB_HOST=DB -e MOODLE_URL=http://0.0.0.0:8080 -e MOODLE_DB_TYPE="pgsql" -p 8080:80 ellakcy/moodle:postgresql_apache_^VERSION^
   ```
 
 Then you can visit the following URL in a browser to get started:
@@ -82,6 +81,8 @@ http://0.0.0.0:8080
 ```
 
 > NOTICE: In case you need to keep the data persisted use volumes both in database and moodle containers.
+> NOTICE 2: `^VERSION` indicates the moodle version. For the latest lts just use `lts` or ofor the latest non lts use `latest` 
+
 
 ##### Alpine with Fpm based solutions
 
