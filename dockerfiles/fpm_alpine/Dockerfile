@@ -31,6 +31,7 @@ COPY ./scripts/detect_mariadb.php /opt/detect_mariadb.php
 
 # Installing php and external tools
 RUN \
+		chmod +x /usr/local/bin/entrypoint.sh
 		if [ $DB_TYPE = 'mysqli' ] || [ $DB_TYPE = 'all' ]; then echo "Setup mysql and mariadb support" && docker-php-ext-install pdo mysqli pdo_mysql; fi &&\
 		if [ $DB_TYPE = 'pgsql' ] || [ $DB_TYPE = 'all' ]; then echo "Setup postgresql support" &&\
 			apk add --update postgresql-dev &&\
