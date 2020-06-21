@@ -1,0 +1,113 @@
+version: '3'
+
+services:
+
+  moodle_db_apache_postgres:
+    image: postgres:alpine
+    volumes:
+      - './volumes/db/mysql:/var/lib/postgresql/data'
+    environment:
+      POSTGRES_DB: $MOODLE_DB_NAME
+      POSTGRES_USER: $MOODLE_DB_USER
+      POSTGRES_PASSWORD: $MOODLE_DB_PASSWORD
+  
+  moodle_db_apache_maria:
+    image: mariadb:10.2
+    volumes:
+      - './volumes/db/maria:/var/lib/mysql'
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+      MYSQL_ONETIME_PASSWORD: "yes"
+      MYSQL_DATABASE: $MOODLE_DB_NAME
+      MYSQL_USER: $MOODLE_DB_USER
+      MYSQL_PASSWORD: $MOODLE_DB_PASSWORD
+  
+  moodle_db_apache_mysql:
+    image: mysql:5.7
+    volumes:
+      - './volumes/db/postgres:/var/lib/mysql'
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+      MYSQL_ONETIME_PASSWORD: "yes"
+      MYSQL_DATABASE: $MOODLE_DB_NAME
+      MYSQL_USER: $MOODLE_DB_USER
+      MYSQL_PASSWORD: $MOODLE_DB_PASSWORD
+  
+########## Moodle ##########
+  moodle_mysql:
+    build:
+      context: ../..
+      dockerfile: ./dockerfiles/apache/Dockerfile
+      args:
+        DB_TYPE: 'mysql'
+    image: ellakcy/moodle:mysql_apache_dev
+    volumes:
+      - './volumes/moodle/mysql/data:/var/moodledata'
+      - './volumes/moodle/mysql/www:/var/www/html'
+    ports:
+      - '8081:80'
+    links:
+      - moodle_db_apache_mysql
+    environment:
+      MOODLE_URL: http://0.0.0.0:8081
+      MOODLE_ADMIN: $MOODLE_ADMIN
+      MOODLE_ADMIN_PASSWORD: $MOODLE_ADMIN_PASSWORD
+      MOODLE_ADMIN_EMAIL: $MOODLE_ADMIN_EMAIL
+      MOODLE_DB_HOST: moodle_db_apache_mysql
+      MOODLE_DB_USER: $MOODLE_DB_USER
+      MOODLE_DB_PASSWORD: $MOODLE_DB_PASSWORD
+      MOODLE_DB_NAME: $MOODLE_DB_NAME
+      MOODLE_REVERSE_LB: "false"
+      MOODLE_SSL: "false"
+      
+  moodle_maria:
+    build:
+      context: ../..
+      dockerfile: ./dockerfiles/apache/Dockerfile
+      args:
+        DB_TYPE: 'mysql'
+    image: ellakcy/moodle:maria_apache_dev
+    volumes:
+      - './volumes/moodle/mysql/data:/var/moodledata'
+      - './volumes/moodle/mysql/www:/var/www/html'
+    ports:
+      - '8082:80'
+    links:
+      - moodle_db_apache_maria
+    environment:
+      MOODLE_URL: http://0.0.0.0:8082
+      MOODLE_ADMIN: $MOODLE_ADMIN
+      MOODLE_ADMIN_PASSWORD: $MOODLE_ADMIN_PASSWORD
+      MOODLE_ADMIN_EMAIL: $MOODLE_ADMIN_EMAIL
+      MOODLE_DB_HOST: moodle_db_apache_maria
+      MOODLE_DB_USER: $MOODLE_DB_USER
+      MOODLE_DB_PASSWORD: $MOODLE_DB_PASSWORD
+      MOODLE_DB_NAME: $MOODLE_DB_NAME
+      MOODLE_REVERSE_LB: "false"
+      MOODLE_SSL: "false"
+
+  moodle_postgresql:
+    build:
+      context: ../..
+      dockerfile: ./dockerfiles/apache/Dockerfile
+      args:
+        DB_TYPE: 'postgres'
+    image: ellakcy/moodle:postgres_apache_dev
+    volumes:
+      - './volumes/moodle/postgres/data:/var/moodledata'
+      - './volumes/moodle/postgres/www:/var/www/html'
+    ports:
+      - '8083:80'
+    links:
+      - moodle_db_apache_postgres
+    environment:
+      MOODLE_URL: http://0.0.0.0:8083
+      MOODLE_ADMIN: $MOODLE_ADMIN
+      MOODLE_ADMIN_PASSWORD: $MOODLE_ADMIN_PASSWORD
+      MOODLE_ADMIN_EMAIL: $MOODLE_ADMIN_EMAIL
+      MOODLE_DB_HOST: moodle_db_apache_postgres
+      MOODLE_DB_USER: $MOODLE_DB_USER
+      MOODLE_DB_PASSWORD: $MOODLE_DB_PASSWORD
+      MOODLE_DB_NAME: $MOODLE_DB_NAME
+      MOODLE_REVERSE_LB: "false"
+      MOODLE_SSL: "false"
