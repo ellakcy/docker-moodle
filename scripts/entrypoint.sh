@@ -6,9 +6,9 @@
 function pingdb {
     OK=0
     for count in {1..100}; do
-      echo "Pinging database attempt "${count}
+      echo "Pinging database attempt ${count} into ${MOODLE_DB_HOST}:${MOODLE_DB_PORT}" 
       if  $(nc -z ${MOODLE_DB_HOST} ${MOODLE_DB_PORT}) ; then
-        echo "Can connect into databaze"
+        echo "Can connect into database"
         OK=1
         break
       fi
