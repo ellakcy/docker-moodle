@@ -11,10 +11,8 @@ VOLUME ["/var/moodledata"]
 VOLUME ["/var/www/html"]
 EXPOSE 9000
 
-ENV MOODLE_DB_TYPE="${DB_TYPE}"
+ENV MOODLE_DB_TYPE ${DB_TYPE}
 
-
-# Let the container know that there is no tty
 ENV \
 	MOODLE_URL http://0.0.0.0 \
     MOODLE_ADMIN admin \
@@ -33,8 +31,10 @@ COPY ./scripts/detect_mariadb.php /opt/detect_mariadb.php
 RUN \
 		chown root:root /usr/local/bin/entrypoint.sh &&\
 		chmod +x /usr/local/bin/entrypoint.sh &&\
-		if [ $DB_TYPE = 'mysqli' ] || [ $DB_TYPE = 'all' ]; then echo "Setup mysql and mariadb support" && docker-php-ext-install pdo mysqli pdo_mysql; fi &&\
-		if [ $DB_TYPE = 'pgsql' ] || [ $DB_TYPE = 'all' ]; then echo "Setup postgresql support" &&\
+		if [[ $DB_TYPE = "mysqli" ]] || [[ $DB_TYPE = "all" ]]; then echo "Setup mysql and mariadb support" &&\
+		 docker-php-ext-install pdo mysqli pdo_mysql;\
+		fi &&\
+		if [[ $DB_TYPE = "pgsql" ]] || [[ $DB_TYPE = "all" ]]; then echo "Setup postgresql support" &&\
 			apk add --update postgresql-dev &&\
 		    docker-php-ext-install pdo pgsql pdo_pgsql;\
 		fi &&\
