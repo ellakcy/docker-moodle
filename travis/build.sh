@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# The script required the Following Environmental Variables:
+# DB_TYPE in order to specify the database type
+# VERSION in order to specify the moodle version
+
 DOCKERFILE_ALPINE_FPM="dockerfiles/fpm_alpine/Dockerfile"
 
 SERVER_FAVOR="apache"
@@ -9,9 +13,10 @@ if [[ $DOCKERFILE == $DOCKERFILE_ALPINE_FPM ]]; then
 fi
 
 DB_FLAVOR=""
+
 case $DB_TYPE in
     "mysqli" ) DB_FLAVOR="mysql_maria" ;;
-    "pgsql" ) DB_FLAVOR="postgresql" ;;
+    "pgsql" ) DB_FLAVOR="postgresql";;
     *) DB_FLAVOR="mulitbase"
 esac
 
@@ -27,5 +32,5 @@ case $VERSION in
     fi;;
 esac 
 
-
-docker build -f ${DOCKERFILE} ${VERSION_TYPE_TAG} ${VERSION_TAG} --no-cache --force-rm .
+echo "Running: docker build -f ${DOCKERFILE} ${VERSION_TYPE_TAG} ${VERSION_TAG} --no-cache --force-rm . "
+docker build --build-arg DB_TYPE=${DB_TYPE} --build-arg VERSION=${VERSION}  -f ${DOCKERFILE} ${VERSION_TYPE_TAG} ${VERSION_TAG} --no-cache --force-rm .

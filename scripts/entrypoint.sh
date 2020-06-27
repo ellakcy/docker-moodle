@@ -48,7 +48,7 @@ echo ${MOODLE_DB_TYPE};
 
 # A cointainer WONT have multi db support
 # Each container will provide support for a specific db only
-if [ $HAS_MySQL_SUPPORT -gt 0 ] && [ "$MOODLE_DB_TYPE" = "mysql" ] ; then
+if [ $HAS_MySQL_SUPPORT -gt 0 ] && [ "$MOODLE_DB_TYPE" == "mysqli" ] ; then
 
   echo "Trying for mysql database"
 

@@ -11,7 +11,7 @@ ARG	DB_TYPE="all"
 VOLUME ["/var/moodledata"]
 EXPOSE 80
 
-ENV MOODLE_DB_TYPE="${DB_TYPE}"
+ENV MOODLE_DB_TYPE $DB_TYPE
 # Let the container know that there is no tty
 ENV DEBIAN_FRONTEND noninteractive \
 	MOODLE_URL http://0.0.0.0 \
