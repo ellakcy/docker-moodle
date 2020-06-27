@@ -111,3 +111,9 @@ services:
       MOODLE_DB_NAME: $MOODLE_DB_NAME
       MOODLE_REVERSE_LB: "false"
       MOODLE_SSL: "false"
+
+volumes:
+  dbmysql:
+  dbmaria:
+  dbpostgres:
+  
