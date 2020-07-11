@@ -39,8 +39,8 @@ services:
       context: ../..
       dockerfile: ./dockerfiles/apache/Dockerfile
       args:
-        DB_TYPE: 'mysql'
-    image: ellakcy/moodle:mysql_maria_apache_35
+        DB_TYPE: 'mysqli'
+    image: ellakcy/moodle:mysql_maria_apache
     volumes:
       - './volumes/moodle/mysql/data:/var/moodledata'
       - './volumes/moodle/mysql/www:/var/www/html'
@@ -65,8 +65,8 @@ services:
       context: ../..
       dockerfile: ./dockerfiles/apache/Dockerfile
       args:
-        DB_TYPE: 'mysql'
-    image: ellakcy/moodle:mysql_maria_apache_35
+        DB_TYPE: 'mysqli'
+    image: ellakcy/moodle:mysql_maria_apache
     volumes:
       - './volumes/moodle/mysql/data:/var/moodledata'
       - './volumes/moodle/mysql/www:/var/www/html'
@@ -92,7 +92,7 @@ services:
       dockerfile: ./dockerfiles/apache/Dockerfile
       args:
         DB_TYPE: 'pgsql'
-    image: ellakcy/moodle:postgres_apache_dev
+    image: ellakcy/moodle:postgresql_apache
     volumes:
       - './volumes/moodle/postgres/data:/var/moodledata'
       - './volumes/moodle/postgres/www:/var/www/html'

@@ -59,7 +59,7 @@ services:
       dockerfile: ./dockerfiles/fpm_alpine/Dockerfile
       args:
         DB_TYPE: 'mysqli'
-    image: ellakcy/moodle:alpine_fpm_dev_mysql
+    image: ellakcy/moodle:mysql_maria_fpm_alpine
     volumes:
       - "moodle_alpine_fpm_mysql:/var/www/html"
       - "moodle_data_alpine_fpm_mysql:/var/moodledata"
@@ -81,7 +81,7 @@ services:
       dockerfile: ./dockerfiles/fpm_alpine/Dockerfile
       args:
         DB_TYPE: 'mysqli'
-    image: ellakcy/moodle:alpine_fpm_dev_mariadb
+    image: ellakcy/moodle:mysql_maria_fpm_alpine
     volumes:
       - "moodle_alpine_fpm_mariadb:/var/www/html"
       - "moodle_data_alpine_fpm_mariadb:/var/moodledata"
@@ -103,7 +103,7 @@ services:
       dockerfile: ./dockerfiles/fpm_alpine/Dockerfile
       args:
         DB_TYPE: 'pgsql'
-    image: ellakcy/moodle:alpine_fpm_dev_postgres
+    image: ellakcy/moodle:postgresql_fpm_alpine
     volumes:
       - "moodle_alpine_fpm_postgresql:/var/www/html"
       - "moodle_data_alpine_fpm_postgresql:/var/moodledata"

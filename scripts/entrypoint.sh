@@ -27,7 +27,6 @@ function pingdb {
     fi
 }
 
-echo "Installing moodle with ${MOODLE_DB_TYPE} support"
 
 echo "Moving files into web folder"
 rsync -rvad --chown www-data:www-data /usr/src/moodle/* /var/www/html/
@@ -40,14 +39,12 @@ echo "placeholder" > /var/moodledata/placeholder
 chown -R www-data:www-data /var/moodledata
 chmod 777 /var/moodledata
 
-echo "Setting up database"
-
 HAS_MySQL_SUPPORT=$(php -m | grep -i mysql | grep -v "mysqlnd" | wc -w)
 HAS_POSTGRES_SUPPORT=$(php -m | grep -i pgsql |wc -w)
 
-echo ${MOODLE_DB_TYPE};
+echo "Installing moodle with ${MOODLE_DB_TYPE} support"
 
-if [ $HAS_MySQL_SUPPORT -gt 0 ] && [[ "$MOODLE_DB_TYPE" == "mysqli"  ||   "$MOODLE_DB_TYPE" == "mariadb"  ]]; then
+if [ $HAS_MySQL_SUPPORT -gt 0 ] && [ "${MOODLE_DB_TYPE}" = "mysqli" ]; then
 
   echo "Trying for mysql database"
 
@@ -58,15 +55,33 @@ if [ $HAS_MySQL_SUPPORT -gt 0 ] && [[ "$MOODLE_DB_TYPE" == "mysqli"  ||   "$MOOD
   : ${MOODLE_DB_USER:=${DB_ENV_MYSQL_USER:-root}}
   : ${MOODLE_DB_NAME:=${DB_ENV_MYSQL_DATABASE:-'moodle'}}
 
-    if [ "$MOODLE_DB_USER" = 'root' ]; then
-  : ${MOODLE_DB_PASSWORD:=$DB_ENV_MYSQL_ROOT_PASSWORD}
-    else
-  : ${MOODLE_DB_PASSWORD:=$DB_ENV_MYSQL_PASSWORD}
-    fi
+  if [ "$MOODLE_DB_USER" = 'root' ]; then
+    : ${MOODLE_DB_PASSWORD:=$DB_ENV_MYSQL_ROOT_PASSWORD}
+  else
+    : ${MOODLE_DB_PASSWORD:=$DB_ENV_MYSQL_PASSWORD}
+  fi
 
   pingdb
   MOODLE_DB_TYPE=$(php /opt/detect_mariadb.php)
 
+elif [ $HAS_MySQL_SUPPORT -gt 0 ] && [ "${MOODLE_DB_TYPE}" = "mariadb" ]; then
+
+  echo "Trying for mariadb database"
+
+  : ${MOODLE_DB_HOST:="moodle_db"}
+  : ${MOODLE_DB_PORT:=3306}
+
+    echo "Setting up the database connection info"
+  : ${MOODLE_DB_USER:=${DB_ENV_MYSQL_USER:-root}}
+  : ${MOODLE_DB_NAME:=${DB_ENV_MYSQL_DATABASE:-'moodle'}}
+
+  if [ "$MOODLE_DB_USER" = 'root' ]; then
+    : ${MOODLE_DB_PASSWORD:=$DB_ENV_MYSQL_ROOT_PASSWORD}
+  else
+    : ${MOODLE_DB_PASSWORD:=$DB_ENV_MYSQL_PASSWORD}
+  fi
+
+  pingdb
 
 elif [ $HAS_POSTGRES_SUPPORT -gt 0 ] && [ "$MOODLE_DB_TYPE" = "pgsql" ]; then
 

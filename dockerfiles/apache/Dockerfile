@@ -24,14 +24,13 @@ ENV DEBIAN_FRONTEND noninteractive \
     MOODLE_DB_NAME '' \
     MOODLE_DB_PORT '3306'
 
-COPY ./scripts/entrypoint.sh /usr/local/bin/entrypoint.sh
-
-
 RUN echo "Build moodle version ${VERSION}" &&\
-	chmod +x /usr/local/bin/entrypoint.sh &&\
 	apt-get update && \
-	if [ $DB_TYPE = 'mysqli' ] || [ $DB_TYPE = 'all' ]; then echo "Setup mysql and mariadb support" && docker-php-ext-install pdo mysqli pdo_mysql; fi &&\
-	if [ $DB_TYPE = 'pgsql' ] || [ $DB_TYPE = 'all' ]; then echo "Setup postgresql support" &&\
+	echo ${DB_TYPE} &&\
+	if [ $DB_TYPE = "mysqli" ] || [ $DB_TYPE = "all" ]; then echo "Setup mysql and mariadb support" &&\
+		 docker-php-ext-install pdo mysqli pdo_mysql;\
+	fi &&\
+	if [ $DB_TYPE = "pgsql" ] || [ $DB_TYPE = "all" ]; then echo "Setup postgresql support" &&\
 		apt-get install -y --no-install-recommends libghc-postgresql-simple-dev &&\
      	docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql &&\
         docker-php-ext-install pdo pgsql pdo_pgsql; \ 
@@ -62,6 +61,11 @@ RUN echo "Build moodle version ${VERSION}" &&\
 
 COPY ./scripts/moodle-config.php /usr/src/moodle/config.php
 COPY ./scripts/detect_mariadb.php /opt/detect_mariadb.php
+
+COPY ./scripts/entrypoint.sh /usr/local/bin/entrypoint.sh
+
+RUN chown root:root /usr/local/bin/entrypoint.sh &&\
+	chmod +x /usr/local/bin/entrypoint.sh
 
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
