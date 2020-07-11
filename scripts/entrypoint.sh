@@ -1,8 +1,9 @@
 #!/bin/bash
 
-# Event though some containers may not have some support for a specific db
+# Even though some containers may not have some support for a specific db
 # We provide a generic entrypoint for better maintainance
 
+# Ping Database function
 function pingdb {
     OK=0
     for count in {1..100}; do
@@ -46,9 +47,7 @@ HAS_POSTGRES_SUPPORT=$(php -m | grep -i pgsql |wc -w)
 
 echo ${MOODLE_DB_TYPE};
 
-# A cointainer WONT have multi db support
-# Each container will provide support for a specific db only
-if [ $HAS_MySQL_SUPPORT -gt 0 ] && [ "$MOODLE_DB_TYPE" == "mysqli" ] ; then
+if [ $HAS_MySQL_SUPPORT -gt 0 ] && [[ "$MOODLE_DB_TYPE" == "mysqli"  ||   "$MOODLE_DB_TYPE" == "mariadb"  ]]; then
 
   echo "Trying for mysql database"
 

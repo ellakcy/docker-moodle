@@ -24,13 +24,10 @@ ENV \
     MOODLE_DB_NAME '' \
     MOODLE_DB_PORT '3306'
 
-COPY ./scripts/entrypoint.sh /usr/local/bin/entrypoint.sh
 COPY ./scripts/detect_mariadb.php /opt/detect_mariadb.php
 
 # Installing php and external tools
 RUN \
-		chown root:root /usr/local/bin/entrypoint.sh &&\
-		chmod +x /usr/local/bin/entrypoint.sh &&\
 		if [[ $DB_TYPE = "mysqli" ]] || [[ $DB_TYPE = "all" ]]; then echo "Setup mysql and mariadb support" &&\
 		 docker-php-ext-install pdo mysqli pdo_mysql;\
 		fi &&\
@@ -57,6 +54,10 @@ RUN \
     rm -rf /var/cache/apk/*
 
 COPY ./scripts/moodle-config-fpm.php /usr/src/moodle/config.php
+COPY ./scripts/entrypoint.sh /usr/local/bin/entrypoint.sh
+
+RUN chown root:root /usr/local/bin/entrypoint.sh &&\
+	chmod +x /usr/local/bin/entrypoint.sh
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 CMD ["php-fpm"]
