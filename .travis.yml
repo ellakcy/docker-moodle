@@ -9,8 +9,8 @@ services:
 
 env:
   global:
-    - LATEST=38
-    - LATEST_LTS=35
+    - LATEST=39
+    - LATEST_LTS=39
   jobs:
     - "DB_TYPE=all VERSION=35 DOCKERFILE=dockerfiles/apache/Dockerfile"
     - "DB_TYPE=mysqli VERSION=35 DOCKERFILE=dockerfiles/apache/Dockerfile"
@@ -32,6 +32,11 @@ env:
     - "DB_TYPE=pgsql  VERSION=38 DOCKERFILE=dockerfiles/apache/Dockerfile"
     - "DB_TYPE=mysqli VERSION=38 DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
     - "DB_TYPE=pgsql VERSION=38 DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
+    - "DB_TYPE=all VERSION=39 DOCKERFILE=dockerfiles/apache/Dockerfile"
+    - "DB_TYPE=mysqli VERSION=39 DOCKERFILE=dockerfiles/apache/Dockerfile"
+    - "DB_TYPE=pgsql  VERSION=39 DOCKERFILE=dockerfiles/apache/Dockerfile"
+    - "DB_TYPE=mysqli VERSION=39 DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
+    - "DB_TYPE=pgsql VERSION=39 DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
 
 script: bash ./travis/build.sh
 
