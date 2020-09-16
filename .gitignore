@@ -4,3 +4,4 @@ volume
 *.orig
 volumes
 *~HEAD
+.vagrant
