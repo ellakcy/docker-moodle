@@ -67,6 +67,4 @@ COPY ./scripts/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chown root:root /usr/local/bin/entrypoint.sh &&\
 	chmod +x /usr/local/bin/entrypoint.sh
 
-
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
-CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
+CMD [ "/usr/local/bin/entrypoint.sh", "/usr/sbin/apache2ctl", "-D", "FOREGROUND"]

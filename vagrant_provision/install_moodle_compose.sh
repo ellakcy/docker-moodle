@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
 
-
-mkdir /home/vagrant/moodle-compose
-git clone https://github.com/ellakcy/docker-moodle.git /home/vagrant/moodle-compose
+sudo rm -rf /home/vagrant/moodle-compose
+git clone https://github.com/ellakcy/moodle-compose.git /home/vagrant/moodle-compose

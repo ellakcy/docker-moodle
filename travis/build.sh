@@ -24,13 +24,18 @@ VERSION_TAG="-t ellakcy/moodle:${DB_FLAVOR}_${SERVER_FAVOR}_${VERSION}"
 
 VERSION_TYPE_TAG=""
 
-case $VERSION in
-    "${LATEST_LTS}" ) VERSION_TYPE_TAG="-t ellakcy/moodle:${DB_FLAVOR}_${SERVER_FAVOR}_lts" ;;
-    "${LATEST}" ) VERSION_TYPE_TAG="-t ellakcy/moodle:${DB_FLAVOR}_${SERVER_FAVOR}_latest -t ellakcy/moodle:${DB_FLAVOR}_${SERVER_FAVOR}" 
+if [[ $VERSION == $LATEST_LTS ]]; then
+    VERSION_TYPE_TAG="-t ellakcy/moodle:${DB_FLAVOR}_${SERVER_FAVOR}_lts"
+fi
+
+if [[ $VERSION == $LATEST ]]; then
+    VERSION_TYPE_TAG="-t ellakcy/moodle:${DB_FLAVOR}_${SERVER_FAVOR}_lts"
+
+    VERSION_TYPE_TAG="-t ellakcy/moodle:${DB_FLAVOR}_${SERVER_FAVOR}_latest -t ellakcy/moodle:${DB_FLAVOR}_${SERVER_FAVOR}" 
     if [[ $SERVER_FAVOR == "apache" ]] && [[ $DB_FLAVOR = "mulitbase" ]]; then
         VERSION_TYPE_TAG=" ${VERSION_TYPE_TAG} -t  ellakcy/moodle:latest"
-    fi;;
-esac 
+    fi
+fi
 
 echo "Running: docker build -f ${DOCKERFILE} ${VERSION_TYPE_TAG} ${VERSION_TAG} --no-cache --force-rm . "
 docker build --build-arg DB_TYPE=${DB_TYPE} --build-arg VERSION=${VERSION}  -f ${DOCKERFILE} ${VERSION_TYPE_TAG} ${VERSION_TAG} --no-cache --force-rm .
