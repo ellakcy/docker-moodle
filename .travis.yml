@@ -38,6 +38,9 @@ env:
     - "DB_TYPE=mysqli VERSION=39 DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
     - "DB_TYPE=pgsql VERSION=39 DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
 
+before_install:
+  - echo "$DOCKER_TOKEN" | docker login -u "$DOCKER_USER" --password-stdin
+
 script: bash ./travis/build.sh
 
 deploy:
