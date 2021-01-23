@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "$DOCKER_TOKEN" | docker login -u "$DOCKER_USER" --password-stdin
+
 # The script required the Following Environmental Variables:
 # DB_TYPE in order to specify the database type
 # VERSION in order to specify the moodle version
