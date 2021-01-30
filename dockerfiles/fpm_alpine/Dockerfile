@@ -4,7 +4,6 @@
 FROM  php:7.2-fpm-alpine
 
 # Replace for later version
-ARG VERSION=35
 ARG	DB_TYPE="all"
 
 VOLUME ["/var/moodledata"]
@@ -38,11 +37,19 @@ RUN \
 		apk add --update curl bash rsync unzip netcat-openbsd libxml2-dev icu-dev libmcrypt-dev libpng-dev libjpeg-turbo-dev libzip-dev &&\
  		docker-php-ext-install xmlrpc && \
 		docker-php-ext-install mbstring && \
-		docker-php-ext-install zip && \
+		docker-php-ext-install zip --with-libzip && \
 		docker-php-ext-install intl && \
  		docker-php-ext-install soap && \
 		docker-php-ext-install gd && \
 		docker-php-ext-install opcache && \
+		apk del unzip curl gcc g++ &&\
+    	rm -rf /var/cache/apk/*
+
+ARG VERSION=35
+
+
+RUN	\
+		apk add --update curl unzip &&\
 		echo "Installing moodle" && \
 		curl https://download.moodle.org/download.php/direct/stable${VERSION}/moodle-latest-${VERSION}.zip -o /tmp/moodle-latest.zip  && \
 		rm -rf /var/www/html/index.html && \
@@ -50,8 +57,8 @@ RUN \
 		mkdir -p /usr/src/moodle && \
 		mv /tmp/moodle /usr/src/ && \
 		chown www-data:www-data -R /usr/src/moodle && \
-		apk del unzip curl gcc g++ &&\
-    rm -rf /var/cache/apk/*
+		apk del unzip curl &&\
+    	rm -rf /var/cache/apk/*
 
 COPY ./scripts/moodle-config-fpm.php /usr/src/moodle/config.php
 COPY ./scripts/entrypoint.sh /usr/local/bin/entrypoint.sh
