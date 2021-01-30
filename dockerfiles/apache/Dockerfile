@@ -35,21 +35,27 @@ RUN echo "Build moodle version ${VERSION}" &&\
      	docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql &&\
         docker-php-ext-install pdo pgsql pdo_pgsql; \ 
 	fi &&\
-	apt-get -f -y install --no-install-recommends rsync unzip netcat libxmlrpc-c++8-dev libxml2-dev libpng-dev libicu-dev libmcrypt-dev libzip-dev &&\
+	apt-get -f -y install --no-install-recommends rsync netcat libxmlrpc-c++8-dev libxml2-dev libpng-dev libicu-dev libmcrypt-dev libzip-dev &&\
  	docker-php-ext-install xmlrpc && \
 	docker-php-ext-install mbstring && \
 	whereis libzip &&\
 	docker-php-ext-configure zip --with-libzip=/usr/lib/x86_64-linux-gnu/libzip.so &&\
-	docker-php-ext-install zip && \
-	docker-php-ext-install xml && \
-	docker-php-ext-install intl && \
- 	docker-php-ext-install soap && \
-	docker-php-ext-install gd && \
-	docker-php-ext-install opcache
+	docker-php-ext-install zip &&\
+	docker-php-ext-install xml &&\
+	docker-php-ext-install intl &&\
+ 	docker-php-ext-install soap &&\
+	docker-php-ext-install gd &&\
+	docker-php-ext-install opcache &&\ 
+	apt-get autopurge -y &&\
+	apt-get autoremove -y &&\
+	apt-get autoclean &&\
+	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* cache/* /var/lib/log/*
 
 ARG VERSION=37
 
 RUN	echo "Installing moodle" && \
+	apt-get update && \
+	apt-get -f -y install --no-install-recommends unzip &&\
 	curl https://download.moodle.org/download.php/direct/stable${VERSION}/moodle-latest-${VERSION}.zip -o /tmp/moodle-latest.zip  && \
 	rm -rf /var/www/html/index.html && \
 	cd /tmp &&	unzip /tmp/moodle-latest.zip && cd / \
