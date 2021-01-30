@@ -5,8 +5,6 @@
 FROM  php:7.2-apache
 
 # Replace for later version
-ARG VERSION=37
-ARG	DB_TYPE="all"
 
 VOLUME ["/var/moodledata"]
 EXPOSE 80
@@ -23,6 +21,8 @@ ENV DEBIAN_FRONTEND noninteractive \
     MOODLE_DB_USER '' \
     MOODLE_DB_NAME '' \
     MOODLE_DB_PORT '3306'
+
+ARG	DB_TYPE="all"
 
 RUN echo "Build moodle version ${VERSION}" &&\
 	apt-get update && \
@@ -45,8 +45,11 @@ RUN echo "Build moodle version ${VERSION}" &&\
 	docker-php-ext-install intl && \
  	docker-php-ext-install soap && \
 	docker-php-ext-install gd && \
-	docker-php-ext-install opcache && \
-	echo "Installing moodle" && \
+	docker-php-ext-install opcache
+
+ARG VERSION=37
+
+RUN	echo "Installing moodle" && \
 	curl https://download.moodle.org/download.php/direct/stable${VERSION}/moodle-latest-${VERSION}.zip -o /tmp/moodle-latest.zip  && \
 	rm -rf /var/www/html/index.html && \
 	cd /tmp &&	unzip /tmp/moodle-latest.zip && cd / \
