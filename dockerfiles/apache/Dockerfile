@@ -22,19 +22,8 @@ ENV DEBIAN_FRONTEND noninteractive \
     MOODLE_DB_NAME '' \
     MOODLE_DB_PORT '3306'
 
-ARG	DB_TYPE="all"
-
 RUN echo "Build moodle version ${VERSION}" &&\
-	apt-get update && \
-	echo ${DB_TYPE} &&\
-	if [ $DB_TYPE = "mysqli" ] || [ $DB_TYPE = "all" ]; then echo "Setup mysql and mariadb support" &&\
-		 docker-php-ext-install pdo mysqli pdo_mysql;\
-	fi &&\
-	if [ $DB_TYPE = "pgsql" ] || [ $DB_TYPE = "all" ]; then echo "Setup postgresql support" &&\
-		apt-get install -y --no-install-recommends libghc-postgresql-simple-dev &&\
-     	docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql &&\
-        docker-php-ext-install pdo pgsql pdo_pgsql; \ 
-	fi &&\
+	apt-get update &&\
 	apt-get -f -y install --no-install-recommends rsync netcat libxmlrpc-c++8-dev libxml2-dev libpng-dev libicu-dev libmcrypt-dev libzip-dev &&\
  	docker-php-ext-install xmlrpc && \
 	docker-php-ext-install mbstring && \
@@ -51,26 +40,53 @@ RUN echo "Build moodle version ${VERSION}" &&\
 	apt-get autoclean &&\
 	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* cache/* /var/lib/log/*
 
-ARG VERSION=37
+ARG	DB_TYPE="all"
 
-RUN	echo "Installing moodle" && \
-	apt-get update && \
-	apt-get -f -y install --no-install-recommends unzip &&\
-	curl https://download.moodle.org/download.php/direct/stable${VERSION}/moodle-latest-${VERSION}.zip -o /tmp/moodle-latest.zip  && \
-	rm -rf /var/www/html/index.html && \
-	cd /tmp &&	unzip /tmp/moodle-latest.zip && cd / \
-	mkdir -p /usr/src/moodle && \
-	mv /tmp/moodle /usr/src/ && \
-	chown www-data:www-data -R /usr/src/moodle && \
-	apt-get purge -y unzip &&\
+RUN apt-get update && \
+	echo ${DB_TYPE} &&\
+	if [ $DB_TYPE = "mysqli" ] || [ $DB_TYPE = "all" ]; then echo "Setup mysql and mariadb support" &&\
+		 docker-php-ext-install pdo mysqli pdo_mysql;\
+	fi &&\
+	if [ $DB_TYPE = "pgsql" ] || [ $DB_TYPE = "all" ]; then echo "Setup postgresql support" &&\
+		apt-get install -y --no-install-recommends libghc-postgresql-simple-dev &&\
+     	docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql &&\
+        docker-php-ext-install pdo pgsql pdo_pgsql; \ 
+	fi &&\
 	apt-get autopurge -y &&\
 	apt-get autoremove -y &&\
 	apt-get autoclean &&\
 	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* cache/* /var/lib/log/*
 
+ARG VERSION=37
+
+# RUN	echo "Installing moodle" && \
+# 	apt-get update && \
+# 	apt-get -f -y install --no-install-recommends unzip &&\
+# 	curl https://download.moodle.org/download.php/direct/stable${VERSION}/moodle-latest-${VERSION}.zip -o /tmp/moodle-latest.zip  && \
+# 	rm -rf /var/www/html/index.html && \
+# 	cd /tmp &&	unzip /tmp/moodle-latest.zip && cd / \
+# 	mkdir -p /usr/src/moodle && \
+# 	mv /tmp/moodle /usr/src/ && \
+# 	chown www-data:www-data -R /usr/src/moodle && \
+# 	apt-get purge -y unzip &&\
+# 	apt-get autopurge -y &&\
+# 	apt-get autoremove -y &&\
+# 	apt-get autoclean &&\
+# 	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* cache/* /var/lib/log/*
+
+RUN	echo "Installing moodle (using php)" &&\
+	php --version &&\
+	php -r "copy(\"https://download.moodle.org/download.php/direct/stable${VERSION}/moodle-latest-${VERSION}.zip\",\"/tmp/moodle-latest.zip\");" &&\
+	rm -rf /var/www/html/index.html && \
+	mkdir -p /usr/src/moodle && \
+	echo "<?php $zip=new ZipArchive(); if($zip->open('/tmp/moodle-latest.zip') === TRUE){ $zip->extractTo('/usr/src/moodle'); $zip->close(); exit(0);} exit(1);" > /tmp/zip.php &&\
+	php /tmp/zip.php &&\
+	chown www-data:www-data -R /usr/src/moodle && \
+	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* cache/* /var/lib/log/*
+
+
 COPY ./scripts/moodle-config.php /usr/src/moodle/config.php
 COPY ./scripts/detect_mariadb.php /opt/detect_mariadb.php
-
 COPY ./scripts/entrypoint.sh /usr/local/bin/entrypoint.sh
 
 RUN chown root:root /usr/local/bin/entrypoint.sh &&\

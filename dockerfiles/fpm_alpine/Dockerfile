@@ -4,7 +4,6 @@
 FROM  php:7.2-fpm-alpine
 
 # Replace for later version
-ARG	DB_TYPE="all"
 
 VOLUME ["/var/moodledata"]
 VOLUME ["/var/www/html"]
@@ -24,6 +23,7 @@ ENV \
     MOODLE_DB_PORT '3306'
 
 COPY ./scripts/detect_mariadb.php /opt/detect_mariadb.php
+
 
 # Installing php and external tools
 RUN \
@@ -46,20 +46,39 @@ RUN \
 		apk del unzip curl gcc g++ &&\
     	rm -rf /var/cache/apk/*
 
+ARG	DB_TYPE="all"
+
+RUN \
+	if [[ $DB_TYPE = "mysqli" ]] || [[ $DB_TYPE = "all" ]]; then echo "Setup mysql and mariadb support" &&\
+		docker-php-ext-install pdo mysqli pdo_mysql;\
+	fi &&\
+	if [[ $DB_TYPE = "pgsql" ]] || [[ $DB_TYPE = "all" ]]; then echo "Setup postgresql support" &&\
+		apk add --update postgresql-dev &&\
+		docker-php-ext-install pdo pgsql pdo_pgsql;\
+	fi
+
 ARG VERSION=35
 
+# RUN	\
+# 		apk add --update curl unzip &&\
+# 		echo "Installing moodle" && \
+# 		curl https://download.moodle.org/download.php/direct/stable${VERSION}/moodle-latest-${VERSION}.zip -o /tmp/moodle-latest.zip  && \
+# 		rm -rf /var/www/html/index.html && \
+# 		cd /tmp &&	unzip /tmp/moodle-latest.zip && cd / \
+# 		mkdir -p /usr/src/moodle && \
+# 		mv /tmp/moodle /usr/src/ && \
+# 		chown www-data:www-data -R /usr/src/moodle && \
+# 		apk del unzip curl &&\
+#     	rm -rf /var/cache/apk/*
 
-RUN	\
-		apk add --update curl unzip &&\
-		echo "Installing moodle" && \
-		curl https://download.moodle.org/download.php/direct/stable${VERSION}/moodle-latest-${VERSION}.zip -o /tmp/moodle-latest.zip  && \
-		rm -rf /var/www/html/index.html && \
-		cd /tmp &&	unzip /tmp/moodle-latest.zip && cd / \
-		mkdir -p /usr/src/moodle && \
-		mv /tmp/moodle /usr/src/ && \
-		chown www-data:www-data -R /usr/src/moodle && \
-		apk del unzip curl &&\
-    	rm -rf /var/cache/apk/*
+RUN	echo "Installing moodle (using php)" &&\
+	php -r "copy(\"https://download.moodle.org/download.php/direct/stable${VERSION}/moodle-latest-${VERSION}.zip\",\"/tmp/moodle-latest.zip\");" &&\
+	rm -rf /var/www/html/index.html && \
+	mkdir -p /usr/src/moodle && \
+	echo "<?php $zip=new ZipArchive(); if($zip->open('/tmp/moodle-latest.zip') === TRUE){ $zip->extractTo('/usr/src/moodle'); $zip->close(); exit(0);} exit(1);" > /tmp/zip.php &&\
+	php zip.php &&\
+	chown www-data:www-data -R /usr/src/moodle && \
+	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* cache/* /var/lib/log/*
 
 COPY ./scripts/moodle-config-fpm.php /usr/src/moodle/config.php
 COPY ./scripts/entrypoint.sh /usr/local/bin/entrypoint.sh
