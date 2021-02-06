@@ -4,9 +4,10 @@
 # The script required the Following Environmental Variables:
 # DB_TYPE in order to specify the database type
 
+SCRIPTPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 DOCKERFILE_ALPINE_FPM="dockerfiles/fpm_alpine/Dockerfile"
 
-
+    echo $version
 SERVER_FAVOR="apache"
 if [[ $DOCKERFILE == $DOCKERFILE_ALPINE_FPM ]]; then
     SERVER_FAVOR="fpm_alpine"

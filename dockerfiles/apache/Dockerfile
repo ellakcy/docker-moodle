@@ -59,29 +59,17 @@ RUN apt-get update && \
 
 ARG VERSION=37
 
-# RUN	echo "Installing moodle" && \
-# 	apt-get update && \
-# 	apt-get -f -y install --no-install-recommends unzip &&\
-# 	curl https://download.moodle.org/download.php/direct/stable${VERSION}/moodle-latest-${VERSION}.zip -o /tmp/moodle-latest.zip  && \
-# 	rm -rf /var/www/html/index.html && \
-# 	cd /tmp &&	unzip /tmp/moodle-latest.zip && cd / \
-# 	mkdir -p /usr/src/moodle && \
-# 	mv /tmp/moodle /usr/src/ && \
-# 	chown www-data:www-data -R /usr/src/moodle && \
-# 	apt-get purge -y unzip &&\
-# 	apt-get autopurge -y &&\
-# 	apt-get autoremove -y &&\
-# 	apt-get autoclean &&\
-# 	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* cache/* /var/lib/log/*
-
-RUN	echo "Installing moodle (using php)" &&\
-	php --version &&\
-	php -r "copy(\"https://download.moodle.org/download.php/direct/stable${VERSION}/moodle-latest-${VERSION}.zip\",\"/tmp/moodle-latest.zip\");" &&\
+RUN	echo "Installing moodle" && \
+	curl http://download.moodle.org/download.php/direct/stable${VERSION}/moodle-latest-${VERSION}.tgz -o /tmp/moodle-latest.tgz  && \
 	rm -rf /var/www/html/index.html && \
+	cd /tmp &&	tar -xvf /tmp/moodle-latest.tgz && cd / \
 	mkdir -p /usr/src/moodle && \
-	echo "<?php $zip=new ZipArchive(); if($zip->open('/tmp/moodle-latest.zip') === TRUE){ $zip->extractTo('/usr/src/moodle'); $zip->close(); exit(0);} exit(1);" > /tmp/zip.php &&\
-	php /tmp/zip.php &&\
+	mv /tmp/moodle /usr/src/ && \
 	chown www-data:www-data -R /usr/src/moodle && \
+	apt-get purge -y unzip &&\
+	apt-get autopurge -y &&\
+	apt-get autoremove -y &&\
+	apt-get autoclean &&\
 	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* cache/* /var/lib/log/*
 
 

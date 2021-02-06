@@ -9,7 +9,7 @@ services:
 
 env:
   global:
-    - LATEST=39
+    - LATEST=310
     - LATEST_LTS=39
   jobs:
     - "DB_TYPE=all DOCKERFILE=dockerfiles/apache/Dockerfile"
