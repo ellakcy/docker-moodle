@@ -5,9 +5,10 @@ SCRIPTPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 echo ${DOCKERFILE_PATH}
 
 case $DOCKERFILE_PATH in
-    "dockerfiles/apache/Dockerfile") SERVER_FLAVOR="apache";;
-    "dockerfiles/fpm_alpine/Dockerfile") SERVER_FLAVOR="fpm_alpine";;
+    "dockerfiles/apache/Dockerfile") SERVER_FLAVOR="apache"; docker pull php:7.2-apache;;
+    "dockerfiles/fpm_alpine/Dockerfile") SERVER_FLAVOR="fpm_alpine"; docker pull php:7.2-fpm-alpine;;
 esac
+
 
 # File must end with new line
 FILE="${SCRIPTPATH}/../versions.txt"
