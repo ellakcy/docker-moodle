@@ -60,16 +60,9 @@ RUN apt-get update && \
 ARG VERSION=37
 
 RUN	echo "Installing moodle" && \
-	curl http://download.moodle.org/download.php/direct/stable${VERSION}/moodle-latest-${VERSION}.tgz -o /tmp/moodle-latest.tgz  && \
+	curl http://download.moodle.org/download.php/direct/stable${VERSION}/moodle-latest-${VERSION}.tgz | tar -xzv /usr/src && \
 	rm -rf /var/www/html/index.html && \
-	cd /tmp &&	tar -xvf /tmp/moodle-latest.tgz && cd / \
-	mkdir -p /usr/src/moodle && \
-	mv /tmp/moodle /usr/src/ && \
 	chown www-data:www-data -R /usr/src/moodle && \
-	apt-get purge -y unzip &&\
-	apt-get autopurge -y &&\
-	apt-get autoremove -y &&\
-	apt-get autoclean &&\
 	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* cache/* /var/lib/log/*
 
 

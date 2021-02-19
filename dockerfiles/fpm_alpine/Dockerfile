@@ -27,24 +27,17 @@ COPY ./scripts/detect_mariadb.php /opt/detect_mariadb.php
 
 # Installing php and external tools
 RUN \
-		if [[ $DB_TYPE = "mysqli" ]] || [[ $DB_TYPE = "all" ]]; then echo "Setup mysql and mariadb support" &&\
-		 docker-php-ext-install pdo mysqli pdo_mysql;\
-		fi &&\
-		if [[ $DB_TYPE = "pgsql" ]] || [[ $DB_TYPE = "all" ]]; then echo "Setup postgresql support" &&\
-			apk add --update postgresql-dev &&\
-		    docker-php-ext-install pdo pgsql pdo_pgsql;\
-		fi &&\
-		apk add --update curl bash rsync unzip netcat-openbsd libxml2-dev icu-dev libmcrypt-dev libpng-dev libjpeg-turbo-dev libzip-dev &&\
- 		docker-php-ext-install xmlrpc && \
-		docker-php-ext-install mbstring && \
-		docker-php-ext-configure zip --with-libzip && \
-		docker-php-ext-install zip &&\
-		docker-php-ext-install intl && \
- 		docker-php-ext-install soap && \
-		docker-php-ext-install gd && \
-		docker-php-ext-install opcache && \
-		apk del unzip curl gcc g++ &&\
-    	rm -rf /var/cache/apk/*
+	apk add --update curl bash rsync unzip netcat-openbsd libxml2-dev icu-dev libmcrypt-dev libpng-dev libjpeg-turbo-dev libzip-dev &&\
+ 	docker-php-ext-install xmlrpc && \
+	docker-php-ext-install mbstring && \
+	docker-php-ext-configure zip --with-libzip && \
+	docker-php-ext-install zip &&\
+	docker-php-ext-install intl && \
+ 	docker-php-ext-install soap && \
+	docker-php-ext-install gd && \
+	docker-php-ext-install opcache && \
+	apk del unzip curl gcc g++ &&\
+    rm -rf /var/cache/apk/*
 
 ARG	DB_TYPE="all"
 
