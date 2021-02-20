@@ -60,7 +60,6 @@ RUN apt-get update && \
 ARG VERSION=37
 
 RUN	echo "Installing moodle ${VERSION}" && \
-	cd /usr/src &&\
 	curl -s -N  http://download.moodle.org/download.php/direct/stable${VERSION}/moodle-latest-${VERSION}.tgz | tar -xvz && \
 	ls -l /usr/src/moodle &&\
 	rm -rf /var/www/html/index.html && \
