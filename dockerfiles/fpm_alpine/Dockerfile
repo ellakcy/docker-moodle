@@ -58,7 +58,7 @@ RUN \
 	 php -r "copy(\"http://download.moodle.org/download.php/direct/stable${VERSION}/moodle-latest-${VERSION}.tgz\",\"/tmp/moodle-latest.tgz\");" &&\
  	 rm -rf /var/www/html/index.html && \
  	 cd /tmp &&\
-	 tar -xvf /tmp/moodle-latest.zip && cd / \
+	 tar -xvf /tmp/moodle-latest.tgz && cd / \
  	 mkdir -p /usr/src/moodle && \
  	 mv /tmp/moodle /usr/src/ && \
  	 chown www-data:www-data -R /usr/src/moodle && \
