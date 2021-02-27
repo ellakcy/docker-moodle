@@ -6,6 +6,7 @@ SCRIPTPATH=`dirname $SCRIPT`
 DB_FLAVORS=("all" "mysqli" "pgsql")
 DOCKERFILES=("dockerfiles/fpm_alpine/Dockerfile" "dockerfiles/apache/Dockerfile")
 
+cd ${SCRIPTPATH}/..
 git fetch
 CURR_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 echo ${CURR_BRANCH}
