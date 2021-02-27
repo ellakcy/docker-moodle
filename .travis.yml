@@ -1,8 +1,6 @@
 language: shell
 os: linux
 dist: xenial
-git:
-  depth: false
 
 services:
   - docker
