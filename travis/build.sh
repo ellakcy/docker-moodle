@@ -12,6 +12,11 @@ if [[ $DOCKERFILE == $DOCKERFILE_ALPINE_FPM ]]; then
     SERVER_FAVOR="fpm_alpine"
 fi
 
+
+VERSION=$(cat VERSION)
+LATEST=$(cat LATEST)
+LATEST_LTS=$(cat LATEST_LTS)
+
 DB_FLAVOR=""
 
 case $DB_TYPE in

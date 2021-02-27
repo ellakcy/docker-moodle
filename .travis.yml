@@ -12,31 +12,13 @@ env:
     - LATEST=310
     - LATEST_LTS=39
   jobs:
-    - "DB_TYPE=all VERSION=35 DOCKERFILE=dockerfiles/apache/Dockerfile"
-    - "DB_TYPE=mysqli VERSION=35 DOCKERFILE=dockerfiles/apache/Dockerfile"
-    - "DB_TYPE=pgsql  VERSION=35 DOCKERFILE=dockerfiles/apache/Dockerfile"
-    - "DB_TYPE=mysqli VERSION=35 DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
-    - "DB_TYPE=pgsql VERSION=36 DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
-    - "DB_TYPE=all VERSION=36 DOCKERFILE=dockerfiles/apache/Dockerfile"
-    - "DB_TYPE=mysqli VERSION=36 DOCKERFILE=dockerfiles/apache/Dockerfile"
-    - "DB_TYPE=pgsql  VERSION=36 DOCKERFILE=dockerfiles/apache/Dockerfile"
-    - "DB_TYPE=mysqli VERSION=36 DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
-    - "DB_TYPE=pgsql VERSION=36 DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
-    - "DB_TYPE=all VERSION=38 DOCKERFILE=dockerfiles/apache/Dockerfile"
-    - "DB_TYPE=mysqli VERSION=38 DOCKERFILE=dockerfiles/apache/Dockerfile"
-    - "DB_TYPE=pgsql  VERSION=38 DOCKERFILE=dockerfiles/apache/Dockerfile"
-    - "DB_TYPE=mysqli VERSION=38 DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
-    - "DB_TYPE=pgsql VERSION=38 DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
-    - "DB_TYPE=all VERSION=39 DOCKERFILE=dockerfiles/apache/Dockerfile"
-    - "DB_TYPE=mysqli VERSION=39 DOCKERFILE=dockerfiles/apache/Dockerfile"
-    - "DB_TYPE=pgsql  VERSION=39 DOCKERFILE=dockerfiles/apache/Dockerfile"
-    - "DB_TYPE=mysqli VERSION=39 DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
-    - "DB_TYPE=pgsql VERSION=39 DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
-    - "DB_TYPE=all VERSION=310 DOCKERFILE=dockerfiles/apache/Dockerfile"
-    - "DB_TYPE=mysqli VERSION=310 DOCKERFILE=dockerfiles/apache/Dockerfile"
-    - "DB_TYPE=pgsql  VERSION=310 DOCKERFILE=dockerfiles/apache/Dockerfile"
-    - "DB_TYPE=mysqli VERSION=310 DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
-    - "DB_TYPE=pgsql VERSION=310 DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
+    - "DB_TYPE=all     DOCKERFILE=dockerfiles/apache/Dockerfile"
+    - "DB_TYPE=mysqli  DOCKERFILE=dockerfiles/apache/Dockerfile"
+    - "DB_TYPE=pgsql   DOCKERFILE=dockerfiles/apache/Dockerfile"
+    - "DB_TYPE=all     DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
+    - "DB_TYPE=mysqli  DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
+    - "DB_TYPE=pgsql   DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
+   
 
 script: bash ./travis/build.sh
 
