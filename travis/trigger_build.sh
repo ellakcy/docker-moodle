@@ -1,8 +1,11 @@
 #!/bin/bash
 
+SCRIPT=`realpath $0`
+SCRIPTPATH=`dirname $SCRIPT`
+
 
 if [ ${TRAVIS_BRANCH} == 'dev' ] || [ ${TRAVIS_BRANCH} == 'master' ]; then
-    bash ./travis/gen_branches.sh 
+    bash ${SCRIPTPATH}/../travis/gen_branches.sh 
 else
-    bash ./travis/buils_docker.sh
+    bash ${SCRIPTPATH}/../travis/buils_docker.sh
 fi
