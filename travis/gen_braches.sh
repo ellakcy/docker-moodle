@@ -41,7 +41,7 @@ while read VERSION; do
             git add ${SCRIPTPATH}/../DOCKERFILE
             git commit -m "SET VERSION AND FLAVOR"
             git status
-            push -fq https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git ${BRANCH}
+            git push -fq https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git ${BRANCH}
             git checkout $CURR_BRANCH
         done
     done
