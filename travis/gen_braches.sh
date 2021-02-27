@@ -9,7 +9,7 @@ DOCKERFILES=("dockerfiles/fpm_alpine/Dockerfile" "dockerfiles/apache/Dockerfile"
 cd ${SCRIPTPATH}/..
 git fetch
 
-CURR_BRANCH=${TRAVIS_BRANCH:$(git rev-parse --abbrev-ref HEAD)}
+CURR_BRANCH=${TRAVIS_BRANCH:-$(git rev-parse --abbrev-ref HEAD)}
 echo "BRANCH "${CURR_BRANCH}
 
 exit 0
