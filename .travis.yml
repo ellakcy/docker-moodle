@@ -7,7 +7,7 @@ git:
 services:
   - docker
 
-script: bash ./travis/gen_braches.sh
+script: bash ./travis/trigger_build.sh
 
 deploy:
   - provider: script

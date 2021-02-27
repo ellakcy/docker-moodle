@@ -12,8 +12,6 @@ git fetch
 CURR_BRANCH=${TRAVIS_BRANCH:-$(git rev-parse --abbrev-ref HEAD)}
 echo "BRANCH "${CURR_BRANCH}
 
-exit 0
-
 while read VERSION; do
     for DB_FLAVOR in ${DB_FLAVORS[@]}; do
         for DOCKERFILE in ${DOCKERFILES[@]}; do
