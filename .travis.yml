@@ -7,7 +7,7 @@ git:
 services:
   - docker
 
-script: bash ./travis/gen_branches.sh
+script: bash ./travis/gen_braches.sh
 
 deploy:
   - provider: script
