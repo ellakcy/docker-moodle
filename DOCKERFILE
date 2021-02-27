@@ -1,1 +1,1 @@
-dockerfiles/apache/Dockerfile
+dockerfiles/fpm_alpine/Dockerfile
