@@ -2,7 +2,7 @@
 
 
 if [ ${TRAVIS_BRANCH} == 'dev' ] || [ ${TRAVIS_BRANCH} == 'master' ]; then
- echo "Ι will generate branches"
+    bash ./travis/gen_branches.sh 
 else
- echo "Ι will build docker"
+    bash ./travis/buils_docker.sh
 fi
