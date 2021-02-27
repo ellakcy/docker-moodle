@@ -3,15 +3,15 @@
 SCRIPT=`realpath $0`
 SCRIPTPATH=`dirname $SCRIPT`
 
-DB_FLAVORS=("all","mysqli","pgsql")
-DOCKERFILES=("dockerfiles/fpm_alpine/Dockerfile","dockerfiles/apache/Dockerfile")
+DB_FLAVORS=("all" "mysqli" "pgsql")
+DOCKERFILES=("dockerfiles/fpm_alpine/Dockerfile" "dockerfiles/apache/Dockerfile")
 
 git fetch
 
-while read $VERSION; do
+while read VERSION; do
     for DB_FLAVOR in $DB_FLAVORS; do
         for DOCKERFILE in $DOCKERFILES; do
-
+            echo $VERSION
             case $DOCKERFILE in
                 "dockerfiles/fpm_alpine/Dockerfile") SERVER_FLAVOR='fpm';;
                 "dockerfiles/apache/Dockerfile") SERVER_FLAVOR='apache';;
