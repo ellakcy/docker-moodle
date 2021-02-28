@@ -1,19 +1,49 @@
 language: shell
 os: linux
 dist: xenial
-
-secure:
-  - "nETsOqp6PjcqbgySOznvO3Aj/STYBnFOyrkDJwfRNUhYzH4lGBzCgVUPvS8vc6eHAxuslvEdeoTetOdr5y1sG5O3v+lNJrt6/WQdLetLf/zfWqVPanMs2IPqn08UTOjh4IShPD5lHrzOw2iA5qz/Sa3Zgay2ytKvIR/zosqQDP//Rf9SYuLglSO4AU0G9P6oW4jk3UFY8OdWpfr6jFNdWTFvm9d4oju+a1ebtzl20gaJQoTC4Hnc/XGp1qWEdMyuq+FhtwVFwaciqOSkHl+kJQfAkZxODYRI0WDHxp01lPlBQufwWC5DrD28s8XFpsRZE6q5vrnrUbeTEjir4fq3+Fhg5wM+LcRhzPUHem5IOHB3uJrSnLmnPGhuE7ycFizAxzA1nBqb7ygri33cNZuEhiGGdRqo+aipPVd+Py9NfeHp7vrwwjh/Sf5k8XyPNahrPhSdWseK0ydmwhPO88wRZc+oxRwb5tItns3WZmBh7N+xgEHPiovnPIDrgWhlVaPkRHgNXYpyatUFcuBYiTLOOovuX4+MbsQsuhSbhKvNtyyyok8LW/qD5h7zfbymyHDIuJDsW344BrM/DtW3bxmXl+XSVZR7PCbGUMfNqeEfrAYU5i/5rfX4zKP7cB2K2gU+o+vYQbFi3vjkYf6+dWkfh5rFnGDj2/Rtbr26efqzp0Y="
+git:
+  depth: false
 
 services:
   - docker
 
-script: bash ./travis/trigger_build.sh
+env:
+  global:
+    - LATEST=310
+    - LATEST_LTS=39
+  jobs:
+    - "DB_TYPE=all DOCKERFILE=dockerfiles/apache/Dockerfile"
+    - "DB_TYPE=mysqli DOCKERFILE=dockerfiles/apache/Dockerfile"
+    - "DB_TYPE=pgsql  DOCKERFILE=dockerfiles/apache/Dockerfile"
+    - "DB_TYPE=all DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
+    - "DB_TYPE=mysqli DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
+    - "DB_TYPE=pgsql DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
+   
+
+jobs:
+  include:
+    - env:
+        "VERSION=35"
+      script: bash ./travis/build_docker.sh
+    - env:
+        "VERSION=36"
+      script: bash ./travis/build_docker.sh
+    - env:
+        "VERSION=37"
+      script: bash ./travis/build_docker.sh
+    - env:
+        "VERSION=38"
+      script: bash ./travis/build_docker.sh
+    - env:
+        "VERSION=39"
+      script: bash ./travis/build_docker.sh
+    - env:
+        "VERSION=310"
+      script: bash ./travis/build_docker.sh
 
 deploy:
   - provider: script
     on:
-      all_branches: true
-      condition: ${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH} =~ ^release\/.*$
+       branch: master
     script: bash ./travis/deploy.sh
        
