@@ -11,36 +11,168 @@ env:
   global:
     - LATEST=310
     - LATEST_LTS=39
-  jobs:
-    - "DB_TYPE=all DOCKERFILE=dockerfiles/apache/Dockerfile"
-    - "DB_TYPE=mysqli DOCKERFILE=dockerfiles/apache/Dockerfile"
-    - "DB_TYPE=pgsql  DOCKERFILE=dockerfiles/apache/Dockerfile"
-    - "DB_TYPE=all DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
-    - "DB_TYPE=mysqli DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
-    - "DB_TYPE=pgsql DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
+  # jobs:
+  #   - "DB_TYPE=all DOCKERFILE=dockerfiles/apache/Dockerfile"
+  #   - "DB_TYPE=mysqli DOCKERFILE=dockerfiles/apache/Dockerfile"
+  #   - "DB_TYPE=pgsql  DOCKERFILE=dockerfiles/apache/Dockerfile"
+  #   - "DB_TYPE=all DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
+  #   - "DB_TYPE=mysqli DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
+  #   - "DB_TYPE=pgsql DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
    
 
 jobs:
   include:
+    # 3.5
     - env:
         "VERSION=35"
+        "DB_TYPE=all DOCKERFILE=dockerfiles/apache/Dockerfile"
+      script: bash ./travis/build_docker.sh
+    - env:
+        "VERSION=35"
+        "DB_TYPE=mysqli DOCKERFILE=dockerfiles/apache/Dockerfile"
+      script: bash ./travis/build_docker.sh
+    - env:
+        "VERSION=35"
+        "DB_TYPE=pgsql  DOCKERFILE=dockerfiles/apache/Dockerfile"
+      script: bash ./travis/build_docker.sh
+    - env:
+        "VERSION=35"
+        "DB_TYPE=all DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
+      script: bash ./travis/build_docker.sh
+    - env:
+        "VERSION=35"
+        "DB_TYPE=mysqli DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
+      script: bash ./travis/build_docker.sh
+    - env:
+        "VERSION=35"
+        "DB_TYPE=pgsql  DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
+      script: bash ./travis/build_docker.sh  
+    # 3.6
+    - env:
+        "VERSION=36"
+        "DB_TYPE=all DOCKERFILE=dockerfiles/apache/Dockerfile"
       script: bash ./travis/build_docker.sh
     - env:
         "VERSION=36"
+        "DB_TYPE=mysqli DOCKERFILE=dockerfiles/apache/Dockerfile"
+      script: bash ./travis/build_docker.sh
+    - env:
+        "VERSION=36"
+        "DB_TYPE=pgsql  DOCKERFILE=dockerfiles/apache/Dockerfile"
+      script: bash ./travis/build_docker.sh
+    - env:
+        "VERSION=36"
+        "DB_TYPE=all DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
+      script: bash ./travis/build_docker.sh
+    - env:
+        "VERSION=36"
+        "DB_TYPE=mysqli DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
+      script: bash ./travis/build_docker.sh
+    - env:
+        "VERSION=36"
+        "DB_TYPE=pgsql  DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
+      script: bash ./travis/build_docker.sh
+    # 3.7
+    - env:
+        "VERSION=37"
+        "DB_TYPE=all DOCKERFILE=dockerfiles/apache/Dockerfile"
       script: bash ./travis/build_docker.sh
     - env:
         "VERSION=37"
+        "DB_TYPE=mysqli DOCKERFILE=dockerfiles/apache/Dockerfile"
+      script: bash ./travis/build_docker.sh
+    - env:
+        "VERSION=37"
+        "DB_TYPE=pgsql  DOCKERFILE=dockerfiles/apache/Dockerfile"
+      script: bash ./travis/build_docker.sh
+    - env:
+        "VERSION=37"
+        "DB_TYPE=all DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
+      script: bash ./travis/build_docker.sh
+    - env:
+        "VERSION=37"
+        "DB_TYPE=mysqli DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
+      script: bash ./travis/build_docker.sh
+    - env:
+        "VERSION=37"
+        "DB_TYPE=pgsql  DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
+      script: bash ./travis/build_docker.sh
+    # 3.8
+    - env:
+        "VERSION=38"
+        "DB_TYPE=all DOCKERFILE=dockerfiles/apache/Dockerfile"
       script: bash ./travis/build_docker.sh
     - env:
         "VERSION=38"
+        "DB_TYPE=mysqli DOCKERFILE=dockerfiles/apache/Dockerfile"
+      script: bash ./travis/build_docker.sh
+    - env:
+        "VERSION=38"
+        "DB_TYPE=pgsql  DOCKERFILE=dockerfiles/apache/Dockerfile"
+      script: bash ./travis/build_docker.sh
+    - env:
+        "VERSION=38"
+        "DB_TYPE=all DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
+      script: bash ./travis/build_docker.sh
+    - env:
+        "VERSION=38"
+        "DB_TYPE=mysqli DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
+      script: bash ./travis/build_docker.sh
+    - env:
+        "VERSION=38"
+        "DB_TYPE=pgsql  DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
+      script: bash ./travis/build_docker.sh      
+    # 3.9
+    - env:
+        "VERSION=39"
+        "DB_TYPE=all DOCKERFILE=dockerfiles/apache/Dockerfile"
       script: bash ./travis/build_docker.sh
     - env:
         "VERSION=39"
+        "DB_TYPE=mysqli DOCKERFILE=dockerfiles/apache/Dockerfile"
       script: bash ./travis/build_docker.sh
     - env:
-        "VERSION=310"
+        "VERSION=39"
+        "DB_TYPE=pgsql  DOCKERFILE=dockerfiles/apache/Dockerfile"
       script: bash ./travis/build_docker.sh
-
+    - env:
+        "VERSION=39"
+        "DB_TYPE=all DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
+      script: bash ./travis/build_docker.sh
+    - env:
+        "VERSION=39"
+        "DB_TYPE=mysqli DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
+      script: bash ./travis/build_docker.sh
+    - env:
+        "VERSION=39"
+        "DB_TYPE=pgsql  DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
+      script: bash ./travis/build_docker.sh  
+    # 3.10
+    - env:
+        "VERSION=39"
+        "DB_TYPE=all DOCKERFILE=dockerfiles/apache/Dockerfile"
+      script: bash ./travis/build_docker.sh
+    - env:
+        "VERSION=39"
+        "DB_TYPE=mysqli DOCKERFILE=dockerfiles/apache/Dockerfile"
+      script: bash ./travis/build_docker.sh
+    - env:
+        "VERSION=39"
+        "DB_TYPE=pgsql  DOCKERFILE=dockerfiles/apache/Dockerfile"
+      script: bash ./travis/build_docker.sh
+    - env:
+        "VERSION=39"
+        "DB_TYPE=all DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
+      script: bash ./travis/build_docker.sh
+    - env:
+        "VERSION=39"
+        "DB_TYPE=mysqli DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
+      script: bash ./travis/build_docker.sh
+    - env:
+        "VERSION=39"
+        "DB_TYPE=pgsql  DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
+      script: bash ./travis/build_docker.sh
+   
 deploy:
   - provider: script
     on:
