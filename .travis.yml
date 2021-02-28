@@ -11,13 +11,6 @@ env:
   global:
     - LATEST=310
     - LATEST_LTS=39
-  # jobs:
-  #   - "DB_TYPE=all DOCKERFILE=dockerfiles/apache/Dockerfile"
-  #   - "DB_TYPE=mysqli DOCKERFILE=dockerfiles/apache/Dockerfile"
-  #   - "DB_TYPE=pgsql  DOCKERFILE=dockerfiles/apache/Dockerfile"
-  #   - "DB_TYPE=all DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
-  #   - "DB_TYPE=mysqli DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
-  #   - "DB_TYPE=pgsql DOCKERFILE=dockerfiles/fpm_alpine/Dockerfile"
    
 
 jobs:
