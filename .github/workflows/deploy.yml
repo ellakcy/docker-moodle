@@ -20,14 +20,6 @@ jobs:
     steps:
       - name: Check Out Repo 
         uses: actions/checkout@v2
-       
-      - name : Build Docker Images
-        shell: bash
-        run: |
-          docker --version
-          ls -l ./.github
-          chmod +x ".github/build_docker.sh"
-          .github/build_docker.sh 'dockerfiles/apache/Dockerfile'
       
       - name: Push into Dockerhub
         shell: bash
@@ -37,6 +29,16 @@ jobs:
         run: |
           echo "$DOCKER_TOKEN" | docker login --username "$DOCKER_USER" --password-stdin
           cat ~/.docker/config.json 
+
+      - name : Build Docker Images
+        shell: bash
+        run: |
+          docker --version
+          ls -l ./.github
+          chmod +x ".github/build_docker.sh"
+          .github/build_docker.sh 'dockerfiles/apache/Dockerfile'
+      
+ 
 
   # build_fpm_images:
   #   runs-on: ubuntu-latest
