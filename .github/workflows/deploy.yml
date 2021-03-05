@@ -19,13 +19,13 @@ jobs:
         VERSION: ${{ matrix.moodle_version }}
         DB_TYPE: ${{ matrix.database }}
         DOCKERFILE: ${{ matrix.dockerdile }}
-      steps:
-        - name: Check Out Repo 
-          uses: actions/checkout@v2
+    steps:
+      - name: Check Out Repo 
+        uses: actions/checkout@v2
        
-        - name : Build Images
-          shell: bash
-          run: |
-            chmod +x "${GITHUB_WORKSPACE}/.travis/build_docker.sh"
-            ${GITHUB_WORKSPACE}/.travis/build_docker.sh
+      - name : Build Images
+        shell: bash
+        run: |
+          chmod +x "${GITHUB_WORKSPACE}/.travis/build_docker.sh"
+          ${GITHUB_WORKSPACE}/.travis/build_docker.sh
        
