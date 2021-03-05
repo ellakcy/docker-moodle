@@ -8,6 +8,8 @@ DOCKERFILE_ALPINE_FPM="dockerfiles/fpm_alpine/Dockerfile"
 
 SERVER_FAVOR="apache"
 
+echo "Building $DOCKERFILE VERSION $VERSION FLAVOR $DB_TYPE " 
+
 if [[ $DOCKERFILE == $DOCKERFILE_ALPINE_FPM ]]; then
     SERVER_FAVOR="fpm_alpine"
 fi
