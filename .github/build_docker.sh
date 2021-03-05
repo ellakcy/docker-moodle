@@ -8,6 +8,8 @@ DOCKERFILE_ALPINE_FPM="dockerfiles/fpm_alpine/Dockerfile"
 
 SERVER_FAVOR="apache"
 
+DOCKERFILE=${1}
+
 echo "Building $DOCKERFILE VERSION $VERSION FLAVOR $DB_TYPE " 
 
 if [[ $DOCKERFILE == $DOCKERFILE_ALPINE_FPM ]]; then
@@ -44,5 +46,5 @@ if [[ $VERSION == $LATEST ]]; then
     fi
 fi
 
-echo "Running: docker build -f ${DOCKERFILE} ${VERSION_TYPE_TAG} ${VERSION_TAG} --no-cache --force-rm . "
-docker build --build-arg DB_TYPE=${DB_TYPE} --build-arg VERSION=${VERSION}  -f ${DOCKERFILE} ${VERSION_TYPE_TAG} ${VERSION_TAG} --force-rm .
+echo "Running: docker build --build-arg DB_TYPE=${DB_TYPE} -f ${DOCKERFILE} ${VERSION_TYPE_TAG} ${VERSION_TAG} --no-cache --force-rm . "
+docker build --build-arg DB_TYPE=${DB_TYPE} --build-arg VERSION=${VERSION} -f ${DOCKERFILE} ${VERSION_TYPE_TAG} ${VERSION_TAG} --force-rm .

@@ -14,20 +14,19 @@ jobs:
       matrix:
         moodle_version: [35,38,39,310]
         database: ['all','mysqli','pgsql']
-        dockerile: ['dockerfiles/apache/Dockerfile','dockerfiles/fpm_alpine/Dockerfile']
     env:
       VERSION: ${{ matrix.moodle_version }}
       DB_TYPE: ${{ matrix.database }}
-      DOCKERFILE: ${{ matrix.dockerdile }}
     steps:
       - name: Check Out Repo 
         uses: actions/checkout@v2
        
-      - name : Build Images
+      - name : Build Docker Images
         shell: bash
         run: |
           docker --version
           ls -l ./.github
           chmod +x ".github/build_docker.sh"
-          .github/build_docker.sh
+          .github/build_docker.sh 'dockerfiles/apache/Dockerfile'
+          .github/build_docker.sh 'dockerfiles/fpm_alpine/Dockerfile'
        
