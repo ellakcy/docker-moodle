@@ -26,7 +26,8 @@ jobs:
       - name : Build Images
         shell: bash
         run: |
-          ls -l
-          chmod +x ".travis/build_docker.sh"
-          .travis/build_docker.sh
+          docker --version
+          ls -l ./.github
+          # chmod +x ".github/build_docker.sh"
+          # .github/build_docker.sh
        
