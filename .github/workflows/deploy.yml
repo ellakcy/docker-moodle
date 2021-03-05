@@ -15,10 +15,10 @@ jobs:
         moodle_version: [35,36,37,38,39,310]
         database: ['all','mysqli','pgsql']
         dockerile: ['dockerfiles/apache/Dockerfile','dockerfiles/fpm_alpine/Dockerfile']
-      env:
-        VERSION: ${{ matrix.moodle_version }}
-        DB_TYPE: ${{ matrix.database }}
-        DOCKERFILE: ${{ matrix.dockerdile }}
+    env:
+      VERSION: ${{ matrix.moodle_version }}
+      DB_TYPE: ${{ matrix.database }}
+      DOCKERFILE: ${{ matrix.dockerdile }}
     steps:
       - name: Check Out Repo 
         uses: actions/checkout@v2
