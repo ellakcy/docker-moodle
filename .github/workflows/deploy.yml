@@ -1,0 +1,31 @@
+name: build_and_deploy
+
+on:
+  push:
+    branches: [
+      master,
+      dev
+    ]
+
+jobs:
+  build_images:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        moodle_version: [35,36,37,38,39,310]
+        database: ['all','mysqli','pgsql']
+        dockerile: ['dockerfiles/apache/Dockerfile','dockerfiles/fpm_alpine/Dockerfile']
+      env:
+        VERSION: ${{ matrix.moodle_version }}
+        DB_TYPE: ${{ matrix.database }}
+        DOCKERFILE: ${{ matrix.dockerdile }}
+      steps:
+        - name: Check Out Repo 
+          uses: actions/checkout@v2
+       
+        - name : Build Images
+          shell: bash
+          run: |
+            chmod +x "${GITHUB_WORKSPACE}/.travis/build_docker.sh"
+            ${GITHUB_WORKSPACE}/.travis/build_docker.sh
+       
