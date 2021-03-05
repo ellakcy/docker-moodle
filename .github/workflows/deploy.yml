@@ -35,7 +35,7 @@ jobs:
           DOCKER_USER: ${{ secrets.DOCKERHUB_USER }}
           DOCKER_TOKEN: ${{ secrets.DOCKERHUB_SECRET }}
         run: |
-          echo "$DOCKER_TOKEN" | docker login -u "$DOCKER_USER" --password-stdin
+          echo "$DOCKER_TOKEN" | docker login --username "$DOCKER_USER" --password-stdin
           cat ~/.docker/config.json 
 
   # build_fpm_images:
