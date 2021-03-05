@@ -7,6 +7,11 @@ on:
       dev
     ]
 
+environment:
+  name: Build
+  url:  https://github.com
+
+
 jobs:
   build_apache_images:
     runs-on: ubuntu-latest
