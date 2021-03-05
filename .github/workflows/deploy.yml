@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        moodle_version: [35,36,37,38,39,310]
+        moodle_version: [35,38,39,310]
         database: ['all','mysqli','pgsql']
         dockerile: ['dockerfiles/apache/Dockerfile','dockerfiles/fpm_alpine/Dockerfile']
     env:
@@ -26,6 +26,7 @@ jobs:
       - name : Build Images
         shell: bash
         run: |
+          ls -l
           chmod +x ".travis/build_docker.sh"
           .travis/build_docker.sh
        
