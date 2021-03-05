@@ -7,17 +7,9 @@ on:
       dev
     ]
 
-environment:
-  name: Build
-  url:  https://github.com
-
-
 jobs:
   build_apache_images:
     runs-on: ubuntu-latest
-    environment:
-      name: Build
-      url:  https://github.com
     strategy:
       matrix:
         moodle_version: [35,38,39,310]
