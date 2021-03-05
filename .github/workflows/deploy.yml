@@ -26,6 +26,6 @@ jobs:
       - name : Build Images
         shell: bash
         run: |
-          chmod +x "${GITHUB_WORKSPACE}/.travis/build_docker.sh"
-          ${GITHUB_WORKSPACE}/.travis/build_docker.sh
+          chmod +x ".travis/build_docker.sh"
+          .travis/build_docker.sh
        
