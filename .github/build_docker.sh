@@ -16,11 +16,6 @@ if [[ $DOCKERFILE == $DOCKERFILE_ALPINE_FPM ]]; then
     SERVER_FAVOR="fpm_alpine"
 fi
 
-
-VERSION=$(cat VERSION)
-LATEST=$(cat LATEST)
-LATEST_LTS=$(cat LATEST_LTS)
-
 DB_FLAVOR=""
 
 case $DB_TYPE in
@@ -46,5 +41,6 @@ if [[ $VERSION == $LATEST ]]; then
     fi
 fi
 
-echo "Running: docker build --build-arg DB_TYPE=${DB_TYPE} -f ${DOCKERFILE} ${VERSION_TYPE_TAG} ${VERSION_TAG} --no-cache --force-rm . "
+echo "Running:" 
+echo "docker build --build-arg DB_TYPE=${DB_TYPE} -f ${DOCKERFILE} ${VERSION_TYPE_TAG} ${VERSION_TAG} --force-rm . "
 docker build --build-arg DB_TYPE=${DB_TYPE} --build-arg VERSION=${VERSION} -f ${DOCKERFILE} ${VERSION_TYPE_TAG} ${VERSION_TAG} --force-rm .

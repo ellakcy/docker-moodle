@@ -17,6 +17,8 @@ jobs:
     env:
       VERSION: ${{ matrix.moodle_version }}
       DB_TYPE: ${{ matrix.database }}
+      LATEST: 310
+      LATEST_LTS: 39
     steps:
       - name: Check Out Repo 
         uses: actions/checkout@v2
@@ -51,6 +53,8 @@ jobs:
     env:
       VERSION: ${{ matrix.moodle_version }}
       DB_TYPE: ${{ matrix.database }}
+      LATEST: 310
+      LATEST_LTS: 39
     steps:
       - name: Check Out Repo 
         uses: actions/checkout@v2
