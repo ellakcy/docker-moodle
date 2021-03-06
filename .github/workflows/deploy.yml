@@ -21,43 +21,57 @@ jobs:
       - name: Check Out Repo 
         uses: actions/checkout@v2
 
-      # - name : Build Docker Images
-      #   shell: bash
-      #   run: |
-      #     docker --version
-      #     ls -l ./.github
-      #     chmod +x ".github/build_docker.sh"
-      #     .github/build_docker.sh 'dockerfiles/apache/Dockerfile'
+      - name : Build Docker Images
+        shell: bash
+        run: |
+          docker --version
+          ls -l ./.github
+          chmod +x ".github/build_docker.sh"
+          .github/build_docker.sh 'dockerfiles/apache/Dockerfile'
       
       - name: Login to Docker Hub
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       
       - name: Docker Push Image
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push' 
         shell: bash
         run: | 
-          cat ~/.docker/config.json
+          docker push ellakcy/moodle
 
-  # build_fpm_images:
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     matrix:
-  #       moodle_version: [35,38,39,310]
-  #       database: ['all','mysqli','pgsql']
-  #   env:
-  #     VERSION: ${{ matrix.moodle_version }}
-  #     DB_TYPE: ${{ matrix.database }}
-  #   steps:
-  #     - name: Check Out Repo 
-  #       uses: actions/checkout@v2
+  build_fpm_images:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        moodle_version: [35,38,39,310]
+        database: ['all','mysqli','pgsql']
+    env:
+      VERSION: ${{ matrix.moodle_version }}
+      DB_TYPE: ${{ matrix.database }}
+    steps:
+      - name: Check Out Repo 
+        uses: actions/checkout@v2
        
-  #     - name : Build Docker Images
-  #       shell: bash
-  #       run: |
-  #         docker --version
-  #         ls -l ./.github
-  #         chmod +x ".github/build_docker.sh"
-  #         .github/build_docker.sh 'dockerfiles/fpm_alpine/Dockerfile'
-       
+      - name : Build Docker Images
+        shell: bash
+        run: |
+          docker --version
+          ls -l ./.github
+          chmod +x ".github/build_docker.sh"
+          .github/build_docker.sh 'dockerfiles/fpm_alpine/Dockerfile'
+          
+      - name: Login to Docker Hub
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      
+      - name: Docker Push Image
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push' 
+        shell: bash
+        run: | 
+          docker push ellakcy/moodle       
