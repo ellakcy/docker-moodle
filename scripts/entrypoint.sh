@@ -27,6 +27,53 @@ function pingdb {
     fi
 }
 
+# Ι use heredoc in order to save space in my docker image by removing a dedicated layer for it.
+cat << 'DETECT_MARIA' > /opt/detect_mariadb.php
+<?php
+/**
+* @param string $host The database host
+* @param string | int $port The database port
+* @param string $database The database itself
+* @return string
+*/
+function gererateDbConnectionString($host,$port,$database) {
+  $connectionString="mysql:host=$host;dbname=$database;port=$port";
+  return $connectionString;
+}
+
+/**
+* @param PDO $pdo
+* @return String
+*/
+function detectMysqlOrMariaDb(PDO $pdo){
+  $version=$pdo->query('select version()')->fetchColumn();
+  if(preg_match("/^(\d*\.?)*-MariaDB-.*$/",$version)){
+    return 'mariadb';
+  } else {
+    return 'mysqli';
+  }
+}
+
+/**
+* Connection info
+*/
+$host=getenv('MOODLE_DB_HOST');
+$port=getenv('MOODLE_DB_PORT');
+$database=getenv('MOODLE_DB_NAME');
+$username=getenv('MOODLE_DB_USER');
+$password=getenv('MOODLE_DB_PASSWORD');
+
+try {
+  $connectionString=gererateDbConnectionString($host,$port,$database);
+  $pdo=new PDO($connectionString,$username,$password);
+  echo detectMysqlOrMariaDb($pdo);
+  exit(0);
+} catch (PDOExcetion $e) {
+  file_put_contents('php://stderr',$e->getMessage(),FILE_APPEND);
+  exit(1);
+}
+DETECT_MARIA
+
 
 echo "Moving files into web folder"
 rsync -rvad --chown www-data:www-data /usr/src/moodle/* /var/www/html/
@@ -41,6 +88,10 @@ chmod 777 /var/moodledata
 
 HAS_MySQL_SUPPORT=$(php -m | grep -i mysql | grep -v "mysqlnd" | wc -w)
 HAS_POSTGRES_SUPPORT=$(php -m | grep -i pgsql |wc -w)
+
+if [ -f "/etc/db_type" ]; then
+  MOODLE_DB_TYPE=$(cat /etc/db_type)
+fi
 
 echo "Installing moodle with ${MOODLE_DB_TYPE} support"
 
@@ -63,6 +114,12 @@ if [ $HAS_MySQL_SUPPORT -gt 0 ] && [ "${MOODLE_DB_TYPE}" = "mysqli" ]; then
 
   pingdb
   MOODLE_DB_TYPE=$(php /opt/detect_mariadb.php)
+  echo ${MOODLE_DB_TYPE}
+  if [ "${MOODLE_DB_TYPE}" = "mysqli" ]; then
+    sed -e "s/trim(getenv('MOODLE_DB_TYPE'))/'mysqli'/" /usr/src/moodle/config.php > /var/www/html/config.php
+  elif [ "${MOODLE_DB_TYPE}" = "mariadb" ]; then
+    sed -e "s/trim(getenv('MOODLE_DB_TYPE'))/'mariadb'/" /usr/src/moodle/config.php > /var/www/html/config.php
+  fi
 
 elif [ $HAS_MySQL_SUPPORT -gt 0 ] && [ "${MOODLE_DB_TYPE}" = "mariadb" ]; then
 
@@ -82,6 +139,7 @@ elif [ $HAS_MySQL_SUPPORT -gt 0 ] && [ "${MOODLE_DB_TYPE}" = "mariadb" ]; then
   fi
 
   pingdb
+  sed -e "s/trim(getenv('MOODLE_DB_TYPE'))/'mariadb'/" /usr/src/moodle/config.php > /var/www/html/config.php
 
 elif [ $HAS_POSTGRES_SUPPORT -gt 0 ] && [ "$MOODLE_DB_TYPE" = "pgsql" ]; then
 
@@ -97,6 +155,7 @@ elif [ $HAS_POSTGRES_SUPPORT -gt 0 ] && [ "$MOODLE_DB_TYPE" = "pgsql" ]; then
   : ${MOODLE_DB_PASSWORD:=$DB_ENV_POSTGRES_PASSWORD}
 
   pingdb
+  sed -e "s/trim(getenv('MOODLE_DB_TYPE'))/'pgsql'/" /usr/src/moodle/config.php > /var/www/html/config.php
 
 else
   echo >&2 "No database support found"
@@ -111,13 +170,16 @@ if [ -z "$MOODLE_DB_PASSWORD" ]; then
   exit 1
 fi
 
+echo "Configuring driver"
+chown www-data:www-data /var/www/html/config.php
+
 echo "Installing moodle"
-MOODLE_DB_TYPE=$MOODLE_DB_TYPE php /var/www/html/admin/cli/install_database.php \
+php /var/www/html/admin/cli/install_database.php \
           --adminemail=${MOODLE_ADMIN_EMAIL} \
           --adminuser=${MOODLE_ADMIN} \
           --adminpass=${MOODLE_ADMIN_PASSWORD} \
           --agree-license
 
-MOODLE_DB_TYPE=$MOODLE_DB_TYPE php admin/cli/purge_caches.php
+php admin/cli/purge_caches.php
 
-MOODLE_DB_TYPE=$MOODLE_DB_TYPE exec "$@"
+exec "$@"

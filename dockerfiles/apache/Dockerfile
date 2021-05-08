@@ -52,6 +52,10 @@ RUN apt-get update && \
      	docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql &&\
         docker-php-ext-install pdo pgsql pdo_pgsql; \ 
 	fi &&\
+	if [ $DB_TYPE = "mysqli" ] || [ $DB_TYPE = "pgsql" ]; then \
+		echo "SET DB_TYPE file" ;\
+		echo $DB_TYPE > /etc/db_type;\
+	fi &&\
 	apt-get autopurge -y &&\
 	apt-get autoremove -y &&\
 	apt-get autoclean &&\
@@ -68,9 +72,7 @@ RUN	echo "Installing moodle ${VERSION}" && \
 	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* cache/* /var/lib/log/* &&\
 	cd /var/www/html
 
-
 COPY ./scripts/moodle-config.php /usr/src/moodle/config.php
-COPY ./scripts/detect_mariadb.php /opt/detect_mariadb.php
 COPY ./scripts/entrypoint.sh /usr/local/bin/entrypoint.sh
 
 RUN chown root:root /usr/local/bin/entrypoint.sh &&\

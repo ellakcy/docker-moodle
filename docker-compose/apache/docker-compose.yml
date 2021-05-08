@@ -5,7 +5,7 @@ services:
   moodle_db_apache_postgres:
     image: postgres:alpine
     volumes:
-      - './volumes/db/mysql:/var/lib/postgresql/data'
+      - 'dbmysql:/var/lib/postgresql/data'
     environment:
       POSTGRES_DB: $MOODLE_DB_NAME
       POSTGRES_USER: $MOODLE_DB_USER
@@ -14,7 +14,7 @@ services:
   moodle_db_apache_maria:
     image: mariadb:10.2
     volumes:
-      - './volumes/db/maria:/var/lib/mysql'
+      - 'dbmaria:/var/lib/mysql'
     environment:
       MYSQL_RANDOM_ROOT_PASSWORD: "yes"
       MYSQL_ONETIME_PASSWORD: "yes"
@@ -25,7 +25,7 @@ services:
   moodle_db_apache_mysql:
     image: mysql:5.7
     volumes:
-      - './volumes/db/postgres:/var/lib/mysql'
+      - 'dbpostgres:/var/lib/mysql'
     environment:
       MYSQL_RANDOM_ROOT_PASSWORD: "yes"
       MYSQL_ONETIME_PASSWORD: "yes"

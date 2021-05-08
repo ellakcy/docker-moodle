@@ -9,38 +9,55 @@ Buidling the required images using this repo is a liitle laborious and the whole
 
 ## Available Images
 
-With apache based on `php:7.2-apache` image:
+All available images are listed in: https://hub.docker.com/r/ellakcy/moodle/tags?page=1&ordering=-name
 
-VERSION | mysql or mariadb | postgresql | all databases (mysql, mariadb, postgresql)
---- | --- | --- | ---
-3.5 | `ellakcy/moodle:mysql_maria_apache_35` `ellakcy/moodle:mysql_maria_apache_lts`  | `ellakcy/moodle:postgresql_apache_35` `ellakcy/moodle:postgresql_apache_lts` |  `ellakcy/moodle:multibase_apache_35` `ellakcy/moodle:multibase_apache_lts` 
-3.6 | `ellakcy/moodle:mysql_maria_apache_36` | `ellakcy/moodle:postgresql_apache_36` | `ellakcy/moodle:multibase_apache_36`
-3.7 | `ellakcy/moodle:mysql_maria_apache_37` | `ellakcy/moodle:postgresql_apache_37` | `ellakcy/moodle:multibase_apache_37`
-3.8 | `ellakcy/moodle:mysql_maria_apache_38` `ellakcy/moodle:mysql_maria_apache_latest` `ellakcy/moodle:mysql_maria_apache`  | `ellakcy/moodle:postgresql_apache_38` `ellakcy/moodle:postgresql_apache_latest` `ellakcy/moodle:postgresql_apache` |  `ellakcy/moodle:multibase_apache_38` `ellakcy/moodle:multibase_apache_latest`  `ellakcy/moodle:multibase_apache` `ellakcy/moodle:latest`
+Each flavor is seperates by database support, version and either if is it based on apache, or aplive fia fpm.
+To be more specific:
 
-With fpm based on `php:7.2-fpm-alpine` image:
+Image naming Pattern | PHP execution type | Mysql Support | Mariadb Support | Postgresql Support
+ --- | --- | --- | --- | --- 
+ `mulitbase_apache_^VERSION^` | apache  | YES | YES | YES 
+ `mysql_maria_apache_^VERSION^` | apache | YES | YES | NO 
+ `postgresql_apache_^VERSION^` | apache  | NO | NO | YES 
+ `mulitbase_alpine_fpm_^VERSION^` | fpm (running on alpine linux) | YES | YES | YES 
+ `mysql_maria_alpine_fpm_^VERSION^` | fpm (running on alpine linux) | YES | YES | NO 
+ `postgresql_alpine_fpm_^VERSION^` | (running on alpine linux)  | NO | NO | YES 
 
-VERSION | mysql or mariadb | postgresql | all databases
---- | --- | --- | ---
-3.5 | `ellakcy/moodle:mysql_maria_apache_35` `ellakcy/moodle:mysql_maria_apache_lts`  | `ellakcy/moodle:postgresql_apache_35` `ellakcy/moodle:postgresql_apache_lts` |  `ellakcy/moodle:multibase_apache_35` `ellakcy/moodle:multibase_apache_lts` 
-3.6 | `ellakcy/moodle:mysql_maria_apache_36` | `ellakcy/moodle:postgresql_apache_36` | `ellakcy/moodle:multibase_apache_36`
-3.7 | `ellakcy/moodle:mysql_maria_apache_37` | `ellakcy/moodle:postgresql_apache_37` | `ellakcy/moodle:multibase_apache_37`
-3.8 | `ellakcy/moodle:mysql_maria_apache_38` `ellakcy/moodle:mysql_maria_apache_latest` `ellakcy/moodle:mysql_maria_apache`  | `ellakcy/moodle:postgresql_apache_38` `ellakcy/moodle:postgresql_fpm_alpine_latest` `ellakcy/moodle:postgresql_apache` |  `ellakcy/moodle:multibase_apache_38` `ellakcy/moodle:multibase_fpm_alpine_latest`  `ellakcy/moodle:multibase_fpm_alpine_latest`
+The `^VERSION^` is a 2-3 digit number the first digit follows the major version and the rest of them follow the minor version for example the `mulitbase_apache_39` runs the moodle 3.9 whilst `mulitbase_apache_310` runs the moodle 3.10 .
 
-The following images are not maintained any more, though there are still archived for historical reasons and available in docker hub:
+Also for the latest moodle version we also ship the following images:
 
-* `ellakcy/moodle:apache_base` : A base image over apache, where you just can base your own moodle image for the database you want.
-* `ellakcy/moodle:mysql_maria_apache`: An image where provides moodle installation supporting mysql or mariadb.
-* `ellakcy/moodle:postgresql_apache`:  An image where provides moodle installation supporting postgresql.
-* `ellakcy/moodle:alpine_fpm_base`: A base image over alpine and fpm, where you just can base your own moodle image for the database you want.
-* `ellakcy/moodle:mysql_maria_fpm_alpine`: An alpine-based image using fpm supporting mysql and mariadb.
-* `ellakcy/moodle:postgresql_fpm_alpine`: An alpine-based image using fpm supporting postgresql.
+Image | PHP execution type | Mysql Support | Mariadb Support | Postgresql Support
+ --- | --- | --- | --- | --- 
+`latest` | apache  | YES | YES | YES
+ `mulitbase_apache_latest` | apache  | YES | YES | YES 
+ `mysql_maria_apache_latest` | apache | YES | YES | NO 
+ `postgresql_apache_latest` | apache  | NO | NO | YES 
+ `mulitbase_alpine_fpm_latest` | fpm (running on alpine linux) | YES | YES | YES 
+ `mysql_maria_alpine_fpm_latest` | fpm (running on alpine linux) | YES | YES | NO 
+ `postgresql_alpine_fpm_latest` | (running on alpine linux)  | NO | NO | YES 
 
+Whilst for the most recent moodle lts we ship:
+
+Image | PHP execution type | Mysql Support | Mariadb Support | Postgresql Support
+ --- | --- | --- | --- | --- 
+ `mulitbase_apache_lts` | apache  | YES | YES | YES 
+ `mysql_maria_apache_lts` | apache | YES | YES | NO 
+ `postgresql_apache_lts` | apache  | NO | NO | YES 
+ `mulitbase_alpine_fpm_lts` | fpm (running on alpine linux) | YES | YES | YES 
+ `mysql_maria_alpine_fpm_lts` | fpm (running on alpine linux) | YES | YES | NO 
+ `postgresql_alpine_fpm_lts` | (running on alpine linux)  | NO | NO | YES 
+
+## Build Cycle
+
+We aim to deliver freshy images on weekly basis.
 
 ## Run
 
 > We also developed a [docker-compose](https://github.com/ellakcy/moodle-compose) solution.
 > We strongly reccomend using this one.
+
+> Furthermore we also strongly recomend to create a docker-compose.yml and run using docker-compose in case that our solution mentioned above, does not fit your needs.
 
 ### Running images manually
 
@@ -81,8 +98,8 @@ http://0.0.0.0:8080
 ```
 
 > NOTICE: In case you need to keep the data persisted use volumes both in database and moodle containers.
-> NOTICE 2: `^VERSION` indicates the moodle version. For the latest lts just use `lts` or ofor the latest non lts use `latest` 
-
+> NOTICE 2: `^VERSION` indicates the moodle version. For the latest lts just use `lts` or for the latest non lts use `latest` 
+> Notice 3: In case your moodle installation is shipped via 
 
 ##### Alpine with Fpm based solutions
 
