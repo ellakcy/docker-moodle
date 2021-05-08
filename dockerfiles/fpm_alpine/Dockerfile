@@ -22,8 +22,7 @@ ENV \
     MOODLE_DB_NAME '' \
     MOODLE_DB_PORT '3306'
 
-COPY ./scripts/detect_mariadb.php /opt/detect_mariadb.php
-
+# COPY ./scripts/detect_mariadb.php /opt/detect_mariadb.php
 
 # Installing php and external tools
 RUN \
