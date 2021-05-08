@@ -1,6 +1,8 @@
 name: build_and_deploy
 
 on:
+  schedule:
+    - cron: '0 0 8-14 */2 2' 
   push:
     branches: [
       master,
