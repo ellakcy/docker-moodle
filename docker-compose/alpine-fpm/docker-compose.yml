@@ -2,9 +2,9 @@ version: "3.1"
 services:
 #database
   moodle_db_alpine_fpm_postgres:
-    image: postgres:alpine
+    image: postgres:11-alpine
     volumes:
-      - 'moodle_db_alpine_fpm_postgres:/var/lib/postgresql/data'
+      - 'moodle_db_alpine_fpm_postgres_volume:/var/lib/postgresql/data'
     environment:
       POSTGRES_DB: $MOODLE_DB_NAME
       POSTGRES_USER: $MOODLE_DB_USER
@@ -36,9 +36,9 @@ services:
   nginx:
     image: nginx:alpine
     ports:
-      - 7070:7070
-      - 7071:7071
-      - 7072:7072
+      - 7970:7970
+      - 7971:7971
+      - 7972:7972
     volumes:
       - "./nginx.conf:/etc/nginx/nginx.conf:ro"
       - "moodle_alpine_fpm_mysql:/var/www/html/mysql"
@@ -64,7 +64,7 @@ services:
       - "moodle_alpine_fpm_mysql:/var/www/html"
       - "moodle_data_alpine_fpm_mysql:/var/moodledata"
     environment:
-      MOODLE_URL: http://0.0.0.0:7070
+      MOODLE_URL: http://0.0.0.0:7970
       MOODLE_ADMIN: $MOODLE_ADMIN
       MOODLE_ADMIN_PASSWORD: $MOODLE_ADMIN_PASSWORD
       MOODLE_ADMIN_EMAIL: $MOODLE_ADMIN_EMAIL
@@ -86,7 +86,7 @@ services:
       - "moodle_alpine_fpm_mariadb:/var/www/html"
       - "moodle_data_alpine_fpm_mariadb:/var/moodledata"
     environment:
-      MOODLE_URL: http://0.0.0.0:7071
+      MOODLE_URL: http://0.0.0.0:7971
       MOODLE_ADMIN: $MOODLE_ADMIN
       MOODLE_ADMIN_PASSWORD: $MOODLE_ADMIN_PASSWORD
       MOODLE_ADMIN_EMAIL: $MOODLE_ADMIN_EMAIL
@@ -107,14 +107,12 @@ services:
     volumes:
       - "moodle_alpine_fpm_postgresql:/var/www/html"
       - "moodle_data_alpine_fpm_postgresql:/var/moodledata"
-    links:
-        - moodle_db_alpine_fpm_postgres
     environment:
-      MOODLE_URL: http://0.0.0.0:7072
+      MOODLE_URL: http://0.0.0.0:7972
       MOODLE_ADMIN: $MOODLE_ADMIN
       MOODLE_ADMIN_PASSWORD: $MOODLE_ADMIN_PASSWORD
       MOODLE_ADMIN_EMAIL: $MOODLE_ADMIN_EMAIL
-      MOODLE_DB_HOST: moodle_alpine_fpm_postgres
+      MOODLE_DB_HOST: moodle_db_alpine_fpm_postgres
       MOODLE_DB_USER: $MOODLE_DB_USER
       MOODLE_DB_PASSWORD: $MOODLE_DB_PASSWORD
       MOODLE_DB_NAME: $MOODLE_DB_NAME
@@ -125,7 +123,7 @@ services:
 volumes:
   moodle_db_alpine_fpm_mysql:
   moodle_db_alpine_fpm_maria:
-  moodle_db_alpine_fpm_postgres:
+  moodle_db_alpine_fpm_postgres_volume:
   moodle_alpine_fpm_mysql:
   moodle_data_alpine_fpm_mysql:
   moodle_alpine_fpm_mariadb:

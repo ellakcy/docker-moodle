@@ -22,8 +22,6 @@ ENV \
     MOODLE_DB_NAME '' \
     MOODLE_DB_PORT '3306'
 
-# COPY ./scripts/detect_mariadb.php /opt/detect_mariadb.php
-
 # Installing php and external tools
 RUN \
 	apk add --update curl bash rsync unzip netcat-openbsd libxml2-dev icu-dev libmcrypt-dev libpng-dev libjpeg-turbo-dev libzip-dev &&\
@@ -47,6 +45,10 @@ RUN \
 	if [[ $DB_TYPE = "pgsql" ]] || [[ $DB_TYPE = "all" ]]; then echo "Setup postgresql support" &&\
 		apk add --update postgresql-dev &&\
 		docker-php-ext-install pdo pgsql pdo_pgsql;\
+	fi &&\
+	if [ $DB_TYPE = "mysqli" ] || [ $DB_TYPE = "pgsql" ]; then \
+		echo "SET DB_TYPE file" ;\
+		echo $DB_TYPE > /etc/db_type;\
 	fi &&\
 	rm -rf /var/cache/apk/*
 

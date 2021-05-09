@@ -48,6 +48,13 @@ Image | PHP execution type | Mysql Support | Mariadb Support | Postgresql Suppor
  `mysql_maria_alpine_fpm_lts` | fpm (running on alpine linux) | YES | YES | NO 
  `postgresql_alpine_fpm_lts` | (running on alpine linux)  | NO | NO | YES 
 
+## Supported Database Versions:
+The images support the following version for each database:
+
+* `Postgresql`: 11 or earlier
+* `Mysql`: 5.7
+* `Mariadb`: 10.2
+
 ## Build Cycle
 
 We aim to deliver freshy images on weekly basis.
