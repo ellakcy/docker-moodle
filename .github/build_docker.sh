@@ -43,8 +43,8 @@ echo "Running:"
 echo "docker build --build-arg DB_TYPE=${DB_TYPE} -f ${DOCKERFILE} ${VERSION_TYPE_TAG} ${VERSION_TAG} --force-rm . "
 docker build --build-arg DB_TYPE=${DB_TYPE} --build-arg VERSION=${VERSION} -f ${DOCKERFILE} ${VERSION_TYPE_TAG} ${VERSION_TAG} --force-rm .
 
-# BRANCH=${GITHUB_REF##*/}
+BRANCH=${GITHUB_REF##*/}
 
-# if [[ $BRANCH == 'master' ]]; then
-#     docker image push --all-tags ellakcy/moodle
-# fi
+if [[ $BRANCH == 'master' ]]; then
+    docker image push --all-tags ellakcy/moodle
+fi
