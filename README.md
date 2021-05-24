@@ -1,4 +1,4 @@
-docker-moodle [![Build Status](https://travis-ci.org/ellakcy/docker-moodle.svg?branch=master)](https://travis-ci.org/ellakcy/docker-moodle)
+docker-moodle
 =============
 
 A Docker image that installs and runs the latest Moodle stable, with external MySQL, Mariadb or Postgresql Database and automated installation with a default predefined administrator user. Also all the images are availalbe via [docker hub](https://hub.docker.com/r/ellakcy/moodle/).
