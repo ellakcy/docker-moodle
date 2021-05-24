@@ -48,9 +48,10 @@ RUN apt-get update && \
 		 docker-php-ext-install pdo mysqli pdo_mysql;\
 	fi &&\
 	if [ $DB_TYPE = "pgsql" ] || [ $DB_TYPE = "all" ]; then echo "Setup postgresql support" &&\
-		apt-get install -y --no-install-recommends libghc-postgresql-simple-dev &&\
+		apt-get install -y --no-install-recommends libpq-dev &&\
      	docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql &&\
-        docker-php-ext-install pdo pgsql pdo_pgsql; \ 
+        docker-php-ext-install pdo pgsql pdo_pgsql &&\
+		apt-get install -y --no-install-recommends libpq-dev;\
 	fi &&\
 	if [ $DB_TYPE = "mysqli" ] || [ $DB_TYPE = "pgsql" ]; then \
 		echo "SET DB_TYPE file" ;\
