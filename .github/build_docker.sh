@@ -12,9 +12,15 @@ DOCKERFILE=${1}
 
 echo "Building $DOCKERFILE VERSION $VERSION FLAVOR $DB_TYPE " 
 
-if [[ $DOCKERFILE == $DOCKERFILE_ALPINE_FPM ]]; then
-    SERVER_FAVOR="fpm_alpine"
-fi
+# if [[ $DOCKERFILE == $DOCKERFILE_ALPINE_FPM ]]; then
+#     SERVER_FAVOR="fpm_alpine"
+# fi
+
+case DOCKERFILE in
+    "dockerfiles/fpm_alpine/Dockerfile") SERVER_FAVOR="fpm_alpine";;
+    "dockerfiles/fpm/Dockerfile") SERVER_FAVOR="fpm";;
+    *)  SERVER_FAVOR="apache";;
+esac
 
 DB_FLAVOR=""
 

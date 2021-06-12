@@ -62,7 +62,7 @@ RUN apt-get update && \
 	apt-get autoclean &&\
 	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* cache/* /var/lib/log/*
 
-ARG VERSION=37
+ARG VERSION=35
 
 RUN	echo "Installing moodle ${VERSION}" && \
 	cd /usr/src &&\ 
