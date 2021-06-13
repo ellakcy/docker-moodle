@@ -21,7 +21,11 @@ Image naming Pattern | PHP execution type | Mysql Support | Mariadb Support | Po
  `postgresql_apache_^VERSION^` | apache  | NO | NO | YES 
  `mulitbase_alpine_fpm_^VERSION^` | fpm (running on alpine linux) | YES | YES | YES 
  `mysql_maria_alpine_fpm_^VERSION^` | fpm (running on alpine linux) | YES | YES | NO 
- `postgresql_alpine_fpm_^VERSION^` | (running on alpine linux)  | NO | NO | YES 
+ `postgresql_alpine_fpm_^VERSION^` | fpm (running on alpine linux)  | NO | NO | YES 
+ `mulitbase_fpm_^VERSION^`   | fpm | YES | YES | YES 
+ `mysql_maria_fpm_^VERSION^` | fpm | YES | YES | NO 
+ `postgresql_fpm_^VERSION^`  | fpm  | NO | NO | YES 
+
 
 The `^VERSION^` is a 2-3 digit number the first digit follows the major version and the rest of them follow the minor version for example the `mulitbase_apache_39` runs the moodle 3.9 whilst `mulitbase_apache_310` runs the moodle 3.10 .
 
@@ -35,7 +39,10 @@ Image | PHP execution type | Mysql Support | Mariadb Support | Postgresql Suppor
  `postgresql_apache_latest` | apache  | NO | NO | YES 
  `mulitbase_alpine_fpm_latest` | fpm (running on alpine linux) | YES | YES | YES 
  `mysql_maria_alpine_fpm_latest` | fpm (running on alpine linux) | YES | YES | NO 
- `postgresql_alpine_fpm_latest` | (running on alpine linux)  | NO | NO | YES 
+ `postgresql_alpine_fpm_latest` | fpm (running on alpine linux)  | NO | NO | YES 
+ `mulitbase_fpm_latest` | fpm | YES | YES | YES 
+ `mysql_maria_fpm_latest` | fpm | YES | YES | NO 
+ `postgresql_fpm_latest` | fpm  | NO | NO | YES 
 
 Whilst for the most recent moodle lts we ship:
 
@@ -46,7 +53,10 @@ Image | PHP execution type | Mysql Support | Mariadb Support | Postgresql Suppor
  `postgresql_apache_lts` | apache  | NO | NO | YES 
  `mulitbase_alpine_fpm_lts` | fpm (running on alpine linux) | YES | YES | YES 
  `mysql_maria_alpine_fpm_lts` | fpm (running on alpine linux) | YES | YES | NO 
- `postgresql_alpine_fpm_lts` | (running on alpine linux)  | NO | NO | YES 
+ `postgresql_alpine_fpm_lts` | fpm (running on alpine linux)  | NO | NO | YES 
+ `mulitbase_fpm_lts` | fpm | YES | YES | YES 
+ `mysql_maria_fpm_lts` | fpm | YES | YES | NO 
+ `postgresql_fpm_lts` | fpm | NO | NO | YES 
 
 ## Supported Database Versions:
 The images support the following version for each database:
