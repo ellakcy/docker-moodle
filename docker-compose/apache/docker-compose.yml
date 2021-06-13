@@ -42,8 +42,8 @@ services:
         DB_TYPE: 'mysqli'
     image: ellakcy/moodle:mysql_maria_apache
     volumes:
-      - './volumes/moodle/mysql/data:/var/moodledata'
-      - './volumes/moodle/mysql/www:/var/www/html'
+      - 'moodle_mysql_data:/var/moodledata'
+      - 'moodle_mysql:/var/www/html'
     ports:
       - '8081:80'
     links:
@@ -68,8 +68,8 @@ services:
         DB_TYPE: 'mysqli'
     image: ellakcy/moodle:mysql_maria_apache
     volumes:
-      - './volumes/moodle/mysql/data:/var/moodledata'
-      - './volumes/moodle/mysql/www:/var/www/html'
+      - 'moodle_maria_data:/var/moodledata'
+      - 'moodle_maria:/var/www/html'
     ports:
       - '8082:80'
     links:
@@ -94,8 +94,8 @@ services:
         DB_TYPE: 'pgsql'
     image: ellakcy/moodle:postgresql_apache
     volumes:
-      - './volumes/moodle/postgres/data:/var/moodledata'
-      - './volumes/moodle/postgres/www:/var/www/html'
+      - 'moodle_postgres:/var/moodledata'
+      - 'moodle_postgres_data:/var/www/html'
     ports:
       - '8083:80'
     links:
@@ -113,7 +113,18 @@ services:
       MOODLE_SSL: "false"
 
 volumes:
+
+  #database
   dbmysql:
   dbmaria:
   dbpostgres:
   
+  #moodle
+  moodle_mysql:
+  moodle_mysql_data:
+  
+  moodle_maria:
+  moodle_maria_data:
+
+  moodle_postgres:
+  moodle_postgres_data:
