@@ -95,6 +95,10 @@ fi
 
 echo "Installing moodle with ${MOODLE_DB_TYPE} support"
 
+if [ "${MOODLE_DB_TYPE}" == "mysql" ]; then
+  MOODLE_DB_TYPE="mysqli"
+fi
+
 if [ $HAS_MySQL_SUPPORT -gt 0 ] && [ "${MOODLE_DB_TYPE}" = "mysqli" ]; then
 
   echo "Trying for mysql database"
@@ -156,7 +160,7 @@ elif [ $HAS_POSTGRES_SUPPORT -gt 0 ] && [ "$MOODLE_DB_TYPE" = "pgsql" ]; then
 
   pingdb
   sed -e "s/trim(getenv('MOODLE_DB_TYPE'))/'pgsql'/" /usr/src/moodle/config.php > /var/www/html/config.php
-
+  sleep 5
 else
   echo >&2 "No database support found"
   exit 1
