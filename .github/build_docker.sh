@@ -10,7 +10,6 @@ SERVER_FAVOR="apache"
 
 DOCKERFILE=${1}
 
-echo "Building $DOCKERFILE VERSION $VERSION FLAVOR $DB_TYPE " 
 
 # if [[ $DOCKERFILE == $DOCKERFILE_ALPINE_FPM ]]; then
 #     SERVER_FAVOR="fpm_alpine"

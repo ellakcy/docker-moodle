@@ -1,7 +1,7 @@
 # Dockerfile for moodle instance.
 #Original Maintainer Jon Auer <jda@coldshore.com>
 
-FROM  php:7.2-fpm-alpine
+FROM  php:7.3-fpm-alpine
 
 # Replace for later version
 

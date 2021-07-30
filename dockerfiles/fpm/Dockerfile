@@ -2,7 +2,7 @@
 # Forked from Jonathan Hardison's <jmh@jonathanhardison.com> docker version. https://github.com/jmhardison/docker-moodle
 #Original Maintainer Jon Auer <jda@coldshore.com>
 
-FROM  php:7.2-fpm
+FROM  php:7.3-fpm
 
 # Replace for later version
 
