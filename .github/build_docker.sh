@@ -11,11 +11,7 @@ SERVER_FAVOR="apache"
 DOCKERFILE=${1}
 
 
-# if [[ $DOCKERFILE == $DOCKERFILE_ALPINE_FPM ]]; then
-#     SERVER_FAVOR="fpm_alpine"
-# fi
-
-case DOCKERFILE in
+case $DOCKERFILE in
     "dockerfiles/fpm_alpine/Dockerfile") SERVER_FAVOR="fpm_alpine";;
     "dockerfiles/fpm/Dockerfile") SERVER_FAVOR="fpm";;
     *)  SERVER_FAVOR="apache";;
