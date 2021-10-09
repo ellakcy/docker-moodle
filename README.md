@@ -65,9 +65,9 @@ The images support the following version for each database:
 * `Mysql`: 5.7
 * `Mariadb`: 10.2
 
-## Build Cycle
+## Build Cycle and build versions
 
-We aim to deliver freshly images on weekly basis. Each images are tagged with the build date in a format `_YmdHi`, without build date is the latest build, for example the image `mysql_maria_apache_latest` is the latest built image whilst `mysql_maria_apache_latest_202108112012` is the image built at `2021-08-11 20:12`. At docker hub you can look at [tags](https://hub.docker.com/r/ellakcy/moodle/tags) section for the latest or older builds.
+We aim to deliver freshly images on weekly basis. Each build image is tagged with the build date in a format `_YmdHi`, without build date is the latest build, for example the image `mysql_maria_apache_latest` is the latest built image whilst `mysql_maria_apache_latest_202108112012` is the image built at `2021-08-11 20:12`. At docker hub you can look at [tags](https://hub.docker.com/r/ellakcy/moodle/tags) section for the latest or older builds.
 
 ## Run
 
