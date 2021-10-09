@@ -67,7 +67,7 @@ The images support the following version for each database:
 
 ## Build Cycle
 
-We aim to deliver freshy images on weekly basis.
+We aim to deliver freshly images on weekly basis. Each images are tagged with the build date in a format `_YmdHi`, without build date is the latest build, for example the image `mysql_maria_apache_latest` is the latest built image whilst `mysql_maria_apache_latest_202108112012` is the image built at `2021-08-11 20:12`. At docker hub you can look at [tags](https://hub.docker.com/r/ellakcy/moodle/tags) section for the latest or older builds.
 
 ## Run
 
