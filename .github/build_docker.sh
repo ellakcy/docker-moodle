@@ -47,8 +47,8 @@ fi
 PARAMS=${TAGS[@]/#/"-t ellakcy/moodle:"}
 
 echo "Running:" 
-echo "docker build --build-arg DB_TYPE=${DB_FLAVOR} -f ${DOCKERFILE} ${PARAMS} --force-rm . "
-docker build --build-arg DB_TYPE=${DB_FLAVOR} --build-arg VERSION=${VERSION} -f ${DOCKERFILE} ${PARAMS} --force-rm .
+echo "docker build --build-arg DB_TYPE=${DB_TYPE} -f ${DOCKERFILE} ${PARAMS} --force-rm . "
+docker build --build-arg DB_TYPE=${DB_TYPE} --build-arg VERSION=${VERSION} -f ${DOCKERFILE} ${PARAMS} --force-rm --no-cache .
 
 BRANCH=${GITHUB_REF##*/}
 
