@@ -25,7 +25,7 @@ ENV DEBIAN_FRONTEND noninteractive \
 
 RUN echo "Build moodle version ${VERSION}" &&\
 	apt-get update &&\
-	apt-get -f -y install --no-install-recommends rsync netcat libxmlrpc-c++8-dev libxml2-dev libpng-dev libicu-dev libmcrypt-dev libzip-dev &&\
+	apt-get -f -y install --no-install-recommends rsync netcat libxmlrpc-c++8-dev libxml2-dev libpng-dev libicu-dev libmcrypt-dev libzip-dev libonig-dev &&\
  	docker-php-ext-install xmlrpc && \
 	docker-php-ext-install mbstring && \
 	whereis libzip &&\
