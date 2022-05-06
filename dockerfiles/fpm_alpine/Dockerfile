@@ -24,7 +24,7 @@ ENV \
 
 # Installing php and external tools
 RUN \
-	apk add --update curl bash rsync unzip netcat-openbsd libxml2-dev icu-dev libmcrypt-dev libpng-dev libjpeg-turbo-dev libzip-dev &&\
+	apk add --update curl bash rsync unzip netcat-openbsd libxml2-dev icu-dev libmcrypt-dev libpng-dev libjpeg-turbo-dev libzip-dev oniguruma-dev &&\
  	docker-php-ext-install xmlrpc && \
 	docker-php-ext-install mbstring && \
 	docker-php-ext-configure zip --with-libzip && \
