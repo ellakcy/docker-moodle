@@ -1,7 +1,7 @@
 # Dockerfile for moodle instance.
 #Original Maintainer Jon Auer <jda@coldshore.com>
 
-FROM  php:7.3-fpm-alpine
+FROM  php:7.4-fpm-alpine
 
 # Replace for later version
 
@@ -52,7 +52,7 @@ RUN \
 	fi &&\
 	rm -rf /var/cache/apk/*
 
-ARG VERSION=35
+ARG VERSION=311
 
 RUN \
  	 echo "Installing moodle" && \
