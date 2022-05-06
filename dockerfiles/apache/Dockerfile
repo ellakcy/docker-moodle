@@ -2,7 +2,7 @@
 # Forked from Jonathan Hardison's <jmh@jonathanhardison.com> docker version. https://github.com/jmhardison/docker-moodle
 #Original Maintainer Jon Auer <jda@coldshore.com>
 
-FROM  php:7.3-apache
+FROM  php:7.4-apache
 
 # Replace for later version
 
@@ -62,7 +62,7 @@ RUN apt-get update && \
 	apt-get autoclean &&\
 	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* cache/* /var/lib/log/*
 
-ARG VERSION=35
+ARG VERSION=311
 
 RUN	echo "Installing moodle ${VERSION}" && \
 	cd /usr/src &&\ 

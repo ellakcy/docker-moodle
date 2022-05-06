@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        moodle_version: [35,38,39,310,311]
+        moodle_version: [39,310,311,400]
         database: ['all','mysqli','pgsql']
     env:
       VERSION: ${{ matrix.moodle_version }}
