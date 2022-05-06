@@ -27,7 +27,7 @@ RUN \
 	apk add --update curl bash rsync unzip netcat-openbsd libxml2-dev icu-dev libmcrypt-dev libpng-dev libjpeg-turbo-dev libzip-dev oniguruma-dev &&\
  	docker-php-ext-install xmlrpc && \
 	docker-php-ext-install mbstring && \
-	docker-php-ext-configure zip --with-libzip && \
+	docker-php-ext-configure zip && \
 	docker-php-ext-install zip &&\
 	docker-php-ext-install intl && \
  	docker-php-ext-install soap && \
