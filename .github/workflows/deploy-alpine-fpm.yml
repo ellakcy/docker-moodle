@@ -19,7 +19,7 @@ jobs:
     env:
       VERSION: ${{ matrix.moodle_version }}
       DB_TYPE: ${{ matrix.database }}
-      LATEST: 311
+      LATEST: 400
       LATEST_LTS: 39
     steps:
       - name: Check Out Repo 
