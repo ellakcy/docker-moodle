@@ -29,7 +29,7 @@ RUN echo "Build moodle version ${VERSION}" &&\
  	docker-php-ext-install xmlrpc && \
 	docker-php-ext-install mbstring && \
 	whereis libzip &&\
-	docker-php-ext-configure zip --with-libzip=/usr/lib/x86_64-linux-gnu/libzip.so &&\
+	docker-php-ext-configure zip &&\
 	docker-php-ext-install zip &&\
 	docker-php-ext-install xml &&\
 	docker-php-ext-install intl &&\
