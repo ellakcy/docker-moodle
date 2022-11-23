@@ -9,7 +9,6 @@ FROM  php:7.4-apache
 VOLUME ["/var/moodledata"]
 EXPOSE 80
 
-ENV MOODLE_DB_TYPE $DB_TYPE
 # Let the container know that there is no tty
 ENV DEBIAN_FRONTEND noninteractive \
 	MOODLE_URL http://0.0.0.0 \
@@ -41,6 +40,7 @@ RUN echo "Build moodle version ${VERSION}" &&\
 	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* cache/* /var/lib/log/*
 
 ARG	DB_TYPE="all"
+ENV MOODLE_DB_TYPE $DB_TYPE
 
 RUN apt-get update && \
 	echo ${DB_TYPE} &&\

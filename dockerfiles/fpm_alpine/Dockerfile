@@ -9,8 +9,6 @@ VOLUME ["/var/moodledata"]
 VOLUME ["/var/www/html"]
 EXPOSE 9000
 
-ENV MOODLE_DB_TYPE ${DB_TYPE}
-
 ENV \
 	MOODLE_URL http://0.0.0.0 \
     MOODLE_ADMIN admin \
@@ -37,6 +35,7 @@ RUN \
     rm -rf /var/cache/apk/*
 
 ARG	DB_TYPE="all"
+ENV MOODLE_DB_TYPE ${DB_TYPE}
 
 RUN \
 	if [[ $DB_TYPE = "mysqli" ]] || [[ $DB_TYPE = "all" ]]; then echo "Setup mysql and mariadb support" &&\
