@@ -9,7 +9,7 @@ source ${BASEDIR}/config.sh
 
 PHP_VERSION=${PHP_VERSION:=${DEFAULT_PHP}}
 
-if [ $PHP_VERSION==${DEFAULT_PHP} ]; then
+if [ "$PHP_VERSION" == "${DEFAULT_PHP}" ]; then
     echo "$PHP_VERSION is same to ${DEFAULT_PHP}"
 fi
 
@@ -47,7 +47,7 @@ function generateTags(){
 
     VERSIONS=("${COMMON_PHP_VERSION}${TAG}" "${COMMON_PHP_VERSION}${TAG}_${BUILD_NUMBER}")
 
-    if [ $PHP_VERSION==${DEFAULT_PHP} ];then
+    if [ "$PHP_VERSION" == "${DEFAULT_PHP}" ]; then
         VERSIONS+=( "${COMMON}${TAG}" "${COMMON}${TAG}_${BUILD_NUMBER}")
     fi
 
@@ -64,7 +64,7 @@ if [[ $VERSION == $LATEST ]]; then
     TAGS+=(  $(generateTags latest ) )
     TAGS+=( $(generateTags ${SERVER_FAVOR} ))
 
-    if [ $PHP_VERSION==${DEFAULT_PHP} ]; then
+    if [ "$PHP_VERSION" == "${DEFAULT_PHP}" ]; then
         TAGS+=("${DB_FLAVOR}_${SERVER_FAVOR}_${BUILD_NUMBER}")
     fi
     
