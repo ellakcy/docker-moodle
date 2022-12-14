@@ -21,6 +21,7 @@ jobs:
       DB_TYPE: ${{ matrix.database }}
       LATEST: 401
       LATEST_LTS: 401
+      DEFAULT_PHP: "7.4"
     steps:
       - name: Check Out Repo 
         uses: actions/checkout@v2
