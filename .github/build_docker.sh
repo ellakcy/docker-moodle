@@ -31,7 +31,7 @@ esac
 
 TAGS=()
 
-COMMON="${DB_FLAVOR}_${SERVER_FAVOR}"
+COMMON="${DB_FLAVOR}_${SERVER_FAVOR}_${VERSION}"
 COMMON_PHP_VERSION="${COMMON}_php${PHP_VERSION}"
 
 function generateTags(){
