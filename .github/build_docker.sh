@@ -8,7 +8,10 @@ BASEDIR=$(dirname ${SCRIPT})
 source ${BASEDIR}/config.sh
 
 PHP_VERSION=${PHP_VERSION:=${DEFAULT_PHP}}
-echo ${PHP_VERSION}
+
+if [ $PHP_VERSION==${DEFAULT_PHP} ]; then
+    echo "$PHP_VERSION is same to ${DEFAULT_PHP}"
+fi
 
 DOCKERFILE_ALPINE_FPM="dockerfiles/fpm_alpine/Dockerfile"
 SERVER_FAVOR="apache"
@@ -80,7 +83,7 @@ PARAMS=${TAGS[@]/#/"-t ellakcy/moodle:"}
 
 echo "Running:" 
 echo "docker build --build-arg DB_TYPE=${DB_TYPE} -f ${DOCKERFILE} ${PARAMS} --force-rm . "
-docker build --build-arg DB_TYPE=${DB_TYPE} --build-arg VERSION=${VERSION} -f ${DOCKERFILE} ${PARAMS} --force-rm --no-cache .
+docker build --build-arg PHP_VERSION=${PHP_VERSION} --build-arg DB_TYPE=${DB_TYPE} --build-arg VERSION=${VERSION} -f ${DOCKERFILE} ${PARAMS} --force-rm --no-cache .
 
 BRANCH=${GITHUB_REF##*/}
 
