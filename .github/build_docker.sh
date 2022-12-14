@@ -39,7 +39,7 @@ function generateTags(){
     #trim    
     TAG=$TAG
 
-    if [ ! -z ${TAG} ]; then TAG="_${TAG}" fi
+    if [ ! -z ${TAG} ]; then TAG="_${TAG}"; fi
 
     VERSIONS=("${COMMON_PHP_VERSION}${TAG}" "${COMMON_PHP_VERSION}${TAG}_${BUILD_NUMBER}")
 
