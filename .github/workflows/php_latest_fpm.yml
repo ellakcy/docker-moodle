@@ -37,7 +37,7 @@ jobs:
           docker --version
           ls -l ./.github
           chmod +x ".github/build_docker.sh"
-          .github/build_docker.sh 'dockerfiles/apache/Dockerfile'
+          .github/build_docker.sh 'dockerfiles/fpm/Dockerfile'
 
           
     
