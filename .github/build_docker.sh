@@ -7,12 +7,12 @@ BASEDIR=$(dirname ${SCRIPT})
 
 source ${BASEDIR}/config.sh
 
-DOCKERFILE_ALPINE_FPM="dockerfiles/fpm_alpine/Dockerfile"
+PHP_VERSION=${PHP_VERSION:=${DEFAULT_PHP}}
 
+DOCKERFILE_ALPINE_FPM="dockerfiles/fpm_alpine/Dockerfile"
 SERVER_FAVOR="apache"
 
 DOCKERFILE=${1}
-
 
 case $DOCKERFILE in
     "dockerfiles/fpm_alpine/Dockerfile") SERVER_FAVOR="fpm_alpine";;
@@ -29,21 +29,44 @@ case $DB_TYPE in
     *) DB_FLAVOR="mulitibase"
 esac
 
-TAGS=("${DB_FLAVOR}_${SERVER_FAVOR}_${VERSION}")
-TAGS+=("${DB_FLAVOR}_${SERVER_FAVOR}_${VERSION}_${BUILD_NUMBER}")
+TAGS=()
+
+COMMON="${DB_FLAVOR}_${SERVER_FAVOR}"
+COMMON_PHP_VERSION="${COMMON}_php${PHP_VERSION}"
+
+function generateTags(){
+    local TAG=${1}
+    #trim    
+    TAG=$TAG
+
+    if [ ! -z ${TAG} ]; then TAG="_${TAG}" fi
+
+    VERSIONS=("${COMMON_PHP_VERSION}${TAG}" "${COMMON_PHP_VERSION}${TAG}_${BUILD_NUMBER}")
+
+    if [ $PHP_VERSION==${DEFAULT_PHP} ];then
+        VERSIONS+=( "${COMMON}${TAG}" "${COMMON}${TAG}_${BUILD_NUMBER}")
+    fi
+
+    echo ${VERSIONS[*]}
+}
+
+TAGS+=( $(generateTags) )
+
 if [[ $VERSION == $LATEST_LTS ]]; then
-    TAGS+=("${DB_FLAVOR}_${SERVER_FAVOR}_lts")
-    TAGS+=("${DB_FLAVOR}_${SERVER_FAVOR}_lts_${BUILD_NUMBER}")
+    TAGS+=( $(generateTags lts) )
 fi
 
 if [[ $VERSION == $LATEST ]]; then
-    TAGS+=("${DB_FLAVOR}_${SERVER_FAVOR}_latest")
-    TAGS+=("${DB_FLAVOR}_${SERVER_FAVOR}_latest_${BUILD_NUMBER}")
-    TAGS+=("${DB_FLAVOR}_${SERVER_FAVOR}")
+    TAGS+=(  $(generateTags latest ) )
+    TAGS+=( $(generateTags ${SERVER_FAVOR} ))
     TAGS+=("${DB_FLAVOR}_${SERVER_FAVOR}_${BUILD_NUMBER}")
+
     if [[ $SERVER_FAVOR == "apache" ]] && [[ $DB_FLAVOR = "mulitbase" ]]; then
-        TAGS+=("latest")
-        TAGS+=("latest_${BUILD_NUMBER}")
+        if [ $PHP_VERSION==${DEFAULT_PHP} ];then
+            TAGS+=("latest" "latest_${BUILD_NUMBER}")
+        fi
+
+        TAGS+=("latest_php${PHP_VERSION}" "latest_php${PHP_VERSION}_${BUILD_NUMBER}")
     fi
 fi
 
