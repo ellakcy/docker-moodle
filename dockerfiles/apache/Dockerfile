@@ -2,7 +2,8 @@
 # Forked from Jonathan Hardison's <jmh@jonathanhardison.com> docker version. https://github.com/jmhardison/docker-moodle
 #Original Maintainer Jon Auer <jda@coldshore.com>
 
-FROM  php:7.4-apache
+ARG PHP_VERSION="7.4"
+FROM  php:${PHP_VERSION}-apache
 
 # Replace for later version
 
