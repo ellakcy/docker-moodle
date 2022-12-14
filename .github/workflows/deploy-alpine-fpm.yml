@@ -14,13 +14,13 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        moodle_version: [39,310,311,400]
+        moodle_version: [39,311,400,401]
         database: ['all','mysqli','pgsql']
     env:
       VERSION: ${{ matrix.moodle_version }}
       DB_TYPE: ${{ matrix.database }}
-      LATEST: 400
-      LATEST_LTS: 39
+      LATEST: 401
+      LATEST_LTS: 401
     steps:
       - name: Check Out Repo 
         uses: actions/checkout@v2
