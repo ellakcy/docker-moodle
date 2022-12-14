@@ -8,7 +8,8 @@ BASEDIR=$(dirname ${SCRIPT})
 source ${BASEDIR}/config.sh
 
 PHP_VERSION=${PHP_VERSION:=${DEFAULT_PHP}}
-
+echo ${PHP_VERSION}
+exit
 DOCKERFILE_ALPINE_FPM="dockerfiles/fpm_alpine/Dockerfile"
 SERVER_FAVOR="apache"
 
