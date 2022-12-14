@@ -59,7 +59,13 @@ fi
 if [[ $VERSION == $LATEST ]]; then
     TAGS+=(  $(generateTags latest ) )
     TAGS+=( $(generateTags ${SERVER_FAVOR} ))
+
+    if [ $PHP_VERSION==${DEFAULT_PHP} ];then
+        TAGS+=("${DB_FLAVOR}_${SERVER_FAVOR}_php${PHP_VERSION}_${BUILD_NUMBER}")
+    then
+
     TAGS+=("${DB_FLAVOR}_${SERVER_FAVOR}_${BUILD_NUMBER}")
+
 
     if [[ $SERVER_FAVOR == "apache" ]] && [[ $DB_FLAVOR = "mulitbase" ]]; then
         if [ $PHP_VERSION==${DEFAULT_PHP} ];then
