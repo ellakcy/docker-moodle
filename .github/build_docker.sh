@@ -1,8 +1,11 @@
 #!/bin/bash
 
-# The script required the Following Environmental Variables:
-# DB_TYPE in order to specify the database type
-# VERSION in order to specify the moodle version
+# Absolute path to this script, e.g. /home/user/bin/foo.sh
+SCRIPT=$(readlink -f "${BASH_SOURCE}")
+# Absolute path this script is in, thus /home/user/bin
+BASEDIR=$(dirname ${SCRIPT})
+
+source ${BASEDIR}/config.sh
 
 DOCKERFILE_ALPINE_FPM="dockerfiles/fpm_alpine/Dockerfile"
 
