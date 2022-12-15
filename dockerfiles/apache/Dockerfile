@@ -22,23 +22,35 @@ ENV DEBIAN_FRONTEND noninteractive \
     MOODLE_DB_NAME '' \
     MOODLE_DB_PORT '3306'
 
+# RUN echo "Build moodle version ${VERSION}" &&\
+# 	apt-get update &&\
+# 	apt-get -f -y install --no-install-recommends rsync netcat libxmlrpc-c++8-dev libxml2-dev libpng-dev libicu-dev libmcrypt-dev libzip-dev libonig-dev &&\
+#  	docker-php-ext-install xmlrpc && \
+# 	docker-php-ext-install mbstring && \
+# 	whereis libzip &&\
+# 	docker-php-ext-configure zip &&\
+# 	docker-php-ext-install zip &&\
+# 	docker-php-ext-install xml &&\
+# 	docker-php-ext-install intl &&\
+#  	docker-php-ext-install soap &&\
+# 	docker-php-ext-install gd &&\
+# 	docker-php-ext-install opcache &&\ 
+# 	apt-get autopurge -y &&\
+# 	apt-get autoremove -y &&\
+# 	apt-get autoclean &&\
+# 	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* cache/* /var/lib/log/*
+
 RUN echo "Build moodle version ${VERSION}" &&\
-	apt-get update &&\
-	apt-get -f -y install --no-install-recommends rsync netcat libxmlrpc-c++8-dev libxml2-dev libpng-dev libicu-dev libmcrypt-dev libzip-dev libonig-dev &&\
- 	docker-php-ext-install xmlrpc && \
-	docker-php-ext-install mbstring && \
-	whereis libzip &&\
-	docker-php-ext-configure zip &&\
-	docker-php-ext-install zip &&\
-	docker-php-ext-install xml &&\
-	docker-php-ext-install intl &&\
- 	docker-php-ext-install soap &&\
-	docker-php-ext-install gd &&\
-	docker-php-ext-install opcache &&\ 
-	apt-get autopurge -y &&\
-	apt-get autoremove -y &&\
-	apt-get autoclean &&\
-	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* cache/* /var/lib/log/*
+	curl -sSLf \
+        -o /usr/local/bin/install-php-extensions \
+        https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions && \
+    chmod +x /usr/local/bin/install-php-extensions && \
+	/usr/local/bin/install-php-extensions xmlrpc mbstring zip xml intl soap gs opcache &&\
+	rm -rf /usr/local/bin/install-php-extensions && \
+ 	apt-get autopurge -y &&\
+ 	apt-get autoremove -y &&\
+ 	apt-get autoclean &&\
+ 	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* cache/* /var/lib/log/*
 
 ARG	DB_TYPE="all"
 ENV MOODLE_DB_TYPE $DB_TYPE
