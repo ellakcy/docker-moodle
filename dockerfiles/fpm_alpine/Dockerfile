@@ -21,18 +21,27 @@ ENV \
     MOODLE_DB_PORT '3306'
 
 # Installing php and external tools
-RUN \
-	apk add --update curl bash rsync unzip netcat-openbsd libxml2-dev icu-dev libmcrypt-dev libpng-dev libjpeg-turbo-dev libzip-dev oniguruma-dev &&\
- 	docker-php-ext-install xmlrpc && \
-	docker-php-ext-install mbstring && \
-	docker-php-ext-configure zip && \
-	docker-php-ext-install zip &&\
-	docker-php-ext-install intl && \
- 	docker-php-ext-install soap && \
-	docker-php-ext-install gd && \
-	docker-php-ext-install opcache && \
-	apk del unzip curl gcc g++ &&\
-    rm -rf /var/cache/apk/*
+# RUN \
+# 	apk add --update curl bash rsync unzip netcat-openbsd libxml2-dev icu-dev libmcrypt-dev libpng-dev libjpeg-turbo-dev libzip-dev oniguruma-dev &&\
+#  	docker-php-ext-install xmlrpc && \
+# 	docker-php-ext-install mbstring && \
+# 	docker-php-ext-configure zip && \
+# 	docker-php-ext-install zip &&\
+# 	docker-php-ext-install intl && \
+#  	docker-php-ext-install soap && \
+# 	docker-php-ext-install gd && \
+# 	docker-php-ext-install opcache && \
+# 	apk del unzip curl gcc g++ &&\
+#     rm -rf /var/cache/apk/*
+
+RUN echo "Build moodle version ${VERSION}" &&\
+	curl -sSLf \
+        -o /usr/local/bin/install-php-extensions \
+        https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions && \
+    chmod +x /usr/local/bin/install-php-extensions && \
+	/usr/local/bin/install-php-extensions xmlrpc mbstring zip xml intl soap gd opcache &&\
+	rm -rf /usr/local/bin/install-php-extensions && \
+ 	rm -rf /var/cache/apk/*
 
 ARG	DB_TYPE="all"
 ENV MOODLE_DB_TYPE ${DB_TYPE}
