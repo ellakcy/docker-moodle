@@ -11,7 +11,7 @@ Buidling the required images using this repo is a liitle laborious and the whole
 
 All available images are listed in: https://hub.docker.com/r/ellakcy/moodle/tags?page=1&ordering=-name
 
-Each flavor is seperates by database support, version and either if is it based on apache, or aplive fia fpm.
+Each flavor is seperates by database support, version and either if is it based on apache, or alpine via fpm.
 To be more specific:
 
 Image naming Pattern | PHP execution type | Mysql Support | Mariadb Support | Postgresql Support
@@ -57,6 +57,38 @@ Image | PHP execution type | Mysql Support | Mariadb Support | Postgresql Suppor
  `mulitbase_fpm_lts` | fpm | YES | YES | YES 
  `mysql_maria_fpm_lts` | fpm | YES | YES | NO 
  `postgresql_fpm_lts` | fpm | NO | NO | YES 
+
+All images are shipped with php 7.4 .
+
+## PHP 8.0 images
+
+Default php is 7.4 whereas images with php 8.0 are shipped as well for moodle versions 3.11, 4.0 and 4.11 php is shipped as well:
+
+Image naming Pattern | PHP execution type | Mysql Support | Mariadb Support | Postgresql Support
+ --- | --- | --- | --- | --- 
+ `mulitbase_apache_php8.0_^VERSION^` | apache  | YES | YES | YES 
+ `mysql_maria_apache_php8.0_^VERSION^` | apache | YES | YES | NO 
+ `postgresql_apache_php8.0_^VERSION^` | apache  | NO | NO | YES 
+ `mulitbase_alpine_fpm_php8.0_^VERSION^` | fpm (running on alpine linux) | YES | YES | YES 
+ `mysql_maria_alpine_fpm_php8.0_^VERSION^` | fpm (running on alpine linux) | YES | YES | NO 
+ `postgresql_alpine_fpm_php8.0_^VERSION^` | fpm (running on alpine linux)  | NO | NO | YES 
+ `mulitbase_fpm_php8.0_^VERSION^`   | fpm | YES | YES | YES 
+ `mysql_maria_fpm_php8.0_^VERSION^` | fpm | YES | YES | NO 
+ `postgresql_fpm_php8.0_^VERSION^`  | fpm  | NO | NO | YES 
+
+For php 7.4 images use the following
+
+Image naming Pattern | PHP execution type | Mysql Support | Mariadb Support | Postgresql Support
+ --- | --- | --- | --- | --- 
+ `mulitbase_apache_php7.4_^VERSION^` | apache  | YES | YES | YES 
+ `mysql_maria_apache_php7.4_^VERSION^` | apache | YES | YES | NO 
+ `postgresql_apache_php7.4_^VERSION^` | apache  | NO | NO | YES 
+ `mulitbase_alpine_fpm_php7.4_^VERSION^` | fpm (running on alpine linux) | YES | YES | YES 
+ `mysql_maria_alpine_fpm_php7.4_^VERSION^` | fpm (running on alpine linux) | YES | YES | NO 
+ `postgresql_alpine_fpm_php7.4_^VERSION^` | fpm (running on alpine linux)  | NO | NO | YES 
+ `mulitbase_fpm_php7.4_^VERSION^`   | fpm | YES | YES | YES 
+ `mysql_maria_fpm_php7.4_^VERSION^` | fpm | YES | YES | NO 
+ `postgresql_fpm_php7.4_^VERSION^`  | fpm  | NO | NO | YES 
 
 ## Supported Database Versions:
 The images support the following version for each database:
@@ -118,7 +150,7 @@ http://0.0.0.0:8080
 > NOTICE 2: `^VERSION` indicates the moodle version. For the latest lts just use `lts` or for the latest non lts use `latest` 
 > Notice 3: In case your moodle installation is shipped via 
 
-##### Alpine with Fpm based solutions
+#### Alpine with Fpm based solutions
 
 For fpm solutions is recomended to use docker-compose. For **production** use is reccomended the to use the repo https://github.com/ellakcy/moodle-compose .
 
