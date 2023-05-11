@@ -1,4 +1,4 @@
-name: build_and_deploy_latest_php
+name: build_and_deploy_80_php
 
 on:
   schedule:
@@ -10,11 +10,11 @@ on:
     ]
 
 jobs:
-  build_apache_images:
+  build_fpm_images:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        moodle_version: [311,400,401]
+        moodle_version: [311,400,401,402]
         database: ['all','mysqli','pgsql']
     env:
       VERSION: ${{ matrix.moodle_version }}
@@ -37,7 +37,7 @@ jobs:
           docker --version
           ls -l ./.github
           chmod +x ".github/build_docker.sh"
-          .github/build_docker.sh 'dockerfiles/apache/Dockerfile'
+          .github/build_docker.sh 'dockerfiles/fpm/Dockerfile'
 
           
     

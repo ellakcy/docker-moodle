@@ -1,8 +1,8 @@
-name: build_and_deploy
+name: build_and_deploy_81_php
 
 on:
   schedule:
-    - cron: '23 20 * * 6' 
+    - cron: '23 10 * * 6' 
   push:
     branches: [
       master,
@@ -10,15 +10,16 @@ on:
     ]
 
 jobs:
-  build_alpine_fpm_images:
+  build_apache_images:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        moodle_version: [39,311,400,401,402]
+        moodle_version: [401,402]
         database: ['all','mysqli','pgsql']
     env:
       VERSION: ${{ matrix.moodle_version }}
       DB_TYPE: ${{ matrix.database }}
+      PHP_VERSION: "8.1"
     steps:
       - name: Check Out Repo 
         uses: actions/checkout@v2
@@ -36,8 +37,7 @@ jobs:
           docker --version
           ls -l ./.github
           chmod +x ".github/build_docker.sh"
-          .github/build_docker.sh 'dockerfiles/fpm_alpine/Dockerfile'
-
+          .github/build_docker.sh 'dockerfiles/apache/Dockerfile'
 
           
     
