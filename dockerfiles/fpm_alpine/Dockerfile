@@ -64,7 +64,7 @@ ARG VERSION=311
 
 RUN \
  	 echo "Installing moodle" && \
-	 php -r "copy(\"http://download.moodle.org/download.php/direct/stable${VERSION}/moodle-latest-${VERSION}.tgz\",\"/tmp/moodle-latest.tgz\");" &&\
+	 php -r "copy(\"https://packaging.moodle.org/stable${VERSION}/moodle-latest-${VERSION}.tgz\",\"/tmp/moodle-latest.tgz\");" &&\
  	 rm -rf /var/www/html/index.html && \
  	 cd /tmp &&\
 	 tar -xvf /tmp/moodle-latest.tgz && cd / \
