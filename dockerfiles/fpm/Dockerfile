@@ -1,15 +1,14 @@
 # Dockerfile for moodle instance.
 # Forked from Jonathan Hardison's <jmh@jonathanhardison.com> docker version. https://github.com/jmhardison/docker-moodle
-#Original Maintainer Jon Auer <jda@coldshore.com>
+# Original Maintainer Jon Auer <jda@coldshore.com>
 
 ARG PHP_VERSION="7.4"
-FROM  php:${PHP_VERSION}-fpm
+FROM  php:${PHP_VERSION}-fpm as base
 
 # Replace for later version
 
 VOLUME ["/var/moodledata"]
 EXPOSE 80
-
 
 # Let the container know that there is no tty
 ENV DEBIAN_FRONTEND noninteractive \
@@ -23,61 +22,14 @@ ENV DEBIAN_FRONTEND noninteractive \
     MOODLE_DB_NAME '' \
     MOODLE_DB_PORT '3306'
 
-# RUN echo "Build moodle version ${VERSION}" &&\
-# 	apt-get update &&\
-# 	apt-get -f -y install --no-install-recommends rsync netcat libxmlrpc-c++8-dev libxml2-dev libpng-dev libicu-dev libmcrypt-dev libzip-dev libonig-dev &&\
-#  	docker-php-ext-install xmlrpc && \
-# 	docker-php-ext-install mbstring && \
-# 	whereis libzip &&\
-# 	docker-php-ext-configure zip &&\
-# 	docker-php-ext-install zip &&\
-# 	docker-php-ext-install xml &&\
-# 	docker-php-ext-install intl &&\
-#  	docker-php-ext-install soap &&\
-# 	docker-php-ext-install gd &&\
-# 	docker-php-ext-install opcache &&\ 
-# 	apt-get autopurge -y &&\
-# 	apt-get autoremove -y &&\
-# 	apt-get autoclean &&\
-# 	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* cache/* /var/lib/log/*
-
-RUN echo "Build moodle version ${VERSION}" &&\
-	curl -sSLf \
-        -o /usr/local/bin/install-php-extensions \
-        https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions && \
-    chmod +x /usr/local/bin/install-php-extensions && \
+RUN --mount=type=bind,from=mlocati/php-extension-installer:latest,source=/usr/bin/install-php-extensions,target=/usr/local/bin/install-php-extensions \
 	/usr/local/bin/install-php-extensions xmlrpc mbstring zip xml intl soap gd opcache &&\
-	rm -rf /usr/local/bin/install-php-extensions && \
  	apt-get autopurge -y &&\
  	apt-get autoremove -y &&\
  	apt-get autoclean &&\
  	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* cache/* /var/lib/log/*
 
-ARG	DB_TYPE="all"
-ENV MOODLE_DB_TYPE $DB_TYPE
-
-RUN apt-get update && \
-	echo ${DB_TYPE} &&\
-	if [ $DB_TYPE = "mysqli" ] || [ $DB_TYPE = "all" ]; then echo "Setup mysql and mariadb support" &&\
-		 docker-php-ext-install pdo mysqli pdo_mysql;\
-	fi &&\
-	if [ $DB_TYPE = "pgsql" ] || [ $DB_TYPE = "all" ]; then echo "Setup postgresql support" &&\
-		apt-get install -y --no-install-recommends libpq-dev &&\
-     	docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql &&\
-        docker-php-ext-install pdo pgsql pdo_pgsql &&\
-		apt-get install -y --no-install-recommends libpq-dev;\
-	fi &&\
-	if [ $DB_TYPE = "mysqli" ] || [ $DB_TYPE = "pgsql" ]; then \
-		echo "SET DB_TYPE file" ;\
-		echo $DB_TYPE > /etc/db_type;\
-	fi &&\
-	apt-get autopurge -y &&\
-	apt-get autoremove -y &&\
-	apt-get autoclean &&\
-	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* cache/* /var/lib/log/*
-
 ARG VERSION=311
-
 RUN	echo "Installing moodle ${VERSION}" && \
 	cd /usr/src &&\ 
 	curl -s -N  https://packaging.moodle.org/stable${VERSION}/moodle-latest-${VERSION}.tgz | tar -xvz && \
@@ -95,3 +47,34 @@ RUN chown root:root /usr/local/bin/entrypoint.sh &&\
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 CMD ["php-fpm"]
+
+FROM base as multibase
+
+ENV MOODLE_DB_TYPE 'all'
+
+RUN --mount=type=bind,from=mlocati/php-extension-installer:latest,source=/usr/bin/install-php-extensions,target=/usr/local/bin/install-php-extensions \
+	/usr/local/bin/install-php-extensions mysqli pdo_mysqli pgsql pdo_pgsql &&\
+	apt-get autopurge -y &&\
+	apt-get autoremove -y &&\
+	apt-get autoclean &&\
+	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* cache/* /var/lib/log/*
+
+FROM base as mysql_maria
+
+ENV MOODLE_DB_TYPE 'mysqli'
+
+COPY --from=multibase /usr/lib/php/extensions/no-debug-non-zts-20190902/pdo_mysql.so /usr/lib/php/extensions/no-debug-non-zts-20190902/pdo_mysql.so
+COPY --from=multibase /usr/lib/php/extensions/no-debug-non-zts-20190902/mysqli.so /usr/lib/php/extensions/no-debug-non-zts-20190902/mysqli.so
+COPY --from=multibase /usr/local/etc/php/conf.d/mysql.ini /usr/local/etc/php/conf.d/mysql.ini
+
+RUN echo 'mysqli' > /etc/db_type;
+
+FROM base as postgres
+
+ENV MOODLE_DB_TYPE 'pgsql'
+
+COPY --from=intermediate /usr/lib/php/extensions/no-debug-non-zts-20190902/pdo_pgsql.so /usr/lib/php/extensions/no-debug-non-zts-20190902/pdo_pgsql.so
+COPY --from=intermediate /usr/lib/php/extensions/no-debug-non-zts-20190902/pgsql.so /usr/lib/php/extensions/no-debug-non-zts-20190902/pgsql.so
+COPY --from=intermediate /usr/local/etc/php/conf.d/postgresql.ini /usr/local/etc/php/conf.d/postgresql.ini
+
+RUN echo 'pgsql' > /etc/db_type;

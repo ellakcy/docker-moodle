@@ -24,22 +24,20 @@ case $DOCKERFILE in
     *)  SERVER_FAVOR="apache";;
 esac
 
-DB_FLAVOR=""
+declare -a DB_FLAVORS = ("mysql_maria","postgresql","multibase")
+
 BUILD_NUMBER=$(date +"%Y%m%d%H%M")
 
-case $DB_TYPE in
-    "mysqli" ) DB_FLAVOR="mysql_maria" ;;
-    "pgsql" ) DB_FLAVOR="postgresql";;
-    *) DB_FLAVOR="mulitibase"
-esac
-
-TAGS=()
-
-COMMON="${DB_FLAVOR}_${SERVER_FAVOR}_${VERSION}"
-COMMON_PHP_VERSION="${COMMON}_php${PHP_VERSION}"
+FINAL_TAGS=()
 
 function generateTags(){
+        
     local TAG=${1}
+    local DB_FLAVOR=${2}
+
+    local COMMON="${DB_FLAVOR}_${SERVER_FAVOR}_${VERSION}"
+    local COMMON_PHP_VERSION="${COMMON}_php${PHP_VERSION}"
+
     #trim    
     TAG=$TAG
 
@@ -52,45 +50,57 @@ function generateTags(){
     fi
 
     echo ${VERSIONS[*]}
+
 }
 
-TAGS+=( $(generateTags) )
+for DB_FLAVOR in ${DB_FLAVORS[@]}; do
 
-if [[ $VERSION == $LATEST_LTS ]]; then
-    TAGS+=( $(generateTags lts) )
-fi
+    case $DB_FLAVOR in
+        "mysql_maria" ) TARGET="mysql_maria" ;;
+        "postgresql" ) TARGET="postgresql";;
+        *) TARGET="mulitibase"
+    esac
 
-if [[ $VERSION == $LATEST ]]; then
-    TAGS+=(  $(generateTags latest ) )
-    TAGS+=( $(generateTags ${SERVER_FAVOR} ))
+    TAGS=()
 
-    if [ "$PHP_VERSION" == "${DEFAULT_PHP}" ]; then
-        TAGS+=("${DB_FLAVOR}_${SERVER_FAVOR}_${BUILD_NUMBER}")
+    TAGS+=( $(generateTags $DB_FLAVOR) )
+
+    if [[ $VERSION == $LATEST_LTS ]]; then
+        TAGS+=( $(generateTags lts) )
     fi
-    
-    TAGS+=("${DB_FLAVOR}_${SERVER_FAVOR}_php${PHP_VERSION}_${BUILD_NUMBER}")
 
-    if [[ $SERVER_FAVOR == "apache" ]] && [[ $DB_FLAVOR = "mulitbase" ]]; then
-        if [ $PHP_VERSION==${DEFAULT_PHP} ];then
-            TAGS+=("latest" "latest_${BUILD_NUMBER}")
+    if [[ $VERSION == $LATEST ]]; then
+        TAGS+=(  $(generateTags latest ) )
+        TAGS+=( $(generateTags ${SERVER_FAVOR} ))
+
+        if [ "$PHP_VERSION" == "${DEFAULT_PHP}" ]; then
+            TAGS+=("${DB_FLAVOR}_${SERVER_FAVOR}_${BUILD_NUMBER}")
         fi
+        
+        TAGS+=("${DB_FLAVOR}_${SERVER_FAVOR}_php${PHP_VERSION}_${BUILD_NUMBER}")
 
-        TAGS+=("latest_php${PHP_VERSION}" "latest_php${PHP_VERSION}_${BUILD_NUMBER}")
+        if [[ $SERVER_FAVOR == "apache" ]] && [[ $DB_FLAVOR = "mulitbase" ]]; then
+            if [ $PHP_VERSION==${DEFAULT_PHP} ];then
+                TAGS+=("latest" "latest_${BUILD_NUMBER}")
+            fi
+
+            TAGS+=("latest_php${PHP_VERSION}" "latest_php${PHP_VERSION}_${BUILD_NUMBER}")
+        fi
     fi
-fi
 
-PARAMS=${TAGS[@]/#/"-t ellakcy/moodle:"}
+    PARAMS=${TAGS[@]/#/"-t ellakcy/moodle:"}
 
-echo "Running:" 
-echo "docker build --build-arg DB_TYPE=${DB_TYPE} -f ${DOCKERFILE} ${PARAMS} --force-rm . "
+    echo "Running:" 
+    echo "docker build --build-arg DB_TYPE=${DB_TYPE} -f ${DOCKERFILE} ${PARAMS} --force-rm . "
 
-docker build --pull --build-arg PHP_VERSION=${PHP_VERSION} --build-arg DB_TYPE=${DB_TYPE} --build-arg VERSION=${VERSION} -f ${DOCKERFILE} ${PARAMS} --force-rm --no-cache .
+    docker build --pull --build-arg PHP_VERSION=${PHP_VERSION} --build-arg DB_TYPE=${DB_TYPE} --build-arg VERSION=${VERSION} -f ${DOCKERFILE} ${PARAMS} --force-rm --no-cache .
+
+done
 
 BRANCH=${GITHUB_REF##*/}
 
 if [[ $BRANCH == 'master' ]]; then
-    for tag in "${TAGS[@]}"; do
+    for tag in "${FINAL_TAGS[@]}"; do
         docker image push ellakcy/moodle:$tag
     done
-
 fi
