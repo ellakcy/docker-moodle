@@ -32,9 +32,10 @@ FINAL_TAGS=()
 
 function generateTags(){
         
-    local TAG=${1}
-    local DB_FLAVOR=${2}
+    local TAG=${2}
+    local DB_FLAVOR=${1}
 
+    # VERSION is env variable and indicates the moodle version
     local COMMON="${DB_FLAVOR}_${SERVER_FAVOR}_${VERSION}"
     local COMMON_PHP_VERSION="${COMMON}_php${PHP_VERSION}"
 
@@ -55,23 +56,15 @@ function generateTags(){
 
 for DB_FLAVOR in ${DB_FLAVORS[@]}; do
 
-    case $DB_FLAVOR in
-        "mysql_maria" ) TARGET="mysql_maria" ;;
-        "postgresql" ) TARGET="postgresql";;
-        *) TARGET="mulitibase"
-    esac
-
-    TAGS=()
-
-    TAGS+=( $(generateTags $DB_FLAVOR) )
+    TAGS=( $(generateTags $DB_FLAVOR) )
 
     if [[ $VERSION == $LATEST_LTS ]]; then
-        TAGS+=( $(generateTags lts) )
+        TAGS+=( $(generateTags $DB_FLAVOR lts) )
     fi
 
     if [[ $VERSION == $LATEST ]]; then
-        TAGS+=(  $(generateTags latest ) )
-        TAGS+=( $(generateTags ${SERVER_FAVOR} ))
+        TAGS+=(  $(generateTags ${DB_FLAVOR} latest ) )
+        TAGS+=( $(generateTags ${DB_FLAVOR} ${SERVER_FAVOR} ))
 
         if [ "$PHP_VERSION" == "${DEFAULT_PHP}" ]; then
             TAGS+=("${DB_FLAVOR}_${SERVER_FAVOR}_${BUILD_NUMBER}")
@@ -93,8 +86,15 @@ for DB_FLAVOR in ${DB_FLAVORS[@]}; do
     echo "Running:" 
     echo "docker build --build-arg DB_TYPE=${DB_TYPE} -f ${DOCKERFILE} ${PARAMS} --force-rm . "
 
-    docker build --pull --build-arg PHP_VERSION=${PHP_VERSION} --build-arg DB_TYPE=${DB_TYPE} --build-arg VERSION=${VERSION} -f ${DOCKERFILE} ${PARAMS} --force-rm --no-cache .
+     case $DB_FLAVOR in
+        "mysql_maria" ) TARGET="mysql_maria" ;;
+        "postgresql" ) TARGET="postgresql";;
+        *) TARGET="mulitibase"
+    esac
+    
+    docker build --target ${TARGET} --pull --build-arg PHP_VERSION=${PHP_VERSION} --build-arg DB_TYPE=${DB_TYPE} --build-arg VERSION=${VERSION} -f ${DOCKERFILE} ${PARAMS} --force-rm --no-cache .
 
+    FINAL_TAGS+=($TAGS)
 done
 
 BRANCH=${GITHUB_REF##*/}

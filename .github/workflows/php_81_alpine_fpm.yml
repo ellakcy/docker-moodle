@@ -14,11 +14,9 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        moodle_version: [401,402]
-        database: ['all','mysqli','pgsql']
+        moodle_version: [401,402,403]
     env:
       VERSION: ${{ matrix.moodle_version }}
-      DB_TYPE: ${{ matrix.database }}
       PHP_VERSION: "8.1"
     steps:
       - name: Check Out Repo 
