@@ -1,5 +1,15 @@
 #!/bin/bash
 
+#############################################################################
+# THIS SCRIPT FOR A SUCCESSFULL RUN, REQUIRES THESE ENVIRONMENTAL VARIABLES:
+# VERSION For the moodle version
+# PHP_VERSION for the PHP version to use.
+# DRY_RUN  : If set as 1 will not build the docker images it will just pront the build arguments 
+#
+# Furthermore the Dockerfile is  retrieves the path of the dockerfile as argument
+# ###########################################################################
+
+
 # Absolute path to this script, e.g. /home/user/bin/foo.sh
 SCRIPT=$(readlink -f "${BASH_SOURCE}")
 # Absolute path this script is in, thus /home/user/bin
@@ -13,7 +23,6 @@ if [ "$PHP_VERSION" == "${DEFAULT_PHP}" ]; then
     echo "$PHP_VERSION is same to ${DEFAULT_PHP}"
 fi
 
-DOCKERFILE_ALPINE_FPM="dockerfiles/fpm_alpine/Dockerfile"
 SERVER_FAVOR="apache"
 
 DOCKERFILE=${1}
@@ -24,18 +33,23 @@ case $DOCKERFILE in
     *)  SERVER_FAVOR="apache";;
 esac
 
-declare -a DB_FLAVORS = ("mysql_maria","postgresql","multibase")
+DB_FLAVORS=("mysql_maria" "postgresql" "multibase")
 
 BUILD_NUMBER=$(date +"%Y%m%d%H%M")
 
+# Aggregates all available tags
 FINAL_TAGS=()
+
+MULTIBASE_PARAMS=()
+POSTGRES_PARAMS=()
+MYSQL_PARAMS=()
 
 function generateTags(){
         
     local TAG=${2}
     local DB_FLAVOR=${1}
 
-    # VERSION is env variable and indicates the moodle version
+    # VERSION is env variable, and indicates the moodle version we build upon
     local COMMON="${DB_FLAVOR}_${SERVER_FAVOR}_${VERSION}"
     local COMMON_PHP_VERSION="${COMMON}_php${PHP_VERSION}"
 
@@ -54,7 +68,12 @@ function generateTags(){
 
 }
 
+# Pulling extention installer
+docker pull mlocati/php-extension-installer
+
 for DB_FLAVOR in ${DB_FLAVORS[@]}; do
+
+    echo "GENERATING TAGS for ${DB_FLAVOR} and ${SERVER_FAVOR}"
 
     TAGS=( $(generateTags $DB_FLAVOR) )
 
@@ -72,7 +91,7 @@ for DB_FLAVOR in ${DB_FLAVORS[@]}; do
         
         TAGS+=("${DB_FLAVOR}_${SERVER_FAVOR}_php${PHP_VERSION}_${BUILD_NUMBER}")
 
-        if [[ $SERVER_FAVOR == "apache" ]] && [[ $DB_FLAVOR = "mulitbase" ]]; then
+        if [[ $SERVER_FAVOR == "apache" ]] && [[ $DB_FLAVOR = "multibase" ]]; then
             if [ $PHP_VERSION==${DEFAULT_PHP} ];then
                 TAGS+=("latest" "latest_${BUILD_NUMBER}")
             fi
@@ -83,19 +102,30 @@ for DB_FLAVOR in ${DB_FLAVORS[@]}; do
 
     PARAMS=${TAGS[@]/#/"-t ellakcy/moodle:"}
 
-    echo "Running:" 
-    echo "docker build --build-arg DB_TYPE=${DB_TYPE} -f ${DOCKERFILE} ${PARAMS} --force-rm . "
-
      case $DB_FLAVOR in
-        "mysql_maria" ) TARGET="mysql_maria" ;;
-        "postgresql" ) TARGET="postgresql";;
-        *) TARGET="mulitibase"
+        "mysql_maria" ) MYSQL_PARAMS=$PARAMS ;;
+        "postgresql" )  POSTGRES_PARAMS=$PARAMS;;
+        *) MULTIBASE_PARAMS=$PARAMS
     esac
     
-    docker build --target ${TARGET} --pull --build-arg PHP_VERSION=${PHP_VERSION} --build-arg DB_TYPE=${DB_TYPE} --build-arg VERSION=${VERSION} -f ${DOCKERFILE} ${PARAMS} --force-rm --no-cache .
-
     FINAL_TAGS+=($TAGS)
 done
+
+if [ $DRY_RUN == "1" ]; then 
+    
+    echo "DRY RUN MODE NO IMAGES ARE BUILT"
+
+    echo ${MYSQL_PARAMS}
+    echo ${POSTGRES_PARAMS}
+    echo ${MULTIBASE_PARAMS}
+
+    exit 0;
+fi
+
+DOCKER_BUILDKIT=1  docker build --target multibase --no-cache --pull --build-arg PHP_VERSION=${PHP_VERSION} --build-arg VERSION=${VERSION} -f ${DOCKERFILE} ${MULTIBASE_PARAMS} .
+DOCKER_BUILDKIT=1  docker build --target postgres  --build-arg CACHEBUST=${BUILD_NUMBER} --build-arg PHP_VERSION=${PHP_VERSION} --build-arg VERSION=${VERSION} -f ${DOCKERFILE} ${POSTGRES_PARAMS} .
+DOCKER_BUILDKIT=1  docker build --target mysql_maria --build-arg CACHEBUST=${BUILD_NUMBER} --build-arg PHP_VERSION=${PHP_VERSION} --build-arg VERSION=${VERSION} -f ${DOCKERFILE} ${MYSQL_PARAMS} .
+
 
 BRANCH=${GITHUB_REF##*/}
 

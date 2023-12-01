@@ -15,10 +15,8 @@ jobs:
     strategy:
       matrix:
         moodle_version: [39,311,400,401,402]
-        database: ['all','mysqli','pgsql']
     env:
       VERSION: ${{ matrix.moodle_version }}
-      DB_TYPE: ${{ matrix.database }}
     steps:
       - name: Check Out Repo 
         uses: actions/checkout@v3
