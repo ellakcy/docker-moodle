@@ -62,6 +62,8 @@ All images are shipped with php **8.0**.
 
 ## Specific PHP version
 
+> For greater stability and unexpected interruptions we reccomend to use the approach locking moodle and php version.
+
 Default php is 8.0 whereas images with php 7.4 and 8.1 are shipped as well:
 
 Image naming Pattern | PHP execution type | Mysql Support | Mariadb Support | Postgresql Support
@@ -89,7 +91,6 @@ Whereas the build moodle versions are:
 * `401`
 * `402`
 * `403`
-
 
 ## Unsupported moodle versions
 
