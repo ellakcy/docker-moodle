@@ -17,7 +17,7 @@ jobs:
         moodle_version: [401,402,403]
     env:
       VERSION: ${{ matrix.moodle_version }}
-      PHP_VERSION: "8.0"
+      PHP_VERSION: "8.1"
     steps:
       - name: Check Out Repo 
         uses: actions/checkout@v3
