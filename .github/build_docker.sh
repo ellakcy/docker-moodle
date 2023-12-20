@@ -50,7 +50,8 @@ function generateTags(){
     local DB_FLAVOR=${1}
 
     # VERSION is env variable, and indicates the moodle version we build upon
-    local COMMON="${DB_FLAVOR}_${SERVER_FAVOR}_${VERSION}"
+    local COMMON_WITHOUT_VERSION="${DB_FLAVOR}_${SERVER_FAVOR}"
+    local COMMON="${COMMON_WITHOUT_VERSION}_${VERSION}"
     local COMMON_PHP_VERSION="${COMMON}_php${PHP_VERSION}"
 
     #trim    
@@ -62,7 +63,13 @@ function generateTags(){
 
     if [ "$PHP_VERSION" == "${DEFAULT_PHP}" ]; then
         VERSIONS+=( "${COMMON}${TAG}" "${COMMON}${TAG}_${BUILD_NUMBER}")
+        
+        # Check is done outside the function
+        if [[ "$TAG" == '_latest' ]] || [[ "$TAG" == '_lts' ]] ; then
+          VERSIONS+=("${COMMON_WITHOUT_VERSION}${TAG}"  "${COMMON_WITHOUT_VERSION}_${BUILD_NUMBER}${TAG}")
+        fi
     fi
+
 
     echo ${VERSIONS[*]}
 
@@ -84,10 +91,6 @@ for DB_FLAVOR in ${DB_FLAVORS[@]}; do
     if [[ $VERSION == $LATEST ]]; then
         TAGS+=(  $(generateTags ${DB_FLAVOR} latest ) )
         TAGS+=( $(generateTags ${DB_FLAVOR} ${SERVER_FAVOR} ))
-
-        if [ "$PHP_VERSION" == "${DEFAULT_PHP}" ]; then
-            TAGS+=("${DB_FLAVOR}_${SERVER_FAVOR}_${BUILD_NUMBER}")
-        fi
         
         TAGS+=("${DB_FLAVOR}_${SERVER_FAVOR}_php${PHP_VERSION}_${BUILD_NUMBER}")
 
@@ -112,7 +115,7 @@ for DB_FLAVOR in ${DB_FLAVORS[@]}; do
     FINAL_TAGS+=($TAGS)
 done
 
-if [ $DRY_RUN == "1" ]; then 
+if [ "$DRY_RUN" == "1" ]; then 
     
     echo "DRY RUN MODE NO IMAGES ARE BUILT"
 
@@ -123,7 +126,7 @@ if [ $DRY_RUN == "1" ]; then
     exit 0;
 fi
 
-DOCKER_BUILDKIT=1  docker build --target multibase --no-cache --pull --build-arg PHP_VERSION=${PHP_VERSION} --build-arg VERSION=${VERSION} -f ${DOCKERFILE} ${MULTIBASE_PARAMS} .
+DOCKER_BUILDKIT=1  docker build --target multibase  --pull --build-arg PHP_VERSION=${PHP_VERSION} --build-arg VERSION=${VERSION} -f ${DOCKERFILE} ${MULTIBASE_PARAMS} .
 DOCKER_BUILDKIT=1  docker build --target postgres  --build-arg CACHEBUST=${BUILD_NUMBER} --build-arg PHP_VERSION=${PHP_VERSION} --build-arg VERSION=${VERSION} -f ${DOCKERFILE} ${POSTGRES_PARAMS} .
 DOCKER_BUILDKIT=1  docker build --target mysql_maria --build-arg CACHEBUST=${BUILD_NUMBER} --build-arg PHP_VERSION=${PHP_VERSION} --build-arg VERSION=${VERSION} -f ${DOCKERFILE} ${MYSQL_PARAMS} .
 

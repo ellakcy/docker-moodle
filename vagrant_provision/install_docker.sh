@@ -28,3 +28,5 @@ sudo service docker start
 
 sudo apt-get -y autoremove
 sudo apt-get -y clean
+
+export BUILDKIT_PROGRESS=plain

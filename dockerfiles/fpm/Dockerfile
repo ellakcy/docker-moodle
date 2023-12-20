@@ -24,6 +24,8 @@ RUN php -i | grep extension_dir  | cut -d " " -f 5
 
 RUN --mount=type=bind,from=mlocati/php-extension-installer:latest,source=/usr/bin/install-php-extensions,target=/usr/local/bin/install-php-extensions \
 	/usr/local/bin/install-php-extensions xmlrpc mbstring zip xml intl soap gd opcache &&\
+	echo "PHP_EXTENTION_DIR="$(php -i | grep extension_dir  | cut -d " " -f 5) >> /etc/environment &&\
+	cat /etc/environment &&\
  	apt-get autopurge -y &&\
  	apt-get autoremove -y &&\
  	apt-get autoclean &&\
@@ -68,10 +70,14 @@ RUN echo 'mysqli' > /etc/db_type;
 
 # Use the argument CACHEBUST to disable caching during build bellow. This contains the build number.
 ARG CACHEBUST=0
-COPY --from=multibase /usr/local/lib/php/extensions/no-debug-non-zts-20190902/pdo_mysql.so /usr/local/lib/php/extensions/no-debug-non-zts-20190902/pdo_mysql.so
-COPY --from=multibase /usr/local/lib/php/extensions/no-debug-non-zts-20190902/mysqli.so /usr/local/lib/php/extensions/no-debug-non-zts-20190902/mysqli.so
-COPY --from=multibase /usr/local/etc/php/conf.d/docker-php-ext-mysqli.ini /usr/local/etc/php/conf.d/docker-php-ext-mysqli.ini
-COPY --from=multibase /usr/local/etc/php/conf.d/docker-php-ext-pdo_mysql.ini /usr/local/etc/php/conf.d/docker-php-ext-pdo_mysql.ini
+RUN --mount=type=bind,from=mlocati/php-extension-installer:latest,source=/usr/bin/install-php-extensions,target=/usr/local/bin/install-php-extensions \
+	/usr/local/bin/install-php-extensions mysqli pdo_mysql &&\
+	php -i | grep extension_dir  | cut -d " " -f 5 &&\
+	ls -l /usr/local/etc/php/conf.d/ &&\
+	apt-get autopurge -y &&\
+	apt-get autoremove -y &&\
+	apt-get autoclean &&\
+	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* cache/* /var/lib/log/*
 
 
 FROM base as postgres
@@ -81,7 +87,11 @@ RUN echo 'pgsql' > /etc/db_type;
 
 # Use the argument CACHEBUST to disable caching during build bellow. This contains the build number.
 ARG CACHEBUST=0
-COPY --from=multibase /usr/local/lib/php/extensions/no-debug-non-zts-20190902/pdo_pgsql.so /usr/local/lib/php/extensions/no-debug-non-zts-20190902/pdo_pgsql.so
-COPY --from=multibase /usr/local/lib/php/extensions/no-debug-non-zts-20190902/pgsql.so /usr/local/lib/php/extensions/no-debug-non-zts-20190902/pgsql.so
-COPY --from=multibase /usr/local/etc/php/conf.d/docker-php-ext-pgsql.ini /usr/local/etc/php/conf.d/docker-php-ext-pgsql.ini
-COPY --from=multibase /usr/local/etc/php/conf.d/docker-php-ext-pdo_pgsql.ini /usr/local/etc/php/conf.d/docker-php-ext-pdo_pgsql.ini
+RUN --mount=type=bind,from=mlocati/php-extension-installer:latest,source=/usr/bin/install-php-extensions,target=/usr/local/bin/install-php-extensions \
+	/usr/local/bin/install-php-extensions pgsql pdo_pgsql &&\
+	php -i | grep extension_dir  | cut -d " " -f 5 &&\
+	ls -l /usr/local/etc/php/conf.d/ &&\
+	apt-get autopurge -y &&\
+	apt-get autoremove -y &&\
+	apt-get autoclean &&\
+	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* cache/* /var/lib/log/*
