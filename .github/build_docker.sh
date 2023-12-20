@@ -93,6 +93,7 @@ for DB_FLAVOR in ${DB_FLAVORS[@]}; do
 
         if [[ $SERVER_FAVOR == "apache" ]] && [[ $DB_FLAVOR = "multibase" ]]; then
             if [ $PHP_VERSION==${DEFAULT_PHP} ];then
+                
                 TAGS+=("latest" "latest_${BUILD_NUMBER}")
             fi
 
