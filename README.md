@@ -76,7 +76,7 @@ Image naming Pattern | PHP execution type | Mysql Support | Mariadb Support | Po
  `mysql_maria_fpm_php^PHP_VERSION^_^MOODLE_VERSION^` | fpm | YES | YES | NO 
  `postgresql_fpm_php^PHP_VERSION^_^MOODLE_VERSION^`  | fpm  | NO | NO | YES 
 
-Repolace the `^PHP_VERSION^` the follwoig bellow .
+Replace the `^PHP_VERSION^` the follwoig bellow .
 The current php versions are:
 
 * `8.1`
