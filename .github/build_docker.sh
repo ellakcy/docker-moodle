@@ -96,12 +96,13 @@ for DB_FLAVOR in ${DB_FLAVORS[@]}; do
 
         if [[ $SERVER_FAVOR == "apache" ]] && [[ $DB_FLAVOR = "multibase" ]]; then
             if [ $PHP_VERSION==${DEFAULT_PHP} ];then
-                
                 TAGS+=("latest" "latest_${BUILD_NUMBER}")
             fi
 
             TAGS+=("latest_php${PHP_VERSION}" "latest_php${PHP_VERSION}_${BUILD_NUMBER}")
         fi
+
+
     fi
 
     PARAMS=${TAGS[@]/#/"-t ellakcy/moodle:"}
@@ -118,10 +119,15 @@ done
 if [ "$DRY_RUN" == "1" ]; then 
     
     echo "DRY RUN MODE NO IMAGES ARE BUILT"
+    echo "# MYSQL #" > ./debug.txt
+    echo ${MYSQL_PARAMS} >> ./debug.txt
+    echo "# POSTGRES #" >> ./debug.txt
+    echo ${POSTGRES_PARAMS} >> ./debug.txt
+    echo "# MULTIBASE #" >> ./debug.txt
+    echo ${MULTIBASE_PARAMS} >> ./debug.txt
+    sed -i 's/\s*-t\s*/\n/g' ./debug.txt
 
-    echo ${MYSQL_PARAMS}
-    echo ${POSTGRES_PARAMS}
-    echo ${MULTIBASE_PARAMS}
+    cat ./debug.txt
 
     exit 0;
 fi

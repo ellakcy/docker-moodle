@@ -6,3 +6,4 @@ volumes
 *~HEAD
 .vagrant
 *.log
+debug.txt
