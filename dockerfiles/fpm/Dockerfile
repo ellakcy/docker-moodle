@@ -6,7 +6,6 @@ FROM  php:${PHP_VERSION}-fpm as base
 # Replace for later version
 
 VOLUME ["/var/moodledata"]
-EXPOSE 80
 
 # Let the container know that there is no tty
 ENV DEBIAN_FRONTEND noninteractive \

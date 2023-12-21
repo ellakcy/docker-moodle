@@ -27,7 +27,7 @@ Image naming Pattern | PHP execution type | Mysql Support | Mariadb Support | Po
  `postgresql_fpm_^VERSION^`  | fpm  | NO | NO | YES 
 
 
-The `^VERSION^` is a 2-3 digit number the first digit follows the major version and the rest of them follow the minor version for example the `mulitbase_apache_39` runs the moodle 3.9 whilst `mulitbase_apache_310` runs the moodle 3.10 .
+The `^VERSION^` is a 2-3 digit number the first digit follows the major version and the rest of them follow the minor version. For example the `mulitbase_apache_39` runs the moodle 3.9 whilst `mulitbase_apache_310` runs the moodle 3.10 .
 
 Also for the latest moodle version we also ship the following images:
 

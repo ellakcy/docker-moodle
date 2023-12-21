@@ -30,7 +30,7 @@ DOCKERFILE=${1}
 case $DOCKERFILE in
     "dockerfiles/fpm_alpine/Dockerfile") SERVER_FAVOR="fpm_alpine";;
     "dockerfiles/fpm/Dockerfile") SERVER_FAVOR="fpm";;
-    *)  SERVER_FAVOR="apache";;
+    *) DOCKERFILE="dockerfiles/apache/Dockerfile"; SERVER_FAVOR="apache";;
 esac
 
 DB_FLAVORS=("mysql_maria" "postgresql" "multibase")
@@ -125,6 +125,7 @@ if [ "$DRY_RUN" == "1" ]; then
     echo ${POSTGRES_PARAMS} >> ./debug.txt
     echo "# MULTIBASE #" >> ./debug.txt
     echo ${MULTIBASE_PARAMS} >> ./debug.txt
+
     sed -i 's/\s*-t\s*/\n/g' ./debug.txt
 
     cat ./debug.txt
@@ -132,7 +133,7 @@ if [ "$DRY_RUN" == "1" ]; then
     exit 0;
 fi
 
-DOCKER_BUILDKIT=1  docker build --target multibase  --pull --build-arg PHP_VERSION=${PHP_VERSION} --build-arg VERSION=${VERSION} -f ${DOCKERFILE} ${MULTIBASE_PARAMS} .
+DOCKER_BUILDKIT=1  docker build --target multibase --no-cahce --pull --build-arg PHP_VERSION=${PHP_VERSION} --build-arg VERSION=${VERSION} -f ${DOCKERFILE} ${MULTIBASE_PARAMS} .
 DOCKER_BUILDKIT=1  docker build --target postgres  --build-arg CACHEBUST=${BUILD_NUMBER} --build-arg PHP_VERSION=${PHP_VERSION} --build-arg VERSION=${VERSION} -f ${DOCKERFILE} ${POSTGRES_PARAMS} .
 DOCKER_BUILDKIT=1  docker build --target mysql_maria --build-arg CACHEBUST=${BUILD_NUMBER} --build-arg PHP_VERSION=${PHP_VERSION} --build-arg VERSION=${VERSION} -f ${DOCKERFILE} ${MYSQL_PARAMS} .
 
