@@ -15,10 +15,8 @@ jobs:
     strategy:
       matrix:
         moodle_version: [311,400,401]
-        database: ['all','mysqli','pgsql']
     env:
       VERSION: ${{ matrix.moodle_version }}
-      DB_TYPE: ${{ matrix.database }}
       PHP_VERSION: "7.4"
     steps:
       - name: Check Out Repo 
