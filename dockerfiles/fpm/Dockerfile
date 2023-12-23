@@ -36,7 +36,7 @@ RUN --mount=type=bind,from=mlocati/php-extension-installer:latest,source=/usr/bi
 ARG VERSION=311
 RUN	echo "Installing moodle ${VERSION}" && \
 	cd /usr/src &&\ 
-	curl -s -N  https://packaging.moodle.org/stable${VERSION}/moodle-latest-${VERSION}.tgz | tar -xvz && \
+	curl -s -N -L  https://packaging.moodle.org/stable${VERSION}/moodle-latest-${VERSION}.tgz | tar -xvz && \
 	ls -l /usr/src/moodle &&\
 	rm -rf /var/www/html/index.html && \
 	chown www-data:www-data -R /usr/src/moodle && \
