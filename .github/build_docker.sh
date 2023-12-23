@@ -133,7 +133,7 @@ if [ "$DRY_RUN" == "1" ]; then
     exit 0;
 fi
 
-DOCKER_BUILDKIT=1  docker build --target multibase --no-cahce --pull --build-arg PHP_VERSION=${PHP_VERSION} --build-arg VERSION=${VERSION} -f ${DOCKERFILE} ${MULTIBASE_PARAMS} .
+DOCKER_BUILDKIT=1  docker build --target multibase --no-cache --pull --build-arg PHP_VERSION=${PHP_VERSION} --build-arg VERSION=${VERSION} -f ${DOCKERFILE} ${MULTIBASE_PARAMS} .
 DOCKER_BUILDKIT=1  docker build --target postgres  --build-arg CACHEBUST=${BUILD_NUMBER} --build-arg PHP_VERSION=${PHP_VERSION} --build-arg VERSION=${VERSION} -f ${DOCKERFILE} ${POSTGRES_PARAMS} .
 DOCKER_BUILDKIT=1  docker build --target mysql_maria --build-arg CACHEBUST=${BUILD_NUMBER} --build-arg PHP_VERSION=${PHP_VERSION} --build-arg VERSION=${VERSION} -f ${DOCKERFILE} ${MYSQL_PARAMS} .
 
