@@ -3,16 +3,7 @@ import docker
 client = docker.from_env()
 
 
-def getBuiltImages():
 
-    options=[];
-    images = client.images.list("ellakcy/moodle");
-
-    for image in images:
-        for tag in image.tags:
-            options.append(tag)
-
-    return options
 
 
 def select_list(message,list):

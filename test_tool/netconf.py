@@ -58,15 +58,9 @@ def validate_port(value):
     else:
         raise InvalidNetworkPort("This is not a valid port")
 
-
-
-def get_random_non_listening_tcp_ports(host, from_port=0, to_port=0,ports_to_exclude=()):
-    '''
-     Get a random Port
-     :return int
-    '''
-    return random.choice(get_non_listening_tcp_ports(host,from_port,to_port,ports_to_exclude))
-
 class InvalidNetworkPort(Exception):
     # Exception that is used when a port has an incorrect value
     pass
+
+def getSmtpIp():
+    

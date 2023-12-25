@@ -1,8 +1,8 @@
 
 import uuid
-import nonlisten_port_detect
+import netconf
 import random
-
+import docker-utils
 
 '''
 The credentials are fixed because we want test ones
@@ -177,23 +177,39 @@ def generateDockerCompose(image_name, folder_location):
     }
 
     dbType = detectDbTypeFromImageName(image_name)
+    hostIp = getDockerImageHostIp()
+    # The smtp service must always run at 1025
+    smtpIp = hostIp+":1025"
 
+    isApache = isImageAnApacheOne(image_name)
+    
     createMaria=(dbType=='multibase' or dbType='mysql')
     createMysql=(dbType=='multibase' or dbType='mysql')
     createPostgres=(dbType=='multibase' or dbType='postgres')
 
     if(createMaria):
         final_compose.volumes.append(MARIADB_VOL())
-        final_compose.services["moodle_mysql"] = getPHPbaseService(image,"127.0.0.1","",credentials,false,false,'mysql')
+        final_compose.services["moodle_maria"] = getPHPbaseService(image,hostIp,smtpIp,credentials,false,false,'mariadb')
+        final_compose.services['maria'] = getMariaDbService(credentials)
+        if [ not isApache ]:
+            # @TODO Create Nginx
+            final_compose.services['moodle_maria_nginx']={}
     
     if(createMysql):
         final_compose.volumes.append(MYSQL_VOL())
-        final_compose.services["moodle_maria"] = = getPHPbaseService(image,"127.0.0.1","",credentials,false,false,'mariadb')
-
+        final_compose.services["moodle_mysql"] = getPHPbaseService(image,hostIp,smtpIp,credentials,false,false,'mysql')
+        final_compose.services['mysql'] = getMysqlService(credentials)
+        if [ not isApache ]:
+            # @TODO Create Nginx
+            final_compose.services['moodle_mysql_nginx']={}
     
     if(createPostgres):
         final_compose.volumes.append(POSTGRES_VOL())
-        final_compose.services["moodle_postgres"] = = getPHPbaseService(image,"127.0.0.1","",credentials,false,false,'postgresql')
+        final_compose.services["moodle_postgres"] = getPHPbaseService(image,hostIp,smtpIp,credentials,false,false,'postgresql')
+        final_compose.services['postgres'] = getPostgresqlService(credentials)
+        if [ not isApache ]:
+            # @TODO Create Nginx
+            final_compose.services['moodle_postgres_nginx']={}
 
 
 
