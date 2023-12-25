@@ -164,6 +164,11 @@ def getPHPbaseService(
     return service
 
 
+def bootstrapDockerComposedir():
+    '''
+      :return String with the folder where docker-compose will be located
+    '''
+    # @TODO implement logic
 
 def generateDockerCompose(image_name, folder_location):
     
