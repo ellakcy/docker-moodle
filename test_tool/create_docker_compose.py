@@ -2,7 +2,7 @@
 import uuid
 import netconf
 import random
-import docker-utils
+import docker_utils
 
 '''
 The credentials are fixed because we want test ones
@@ -125,6 +125,7 @@ def getPHPbaseService(
         db_service_name,
         smtp_service_name,
         credentials,
+        www_volume,
         use_ssl=False, 
         behindLb=False,
         preferredbType='mysql'
