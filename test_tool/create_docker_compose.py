@@ -7,7 +7,6 @@ from pathlib import Path
 import os
 
 import docker_utils
-import config
 
 '''
 The credentials are fixed because we want test ones

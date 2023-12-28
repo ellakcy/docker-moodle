@@ -61,6 +61,4 @@ def validate_port(value):
 class InvalidNetworkPort(Exception):
     # Exception that is used when a port has an incorrect value
     pass
-
-def getSmtpIp():
     
