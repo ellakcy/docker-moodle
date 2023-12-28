@@ -60,6 +60,7 @@ RUN --mount=type=bind,from=mlocati/php-extension-installer:latest,source=/usr/bi
 	/usr/local/bin/install-php-extensions mysqli pdo_mysql pgsql pdo_pgsql &&\
 	php -i | grep extension_dir  | cut -d " " -f 5 &&\
 	ls -l /usr/local/etc/php/conf.d/ &&\
+	apt-get install -y nc &&\
 	apt-get autopurge -y &&\
 	apt-get autoremove -y &&\
 	apt-get autoclean &&\
