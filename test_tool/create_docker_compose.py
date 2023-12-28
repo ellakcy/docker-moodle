@@ -298,6 +298,8 @@ def generateDockerCompose(image_name):
 
     isApache = isImageAnApacheOne(image_name)
     
+    print (isApache)
+
     createMaria=(dbType=='multibase' or dbType=='mysql')
     createMysql=(dbType=='multibase' or dbType=='mysql')
     createPostgres=(dbType=='multibase' or dbType=='postgres')
@@ -328,7 +330,8 @@ def generateDockerCompose(image_name):
             'mariadb')
         
 
-        if [ not isApache ]:
+        if (isApache == False):
+            print("Creatinh nginx service for mariadb php moodle image")
             final_compose['services']['moodle_maria_nginx']=createNginxService(dirs['nginx_conf_dir'],port,"moodle_maria","moodle_maria","moodle_maria_data")
     
     if(createMysql):
@@ -341,8 +344,7 @@ def generateDockerCompose(image_name):
 
         final_compose['services']['mysql'] = getMysqlService(credentials)
         final_compose['services']["moodle_mysql"] = getPHPbaseService(image_name,domain,'mysql',smtpIp,credentials,"moodle_mysql","moodle_mysql_data",port,False,False,'mysql')
-        if [ not isApache ]:
-            # @TODO Create Nginx
+        if (isApache == False):
             final_compose['services']['moodle_mysql_nginx']=createNginxService(dirs['nginx_conf_dir'],port,"moodle_mysql","moodle_mysql","moodle_mysql_data")
     
     if(createPostgres):
@@ -357,13 +359,12 @@ def generateDockerCompose(image_name):
         final_compose['services']['postgres'] = getPostgresqlService(credentials)
         final_compose['services']["moodle_postgres"] = getPHPbaseService(image_name,domain,'postgres',smtpIp,credentials,"moodle_postgres","moodle_postgres_data",port,False,False,'postgresql')
 
-        if [ not isApache ]:
-            # @TODO Create Nginx
+        if (isApache == False):
             final_compose['services']['moodle_postgres_nginx']=createNginxService(dirs['nginx_conf_dir'],port,"moodle_postgres","moodle_postgres","moodle_postgres_data")
 
-    
+    print("Creating Docker-compose file")
     with open(dirs['docker_compose_file'], 'w') as yaml_file:
-        yaml.dump(final_compose, yaml_file, default_flow_style=False)
+        yaml.dump(final_compose, yaml_file)
 
 
 
