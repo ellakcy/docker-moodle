@@ -7,6 +7,7 @@ import yaml
 
 from netconf import get_non_listening_tcp_ports
 
+#### Config
 
 '''
 The credentials are fixed because we want test ones
@@ -28,6 +29,8 @@ def MOODLE_DOMAIN(): return "192.168.56.4";
 def MYSQL_VOL(): return "moodledb_mysql";
 def POSTGRES_VOL(): return "moodledb_postgres";
 def MARIADB_VOL(): return "moodledb_maria";
+
+##### End of config
 
 def createDBName(type):
     return "moodledb_"+type+"_"+str(uuid.uuid4().get_hex().upper()[0:16])
