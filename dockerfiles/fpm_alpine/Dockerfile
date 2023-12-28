@@ -24,8 +24,8 @@ ENV \
 
 RUN --mount=type=bind,from=mlocati/php-extension-installer:latest,source=/usr/bin/install-php-extensions,target=/usr/local/bin/install-php-extensions \
 	/usr/local/bin/install-php-extensions xmlrpc mbstring zip xml intl soap gd opcache &&\
-	apk install netcat &&\
-	cat /etc/environment &&\
+	apk update &&\
+	apk add netcat-openbsd &&\
  	rm -rf /var/cache/apk/*
 
 ARG VERSION=311
