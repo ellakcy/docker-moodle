@@ -1,12 +1,11 @@
 
 
 import uuid
-import netconf
 import random
-from pathlib import Path
 import os
 
-import docker_utils
+from docker_utils import getDockerImageHostIp
+from netconf import get_non_listening_tcp_ports
 
 '''
 The credentials are fixed because we want test ones
@@ -178,7 +177,7 @@ def bootstrapDockerComposeDir(image_name):
       :return String with the folder where docker-compose will be located
     '''
     
-    image=image.lower().strip()
+    image=image_name.lower().strip()
     # Keeping tag only and use that as fodler name
     folder_name = image.replace("ellakcy/moodle:","")
     
@@ -192,8 +191,10 @@ def bootstrapDockerComposeDir(image_name):
         "nginx_conf_dir":os.path.join(docker_compose_main_dir,"nginx")
     }
 
-    for index,dir in dirs:
+    for index,dir in dirs.items():
         if index == 'docker_compose_file':
+            continue
+        if os.path.exists(dir):
             continue
         os.mkdir(dir)
 

@@ -1,5 +1,5 @@
 import sys
-import create_docker_compose
+from create_docker_compose import generateDockerCompose
 
 
 if __name__ == "__main__":
@@ -10,9 +10,9 @@ if __name__ == "__main__":
         exit(1) 
     
     image = sys.argv[1]
-    if image != null or image.trim() == "":
+    if image is None or image.strip() == "":
         print("NO image has been provided")
         exit(1) 
 
-    image = image.trim()
+    image = image.strip()
     generateDockerCompose(image)

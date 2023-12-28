@@ -17,10 +17,12 @@ def get_non_listening_tcp_ports(host, from_port=0, to_port=0,ports_to_exclude=()
     '''
     remoteServerIP = socket.gethostbyname(host)
 
+    from_port = int(from_port)
     # Try not to list system defined port
     if from_port <= 0:
         from_port = 1024
 
+    to_port=int(to_port)
     # Set to maximum
     if to_port <= 0:
         to_port = 49151
