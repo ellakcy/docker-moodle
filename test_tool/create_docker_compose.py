@@ -124,7 +124,7 @@ def detectDbTypeFromImageName(image):
         return "mysql"
     elif "postgresql" in image:
         return "postgres"
-    elif image == "latest" or image.startsWith("latest_php"):
+    elif image == "latest" or image.startswith("latest_php"):
         return "multibase"
     else:
         return "multibase"
