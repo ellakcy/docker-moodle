@@ -27,7 +27,7 @@ RUN --mount=type=bind,from=mlocati/php-extension-installer:latest,source=/usr/bi
 	/usr/local/bin/install-php-extensions xmlrpc mbstring zip xml intl soap gd opcache &&\
 	echo "PHP_EXTENTION_DIR="$(php -i | grep extension_dir  | cut -d " " -f 5) >> /etc/environment &&\
 	cat /etc/environment &&\
-	apt-get install -y nc &&\
+	apt-get install -y netcat-traditional &&\
  	apt-get autopurge -y &&\
  	apt-get autoremove -y &&\
  	apt-get autoclean &&\
