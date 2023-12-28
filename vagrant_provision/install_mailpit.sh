@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
-bash < <(curl -sL https://raw.githubusercontent.com/axllent/mailpit/develop/install.sh)
+# Skip installation is already exists
+if [ ! -f "/usr/local/bin/mailpit" ]; then
+ bash < <(curl -sL https://raw.githubusercontent.com/axllent/mailpit/develop/install.sh)
+fi
 
 SYSTEMD_CONFIG=$(cat << 'EOM'
 [Unit]
