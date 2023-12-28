@@ -9,3 +9,4 @@ volumes
 debug.txt
 test_tool/__pycache__
 test_tool/*.pyc
+docker-compose/*
