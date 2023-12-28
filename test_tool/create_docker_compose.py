@@ -278,15 +278,22 @@ def createNginxService(path,port,fpm_service,www_volume,data_volume):
             www_volume+":/var/www/data",
             data_volume+":/var/moodledata"
         ],
-        
     }
+
+    return service_conf
+
+def writeDockerCompose(file,data):
+    yaml.add_representer(type(None), lambda self,data: self.represent_scalar('tag:yaml.org,2002:null', '') )
+    with open(file, 'w') as yaml_file:
+        yaml.dump(data, yaml_file)
+
 
 def generateDockerCompose(image_name):
     
     final_compose={
         "version":"v3",
         "services":{},
-        "volumes":[]
+        "volumes":{}
     }
 
     dirs = bootstrapDockerComposeDir(image_name)
@@ -309,9 +316,9 @@ def generateDockerCompose(image_name):
 
     if(createMaria):
         
-        final_compose['volumes'].append(MARIADB_VOL())
-        final_compose['volumes'].append("moodle_maria")
-        final_compose['volumes'].append('moodle_maria_data')
+        final_compose['volumes'][MARIADB_VOL()]=None
+        final_compose['volumes']["moodle_maria"]=None
+        final_compose['volumes']['moodle_maria_data']=None
 
         port = available_ports.pop(1)
         domain = MOODLE_DOMAIN()+":"+str(port)
@@ -334,10 +341,11 @@ def generateDockerCompose(image_name):
             print("Creatinh nginx service for mariadb php moodle image")
             final_compose['services']['moodle_maria_nginx']=createNginxService(dirs['nginx_conf_dir'],port,"moodle_maria","moodle_maria","moodle_maria_data")
     
+
     if(createMysql):
-        final_compose['volumes'].append(MYSQL_VOL())
-        final_compose['volumes'].append("moodle_mysql")
-        final_compose['volumes'].append("moodle_mysql_data")
+        final_compose['volumes'][MYSQL_VOL()]=None
+        final_compose['volumes']["moodle_mysql"]=None
+        final_compose['volumes']["moodle_mysql_data"]=None
 
         port = available_ports.pop(1)
         domain = MOODLE_DOMAIN()+":"+str(port)
@@ -349,9 +357,9 @@ def generateDockerCompose(image_name):
     
     if(createPostgres):
         
-        final_compose['volumes'].append(POSTGRES_VOL())
-        final_compose['volumes'].append("moodle_postgres")
-        final_compose['volumes'].append("moodle_postgres_data")
+        final_compose['volumes'][POSTGRES_VOL()]=None
+        final_compose['volumes']["moodle_postgres"]=None
+        final_compose['volumes']["moodle_postgres_data"]=None
 
         port = available_ports.pop(1)
         domain = MOODLE_DOMAIN()+":"+str(port)
@@ -362,9 +370,6 @@ def generateDockerCompose(image_name):
         if (isApache == False):
             final_compose['services']['moodle_postgres_nginx']=createNginxService(dirs['nginx_conf_dir'],port,"moodle_postgres","moodle_postgres","moodle_postgres_data")
 
-    print("Creating Docker-compose file")
-    with open(dirs['docker_compose_file'], 'w') as yaml_file:
-        yaml.dump(final_compose, yaml_file)
-
+    writeDockerCompose(dirs['docker_compose_file'],final_compose)
 
 
