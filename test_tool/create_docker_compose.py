@@ -141,7 +141,7 @@ def getPHPbaseService(
     preferredbType=sanitiseDbType(image,preferredbType)
     image=image.lower().strip()
     www_volume=www_volume.strip()
-    
+
     service =  {
         "image": image,
         "volumes":{
@@ -150,23 +150,23 @@ def getPHPbaseService(
         },
         "environment":{
             "MOODLE_URL": "http://"+base_url,
-            "MOODLE_ADMIN": credentials["moodle_admin"],
+            "MOODLE_ADMIN": credentials["moodle_web_usr"],
             "MOODLE_ADMIN_PASSWORD": credentials["moodle_web_passwd"],
             "MOODLE_ADMIN_EMAIL": credentials['moodle_web_email'],
-            "MOODLE_DB_TYPE": dbType,
+            "MOODLE_DB_TYPE": preferredbType,
             "MOODLE_DB_HOST": db_service_name,
             "MOODLE_DB_USER": credentials['moodle_db_user'],
             "MOODLE_DB_PASSWORD": credentials['moodle_db_password'],
             "MOODLE_DB_NAME": credentials['moodle_db'],
             "MOODLE_REVERSE_LB": behindLb,
             "MOODLE_SSL": use_ssl,
-            "MOODLE_EMAIL_TYPE_QMAIL": false,
+            "MOODLE_EMAIL_TYPE_QMAIL": False,
             "MOODLE_EMAIL_HOST": smtp_service_name
         }
     }
 
     if isImageAnApacheOne(image):
-        service['ports']=[port+":80"]
+        service['ports']=[str(port)+":80"]
 
     return service
 
@@ -321,11 +321,21 @@ def generateDockerCompose(image_name):
         preferredbType='mysql'
         """
         final_compose['services']['maria'] = getMariaDbService(credentials)
-        final_compose['services']["moodle_maria"] = getPHPbaseService(image_name,domain,'maria',smtpIp,credentials,"moodle_maria","moodle_maria_data",False,False,'mariadb')
+        final_compose['services']["moodle_maria"] = getPHPbaseService(image_name,
+            domain,
+            'maria',
+            smtpIp,
+            credentials,
+            "moodle_maria",
+            "moodle_maria_data",
+            port,
+            False,
+            False,
+            'mariadb')
         
 
         if [ not isApache ]:
-            final_compose['services']['moodle_maria_nginx']=createNginxService(dirs['nginx_conf_dir'],port,"moodle_maria","moodle_maria","moodle_maria_data")
+            final_compose['services']['moodle_maria_nginx']=createNginxService(dirs['nginx_conf_dir'],"moodle_maria","moodle_maria",port,"moodle_maria_data")
     
     if(createMysql):
         final_compose.volumes[MYSQL_VOL()]=""
@@ -336,7 +346,7 @@ def generateDockerCompose(image_name):
         domain = MOODLE_DOMAIN()+":"+str(port)
 
         final_compose['services']['mysql'] = getMysqlService(credentials)
-        final_compose['services']["moodle_mysql"] = getPHPbaseService(image_name,domain,'mysql',smtpIp,credentials,"moodle_mysql","moodle_mysql_data",False,False,'mysql')
+        final_compose['services']["moodle_mysql"] = getPHPbaseService(image_name,domain,'mysql',smtpIp,credentials,"moodle_mysql","moodle_mysql_data",port,False,False,'mysql')
         if [ not isApache ]:
             # @TODO Create Nginx
             final_compose['services']['moodle_mysql_nginx']=createNginxService(dirs['nginx_conf_dir'],port,"moodle_mysql","moodle_mysql","moodle_mysql_data")
@@ -351,7 +361,7 @@ def generateDockerCompose(image_name):
         domain = MOODLE_DOMAIN()+":"+str(port)
 
         final_compose['services']['postgres'] = getPostgresqlService(credentials)
-        final_compose['services']["moodle_postgres"] = getPHPbaseService(image_name,domain,'postgres',smtpIp,credentials,"moodle_postgres","moodle_postgres_data",False,False,'postgresql')
+        final_compose['services']["moodle_postgres"] = getPHPbaseService(image_name,domain,'postgres',smtpIp,credentials,"moodle_postgres","moodle_postgres_data",port,False,False,'postgresql')
 
         if [ not isApache ]:
             # @TODO Create Nginx
