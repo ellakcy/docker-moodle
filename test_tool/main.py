@@ -15,4 +15,8 @@ if __name__ == "__main__":
         exit(1) 
 
     image = image.strip()
+
+    if(image.startswith('ellakcy/moodle:')==False):
+        image="ellakcy/moodle:"+image
+
     generateDockerCompose(image)
