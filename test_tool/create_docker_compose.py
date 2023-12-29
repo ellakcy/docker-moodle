@@ -268,7 +268,6 @@ http {
 
     with open(final_file, 'w') as pf: pf.write(conf)
 
-
     return conf_file
 
 def createNginxService(path,port,fpm_service,www_volume,data_volume):
@@ -277,7 +276,7 @@ def createNginxService(path,port,fpm_service,www_volume,data_volume):
         "image":"nginx:alpine",
         "ports":[str(port)+":"+str(port)],
         "volumes":[
-            "./"+file+":/etc/nginx/nginx.conf:ro",
+            "./nginx/"+file+":/etc/nginx/nginx.conf:ro",
             www_volume+":/var/www/data",
             data_volume+":/var/moodledata"
         ],
