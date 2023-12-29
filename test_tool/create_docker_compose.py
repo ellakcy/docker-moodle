@@ -274,7 +274,7 @@ http {
 def createNginxService(path,port,fpm_service,www_volume,data_volume):
     file = createNginxConf(path,port,fpm_service)
     service_conf={
-        "image":"nginx-fpm",
+        "image":"nginx:alpine",
         "ports":[str(port)+":"+str(port)],
         "volumes":[
             "./"+file+":/etc/nginx/nginx.conf:ro",
