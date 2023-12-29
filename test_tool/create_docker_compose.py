@@ -5,7 +5,7 @@ import os
 import docker
 import yaml
 
-from netconf import get_non_listening_tcp_ports
+from netconf import get_non_listening_tcp_ports,scanForAllocatedPorts
 
 #### Config
 
@@ -315,7 +315,7 @@ def generateDockerCompose(image_name):
     createPostgres=(dbType=='multibase' or dbType=='postgres')
 
     # Should Also detect a Port for HTTPS as well? Idk
-    available_ports=get_non_listening_tcp_ports("0.0.0.0","8080","8999")
+    available_ports=get_non_listening_tcp_ports("0.0.0.0","8080","8999",scanForAllocatedPorts(dirs['all_docker_compose_dir']))
 
     if(createMaria):
         

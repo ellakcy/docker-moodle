@@ -1,5 +1,6 @@
 import socket
-import random
+import os
+import yaml
 
 def get_non_listening_tcp_ports(host, from_port=0, to_port=0,ports_to_exclude=()):
     '''
@@ -63,4 +64,32 @@ def validate_port(value):
 class InvalidNetworkPort(Exception):
     # Exception that is used when a port has an incorrect value
     pass
+
+def extractPortsFromDockerComposeYaml(pathfile):
+
+    ports_to_ignore=[]
+
+    with open(pathfile, "r") as docker_compose_file:
+        docker_compose=yaml.safe_load(docker_compose_file)
+        for service_name,service_conf in docker_compose['services'].items():
+            if "ports" in service_conf:
+                for port in service_conf['ports']:
+                    ports_to_ignore.append(int(port.split(":")[0]))
+
+    return ports_to_ignore
+
+def scanForAllocatedPorts(dir):
+    if(os.path.isdir(dir)==False):
+        raise ValueError(dir+" is not a directory")
+
+    dirs_to_scan=[dir]
+    ports_to_ignore=[]
+
+    for item in dirs_to_scan:
+        for file_or_directory in os.scandir(item):
+            if(os.path.isdir(file_or_directory)):
+                dirs_to_scan.append(file_or_directory)
+            elif( file_or_directory.name == "docker-compose.yml" or file_or_directory.name == "docker-compose.yaml" ): 
+                ports_to_ignore+=extractPortsFromDockerComposeYaml(file_or_directory.path)
     
+    return ports_to_ignore
