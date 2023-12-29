@@ -277,7 +277,7 @@ def createNginxService(path,port,fpm_service,www_volume,data_volume):
         "ports":[str(port)+":"+str(port)],
         "volumes":[
             "./nginx/"+file+":/etc/nginx/nginx.conf:ro",
-            www_volume+":/var/www/data",
+            www_volume+":/var/www/html",
             data_volume+":/var/moodledata"
         ],
     }
