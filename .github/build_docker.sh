@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 #############################################################################
 # THIS SCRIPT FOR A SUCCESSFULL RUN, REQUIRES THESE ENVIRONMENTAL VARIABLES:
@@ -133,7 +133,13 @@ if [ "$DRY_RUN" == "1" ]; then
     exit 0;
 fi
 
-DOCKER_BUILDKIT=1  docker build --target multibase --no-cache --pull --build-arg PHP_VERSION=${PHP_VERSION} --build-arg VERSION=${VERSION} -f ${DOCKERFILE} ${MULTIBASE_PARAMS} .
+CACHE_ARG="--no-cache"
+
+if [ "$CACHE_ENABLE" == "1" ]; then
+    CACHE_ARG=""
+fi
+
+DOCKER_BUILDKIT=1  docker build --target multibase ${CACHE_ARG} --pull --build-arg PHP_VERSION=${PHP_VERSION} --build-arg VERSION=${VERSION} -f ${DOCKERFILE} ${MULTIBASE_PARAMS} .
 DOCKER_BUILDKIT=1  docker build --target postgres  --build-arg CACHEBUST=${BUILD_NUMBER} --build-arg PHP_VERSION=${PHP_VERSION} --build-arg VERSION=${VERSION} -f ${DOCKERFILE} ${POSTGRES_PARAMS} .
 DOCKER_BUILDKIT=1  docker build --target mysql_maria --build-arg CACHEBUST=${BUILD_NUMBER} --build-arg PHP_VERSION=${PHP_VERSION} --build-arg VERSION=${VERSION} -f ${DOCKERFILE} ${MYSQL_PARAMS} .
 
