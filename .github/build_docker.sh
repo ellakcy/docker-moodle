@@ -5,7 +5,7 @@
 # VERSION For the moodle version
 # PHP_VERSION for the PHP version to use.
 # DRY_RUN  : If set as 1 will not build the docker images it will just pront the build arguments 
-#
+# CACHE_ENABLE : If set 1 it builds the docker images without --no-cache
 # Furthermore the Dockerfile is  retrieves the path of the dockerfile as argument
 # ###########################################################################
 
