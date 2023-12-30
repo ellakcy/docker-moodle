@@ -32,7 +32,8 @@ RUN --mount=type=bind,from=mlocati/php-extension-installer:latest,source=/usr/bi
  	apt-get autopurge -y &&\
  	apt-get autoremove -y &&\
  	apt-get autoclean &&\
- 	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* cache/* /var/lib/log/*
+ 	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* cache/* /var/lib/log/* &&\
+	echo "max_input_vars=5000" > ${PHP_INI_DIR}/conf.d/moodle.ini
 
 ARG VERSION=311
 RUN	echo "Installing moodle ${VERSION}" && \
