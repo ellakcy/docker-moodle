@@ -1,12 +1,20 @@
 #!/bin/bash -e
 
 #############################################################################
-# THIS SCRIPT FOR A SUCCESSFULL RUN, REQUIRES THESE ENVIRONMENTAL VARIABLES:
-# VERSION For the moodle version
-# PHP_VERSION for the PHP version to use.
+# THIS SCRIPT, FOR A SUCCESSFULL RUN, REQUIRES THESE ENVIRONMENTAL VARIABLES:
+#
+# VERSION : The moodle version without dots eg for moodle 4.3 use 403
+# PHP_VERSION : For the PHP version to use.
 # DRY_RUN  : If set as 1 will not build the docker images it will just pront the build arguments 
 # CACHE_ENABLE : If set 1 it builds the docker images without --no-cache
-# Furthermore the Dockerfile is  retrieves the path of the dockerfile as argument
+# 
+# Also a single argument must be provided for the dockerfile:
+# 
+# dockerfiles/fpm_alpine/Dockerfile : for fpm using alpine
+# dockerfiles/fpm/Dockerfile : for debian based fpm
+# dockerfiles/fpm_alpine/Dockerfile: for apache
+#
+# If not provided is it assumes as an apache image
 # ###########################################################################
 
 
