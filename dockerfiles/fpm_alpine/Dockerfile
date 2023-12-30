@@ -25,8 +25,9 @@ ENV \
 RUN --mount=type=bind,from=mlocati/php-extension-installer:latest,source=/usr/bin/install-php-extensions,target=/usr/local/bin/install-php-extensions \
 	/usr/local/bin/install-php-extensions xmlrpc mbstring zip xml intl soap gd opcache &&\
 	apk update &&\
-	apk add netcat-openbsd &&\
- 	rm -rf /var/cache/apk/*
+	apk add netcat-openbsd rsync &&\
+ 	rm -rf /var/cache/apk/* &&\
+	echo "max_input_vars=5000" > ${PHP_INI_DIR}/conf.d/moodle.ini
 
 ARG VERSION=311
 RUN \
@@ -46,7 +47,7 @@ COPY ./scripts/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chown root:root /usr/local/bin/entrypoint.sh &&\
 	chmod +x /usr/local/bin/entrypoint.sh
 
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+ENTRYPOINT ["/bin/sh","/usr/local/bin/entrypoint.sh"]
 CMD ["php-fpm"]
 
 FROM base as multibase
