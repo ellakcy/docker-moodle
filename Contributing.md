@@ -69,10 +69,9 @@ That will create a distince docker-compose in its own folder. In prder to launch
 ```
 cd ~/code/docker-compose/^image_name^
 docker-compose up -d
-
 ```
 
-The `^image_name^` is the built tag.
+The `^image_name^` is the built tag via `.github/build_docker.sh` script.
 
 ### Db versions
 
