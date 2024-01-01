@@ -97,11 +97,38 @@ Whereas the build moodle versions are:
 All moodle versions **bellow** `3.11` are not build and supported via out solution. 
 
 ## Supported Database Versions:
-The images support the following version for each database:
+The database support is described into moodles documentation depending the moodle version. The installer will point you to appropriate version if you follow these steps:
 
-* `Postgresql`: 11 or earlier
-* `Mysql`: 5.7
-* `Mariadb`: 10.2
+#### **STEP 1**
+
+Create a docker-compose.yml with a db version mentioned upon https://moodledev.io/docs/4.3/gettingstarted/requirements
+
+#### **STEP 2**: 
+
+Run it locally and look at container's log (via `docker log` command). At invorrect version the installer (via entrypoint script) will point an error similar to:
+
+```
+== Environment ==
+!! database mariadb (10.2.44-MariaDB-1:10.2.44+maria~bionic) !!
+[System] version 10.6.7 is required and you are running 10.2.44 - 
+```
+
+In order to retrieve the logs follow these commands:
+```
+# create docker-compose
+cd ./folder_where_docker-compose_is
+docker-compose up -d
+docker ps --filter ancestor=ellakcy/moodle
+# Then copy the container id and run
+docker logs -f ^container_id^
+```
+
+Also at `docker ps` command above we can also use a specific tag as well for example:
+
+```
+docker ps --filter ancestor=ellakcy/moodle:multibase_apache_403
+```
+
 
 ## Build Cycle and build versions
 
