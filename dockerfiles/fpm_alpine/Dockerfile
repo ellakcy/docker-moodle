@@ -26,7 +26,7 @@ RUN --mount=type=bind,from=mlocati/php-extension-installer:latest,source=/usr/bi
 	/usr/local/bin/install-php-extensions xmlrpc mbstring zip xml intl soap gd opcache &&\
 	apk update &&\
 	apk add netcat-openbsd rsync &&\
- 	rm -rf /var/cache/apk/* &&\
+	 rm -rf /var/cache/apk/* /var/tmp/* cache/* /var/lib/log/* &&\
 	echo "max_input_vars=5000" > ${PHP_INI_DIR}/conf.d/moodle.ini
 
 ARG VERSION=311
@@ -39,7 +39,7 @@ RUN \
  	 mkdir -p /usr/src/moodle && \
  	 mv /tmp/moodle /usr/src/ && \
  	 chown www-data:www-data -R /usr/src/moodle && \
-     rm -rf /var/cache/apk/*
+	 rm -rf /var/cache/apk/* /var/tmp/* cache/* /var/lib/log/*
 
 COPY ./scripts/moodle-config-fpm.php /usr/src/moodle/config.php
 COPY ./scripts/entrypoint.sh /usr/local/bin/entrypoint.sh
@@ -58,10 +58,7 @@ RUN --mount=type=bind,from=mlocati/php-extension-installer:latest,source=/usr/bi
 	/usr/local/bin/install-php-extensions mysqli pdo_mysql pgsql pdo_pgsql &&\
 	php -i | grep extension_dir  | cut -d " " -f 5 &&\
 	ls -l /usr/local/etc/php/conf.d/ &&\
-	apt-get autopurge -y &&\
-	apt-get autoremove -y &&\
-	apt-get autoclean &&\
-	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* cache/* /var/lib/log/*
+	rm -rf /var/cache/apk/* /var/tmp/* cache/* /var/lib/log/*
 
 FROM base as mysql_maria
 
@@ -74,7 +71,7 @@ RUN --mount=type=bind,from=mlocati/php-extension-installer:latest,source=/usr/bi
 	/usr/local/bin/install-php-extensions mysqli pdo_mysql &&\
 	php -i | grep extension_dir  | cut -d " " -f 5 &&\
 	ls -l /usr/local/etc/php/conf.d/ &&\
-	rm -rf /var/cache/apk/*
+	rm -rf /var/cache/apk/* /var/tmp/* cache/* /var/lib/log/*
 
 FROM base as postgres
 
@@ -87,4 +84,4 @@ RUN --mount=type=bind,from=mlocati/php-extension-installer:latest,source=/usr/bi
 	/usr/local/bin/install-php-extensions pgsql pdo_pgsql &&\
 	php -i | grep extension_dir  | cut -d " " -f 5 &&\
 	ls -l /usr/local/etc/php/conf.d/ &&\
-	rm -rf /var/cache/apk/*
+	rm -rf /var/cache/apk/* /var/tmp/* cache/* /var/lib/log/*
