@@ -2,10 +2,9 @@ import uuid
 import random
 import os
 
-import docker
 import yaml
 
-from netconf import get_non_listening_tcp_ports,scanForAllocatedPorts
+from netconf import get_non_listening_tcp_ports,scanForAllocatedPorts,getDockerImageHostIp
 
 #### Config
 
@@ -35,14 +34,10 @@ def MARIADB_VOL(): return "moodledb_maria";
 def createDBName(type):
     return "moodledb_"+type+"_"+str(uuid.uuid4().get_hex().upper()[0:16])
 
-def getDockerImageHostIp():
-    client = docker.from_env()
-    return client.containers.run('busybox',"/bin/sh -c \"ip route get 1 | sed -n 's/^.*src \([0-9.]*\) .*$/\\1/p'\"",remove=True,network="host").decode('ascii').strip()
 
-
-def getMysqlService(credentials): 
+def getMysqlService(credentials,version='latest'): 
     return {
-        "image": "mysql:5.7",
+        "image": "mysql:"+version,
         "volumes":[
            MYSQL_VOL()+':/var/lib/mysql'
         ],
@@ -55,11 +50,11 @@ def getMysqlService(credentials):
         }
     }
 
-def getMariaDbService(credentials):
+def getMariaDbService(credentials,version="latest"):
     return {
-        "image": "mariadb:10.2",
+        "image": "mariadb:"+version,
         "volumes":[
-           MYSQL_VOL()+':/var/lib/mysql'
+           MARIADB_VOL()+':/var/lib/mysql'
         ],
         "environment":{
         "MYSQL_RANDOM_ROOT_PASSWORD": "yes",
@@ -70,9 +65,9 @@ def getMariaDbService(credentials):
         }
     }
 
-def getPostgresqlService(credentials):
+def getPostgresqlService(credentials,version="latest"):
     return {
-        "image": "postgres:11",
+        "image": "postgres:"+version,
         "volumes":[
             POSTGRES_VOL()+':/var/lib/postgresql/data'
         ],

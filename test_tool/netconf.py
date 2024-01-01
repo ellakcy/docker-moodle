@@ -1,6 +1,7 @@
 import socket
 import os
 import yaml
+import docker
 
 def get_non_listening_tcp_ports(host, from_port=0, to_port=0,ports_to_exclude=()):
     '''
@@ -93,3 +94,7 @@ def scanForAllocatedPorts(dir):
                 ports_to_ignore+=extractPortsFromDockerComposeYaml(file_or_directory.path)
     
     return ports_to_ignore
+
+def getDockerImageHostIp():
+    client = docker.from_env()
+    return client.containers.run('busybox',"/bin/sh -c \"ip route get 1 | sed -n 's/^.*src \([0-9.]*\) .*$/\\1/p'\"",remove=True,network="host").decode('ascii').strip()
