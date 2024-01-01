@@ -5,7 +5,7 @@
 #
 # VERSION : The moodle version without dots eg for moodle 4.3 use 403
 # PHP_VERSION : For the PHP version to use.
-# DRY_RUN  : If set as 1 will not build the docker images it will just pront the build arguments 
+# DRY_RUN  : If set as 1 will not build the docker images it will just print the build arguments 
 # CACHE_ENABLE : If set 1 it builds the docker images without --no-cache
 # 
 # Also a single argument must be provided for the dockerfile:
