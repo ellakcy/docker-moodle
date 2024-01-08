@@ -22,3 +22,6 @@ apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin do
 usermod -aG docker vagrant
 
 export BUILDKIT_PROGRESS=plain
+
+echo "alias docker-compose=\"docker compose\"" > /etc/profile.d/10-docker.sh
+echo "export BUILDKIT_PROGRESS=plain" >> /etc/profile.d/10-docker.sh
