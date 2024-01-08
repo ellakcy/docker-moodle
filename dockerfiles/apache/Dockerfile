@@ -28,7 +28,7 @@ RUN --mount=type=bind,from=mlocati/php-extension-installer:latest,source=/usr/bi
 	echo "PHP_EXTENTION_DIR="$(php -i | grep extension_dir  | cut -d " " -f 5) >> /etc/environment &&\
 	cat /etc/environment &&\
 	apt-get update &&\
-	apt-get install -y netcat-traditional rsync &&\
+	apt-get install -y rsync &&\
  	apt-get autopurge -y &&\
  	apt-get autoremove -y &&\
  	apt-get autoclean &&\
