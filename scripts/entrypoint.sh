@@ -6,7 +6,7 @@
 # Ping Database function
 function pingdb {
     OK=0
-    for i in $(seq 1 100); do
+    for count in $(seq 1 100); do
       echo "Pinging database attempt ${count} into ${MOODLE_DB_HOST}:${MOODLE_DB_PORT}" 
       if  $(php -r "is_resource(@fsockopen(\"${MOODLE_DB_HOST}\",intval(\"${MOODLE_DB_PORT}\")))?exit(0):exit(1);") ; then
         echo "Can connect into database"
