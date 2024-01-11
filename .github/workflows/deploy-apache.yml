@@ -30,7 +30,7 @@ jobs:
           - moodle_version: 402
             php_version: '8.2'
           - moodle_version: 403
-            php_version: '7.4''
+            php_version: '7.4'
     env:
       VERSION: ${{ matrix.moodle_version }}
       PHP_VERSION: "${{ matrix.php_version }}"
