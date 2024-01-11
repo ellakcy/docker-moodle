@@ -27,7 +27,7 @@ Image naming Pattern | PHP execution type | Mysql Support | Mariadb Support | Po
  `postgresql_fpm_^VERSION^`  | fpm  | NO | NO | YES 
 
 
-The `^VERSION^` is a 2-3 digit number the first digit follows the major version and the rest of them follow the minor version for example the `mulitbase_apache_39` runs the moodle 3.9 whilst `mulitbase_apache_310` runs the moodle 3.10 .
+The `^VERSION^` is a 2-3 digit number the first digit follows the major version and the rest of them follow the minor version. For example the `mulitbase_apache_39` runs the moodle 3.9 whilst `mulitbase_apache_310` runs the moodle 3.10 .
 
 Also for the latest moodle version we also ship the following images:
 
@@ -58,55 +58,84 @@ Image | PHP execution type | Mysql Support | Mariadb Support | Postgresql Suppor
  `mysql_maria_fpm_lts` | fpm | YES | YES | NO 
  `postgresql_fpm_lts` | fpm | NO | NO | YES 
 
-All images are shipped with php 7.4 .
+All images are shipped with php **8.0**.
 
-## PHP 8.0 images
+## Specific PHP version
 
-Default php is 7.4 whereas images with php 8.0 are shipped as well for moodle versions 3.11, 4.0 and 4.11 php is shipped as well:
+> For greater stability and unexpected interruptions we reccomend to use the approach locking moodle and php version.
 
-Image naming Pattern | PHP execution type | Mysql Support | Mariadb Support | Postgresql Support
- --- | --- | --- | --- | --- 
- `mulitbase_apache_php8.0_^VERSION^` | apache  | YES | YES | YES 
- `mysql_maria_apache_php8.0_^VERSION^` | apache | YES | YES | NO 
- `postgresql_apache_php8.0_^VERSION^` | apache  | NO | NO | YES 
- `mulitbase_alpine_fpm_php8.0_^VERSION^` | fpm (running on alpine linux) | YES | YES | YES 
- `mysql_maria_alpine_fpm_php8.0_^VERSION^` | fpm (running on alpine linux) | YES | YES | NO 
- `postgresql_alpine_fpm_php8.0_^VERSION^` | fpm (running on alpine linux)  | NO | NO | YES 
- `mulitbase_fpm_php8.0_^VERSION^`   | fpm | YES | YES | YES 
- `mysql_maria_fpm_php8.0_^VERSION^` | fpm | YES | YES | NO 
- `postgresql_fpm_php8.0_^VERSION^`  | fpm  | NO | NO | YES 
-
-For php 7.4 images use the following
+Default php is 8.0 whereas images with php 7.4 and 8.1 are shipped as well:
 
 Image naming Pattern | PHP execution type | Mysql Support | Mariadb Support | Postgresql Support
  --- | --- | --- | --- | --- 
- `mulitbase_apache_php7.4_^VERSION^` | apache  | YES | YES | YES 
- `mysql_maria_apache_php7.4_^VERSION^` | apache | YES | YES | NO 
- `postgresql_apache_php7.4_^VERSION^` | apache  | NO | NO | YES 
- `mulitbase_alpine_fpm_php7.4_^VERSION^` | fpm (running on alpine linux) | YES | YES | YES 
- `mysql_maria_alpine_fpm_php7.4_^VERSION^` | fpm (running on alpine linux) | YES | YES | NO 
- `postgresql_alpine_fpm_php7.4_^VERSION^` | fpm (running on alpine linux)  | NO | NO | YES 
- `mulitbase_fpm_php7.4_^VERSION^`   | fpm | YES | YES | YES 
- `mysql_maria_fpm_php7.4_^VERSION^` | fpm | YES | YES | NO 
- `postgresql_fpm_php7.4_^VERSION^`  | fpm  | NO | NO | YES 
+ `mulitbase_apache_php^PHP_VERSION^_^MOODLE_VERSION^` | apache  | YES | YES | YES 
+ `mysql_maria_apache_php^PHP_VERSION^_^MOODLE_VERSION^` | apache | YES | YES | NO 
+ `postgresql_apache_php^PHP_VERSION^_^MOODLE_VERSION^` | apache  | NO | NO | YES 
+ `mulitbase_alpine_fpm_php^PHP_VERSION^_^MOODLE_VERSION^` | fpm (running on alpine linux) | YES | YES | YES 
+ `mysql_maria_alpine_fpm_php^PHP_VERSION^_^MOODLE_VERSION^` | fpm (running on alpine linux) | YES | YES | NO 
+ `postgresql_alpine_fpm_php^PHP_VERSION^_^MOODLE_VERSION^` | fpm (running on alpine linux)  | NO | NO | YES 
+ `mulitbase_fpm_php^PHP_VERSION^_^MOODLE_VERSION^`   | fpm | YES | YES | YES 
+ `mysql_maria_fpm_php^PHP_VERSION^_^MOODLE_VERSION^` | fpm | YES | YES | NO 
+ `postgresql_fpm_php^PHP_VERSION^_^MOODLE_VERSION^`  | fpm  | NO | NO | YES 
+
+Replace the `^PHP_VERSION^` the follwoig bellow .
+The current php versions are:
+
+* `8.1`
+* `8.0`
+* `7.4`
+
+Whereas the build moodle versions are:
+* `311`
+* `400`
+* `401`
+* `402`
+* `403`
+
+## Unsupported moodle versions
+
+All moodle versions **bellow** `3.11` are not build and supported via out solution. 
 
 ## Supported Database Versions:
-The images support the following version for each database:
+The database support is described into moodles documentation depending the moodle version. The installer will point you to appropriate version if you follow these steps:
 
-* `Postgresql`: 11 or earlier
-* `Mysql`: 5.7
-* `Mariadb`: 10.2
+#### **STEP 1**
+
+Create a docker-compose.yml with a db version mentioned upon https://moodledev.io/docs/4.3/gettingstarted/requirements
+
+#### **STEP 2**: 
+
+Run it locally and look at container's log (via `docker log` command). At invorrect version the installer (via entrypoint script) will point an error similar to:
+
+```
+== Environment ==
+!! database mariadb (10.2.44-MariaDB-1:10.2.44+maria~bionic) !!
+[System] version 10.6.7 is required and you are running 10.2.44 - 
+```
+
+In order to retrieve the logs follow these commands:
+```
+# create docker-compose
+cd ./folder_where_docker-compose_is
+docker-compose up -d
+docker ps --filter ancestor=ellakcy/moodle
+# Then copy the container id and run
+docker logs -f ^container_id^
+```
+
+Also at `docker ps` command above we can also use a specific tag as well for example:
+
+```
+docker ps --filter ancestor=ellakcy/moodle:multibase_apache_403
+```
+
 
 ## Build Cycle and build versions
 
 We aim to deliver freshly images on weekly basis. Each build image is tagged with the build date in a format `_YmdHi`, without build date is the latest build, for example the image `mysql_maria_apache_latest` is the latest built image whilst `mysql_maria_apache_latest_202108112012` is the image built at `2021-08-11 20:12`. At docker hub you can look at [tags](https://hub.docker.com/r/ellakcy/moodle/tags) section for the latest or older builds.
 
 ## Run
-
-> We also developed a [docker-compose](https://github.com/ellakcy/moodle-compose) solution.
-> We strongly reccomend using this one.
-
-> Furthermore we also strongly recomend to create a docker-compose.yml and run using docker-compose in case that our solution mentioned above, does not fit your needs.
+> We also strongly recomend to create a docker-compose.yml and run using docker-compose in case that our solution mentioned above, does not fit your needs. The moodle-compose ( https://github.com/ellakcy/moodle-compose ) we developped is no longer supported 
 
 ### Running images manually
 

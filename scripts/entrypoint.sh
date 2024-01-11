@@ -6,9 +6,9 @@
 # Ping Database function
 function pingdb {
     OK=0
-    for count in {1..100}; do
+    for count in $(seq 1 100); do
       echo "Pinging database attempt ${count} into ${MOODLE_DB_HOST}:${MOODLE_DB_PORT}" 
-      if  $(nc -z ${MOODLE_DB_HOST} ${MOODLE_DB_PORT}) ; then
+      if  $(php -r "is_resource(@fsockopen(\"${MOODLE_DB_HOST}\",intval(\"${MOODLE_DB_PORT}\")))?exit(0):exit(1);") ; then
         echo "Can connect into database"
         OK=1
         break
@@ -16,7 +16,6 @@ function pingdb {
       sleep 5
     done
 
-    echo "Is ok? "$OK
 
     if [ $OK -eq 1 ]; then
       echo "Database type: "${MOODLE_DB_TYPE}
