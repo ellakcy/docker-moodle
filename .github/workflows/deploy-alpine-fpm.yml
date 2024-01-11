@@ -14,10 +14,20 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        moodle_version: [311,400,401]
+        moodle_version: [311,400,401,402,403]
+        php_version: ['7.4','8.0','8.1','8.2']
+        exclude:
+          - moodle_version: [311,400]
+            php_version: ['8.1','8.2']
+          - moodle_version: 401
+            php_version: ['8.2']
+          - moodle_version: 402
+            php_version: ['7.4','8.2']
+          - moodle_version: 403
+            php_version: '7.4'
     env:
       VERSION: ${{ matrix.moodle_version }}
-      PHP_VERSION: "7.4"
+      PHP_VERSION: "${{ matrix.moodle_version }}"
     steps:
       - name: Check Out Repo 
         uses: actions/checkout@v3
