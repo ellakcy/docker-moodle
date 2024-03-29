@@ -10,16 +10,15 @@ VOLUME ["/var/moodledata"]
 VOLUME ["/var/www/html"]
 EXPOSE 9000
 
-ENV \
-	MOODLE_URL http://0.0.0.0 \
-    MOODLE_ADMIN admin \
-    MOODLE_ADMIN_PASSWORD Admin~1234 \
-    MOODLE_ADMIN_EMAIL admin@example.com \
-    MOODLE_DB_HOST '' \
-    MOODLE_DB_PASSWORD '' \
-    MOODLE_DB_USER '' \
-    MOODLE_DB_NAME '' \
-    MOODLE_DB_PORT '3306'
+ENV MOODLE_URL=http://0.0.0.0 \
+    MOODLE_ADMIN=admin \
+    MOODLE_ADMIN_PASSWORD=Admin~1234 \
+    MOODLE_ADMIN_EMAIL=admin@example.com \
+    MOODLE_DB_HOST= \
+    MOODLE_DB_PASSWORD= \
+    MOODLE_DB_USER= \
+    MOODLE_DB_NAME= \
+    MOODLE_DB_PORT=3306
 
 
 RUN --mount=type=bind,from=mlocati/php-extension-installer:latest,source=/usr/bin/install-php-extensions,target=/usr/local/bin/install-php-extensions \

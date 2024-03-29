@@ -10,16 +10,16 @@ FROM  php:${PHP_VERSION}-apache as base
 VOLUME ["/var/moodledata"]
 
 # Let the container know that there is no tty
-ENV DEBIAN_FRONTEND noninteractive \
-	MOODLE_URL http://0.0.0.0 \
-    MOODLE_ADMIN admin \
-    MOODLE_ADMIN_PASSWORD Admin~1234 \
-    MOODLE_ADMIN_EMAIL admin@example.com \
-    MOODLE_DB_HOST '' \
-    MOODLE_DB_PASSWORD '' \
-    MOODLE_DB_USER '' \
-    MOODLE_DB_NAME '' \
-    MOODLE_DB_PORT '3306'
+ENV DEBIAN_FRONTEND=noninteractive \
+    MOODLE_URL=http://0.0.0.0 \
+    MOODLE_ADMIN=admin \
+    MOODLE_ADMIN_PASSWORD=Admin~1234 \
+    MOODLE_ADMIN_EMAIL=admin@example.com \
+    MOODLE_DB_HOST= \
+    MOODLE_DB_PASSWORD= \
+    MOODLE_DB_USER= \
+    MOODLE_DB_NAME= \
+    MOODLE_DB_PORT=3306
 
 RUN php -i | grep extension_dir  | cut -d " " -f 5
 
