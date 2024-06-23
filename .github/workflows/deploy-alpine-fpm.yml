@@ -14,23 +14,33 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        moodle_version: [311,400,401,402,403]
-        php_version: ['7.4','8.0','8.1','8.2']
+        moodle_version: [311,400,401,402,403,404]
+        php_version: ['7.4','8.0','8.1','8.2','8.3']
         exclude:
           - moodle_version: 311
             php_version: '8.1'
           - moodle_version: 311
             php_version: '8.2'
+          - moodle_version: 311
+            php_version: '8.3'
           - moodle_version: 400
-            php_version: 8.1
+            php_version: '8.1'
+          - moodle_version: 400
+            php_version: '8.3'
           - moodle_version: 401
             php_version: '8.2'
+          - moodle_version: 401
+            php_version: '8.3'
           - moodle_version: 402
             php_version: '7.4'
           - moodle_version: 402
             php_version: '8.2'
           - moodle_version: 403
+            php_version: '8.3'
+          - moodle_version: 403
             php_version: '7.4'
+          - moodle_version: 403
+            php_version: '8.3'  
     env:
       VERSION: ${{ matrix.moodle_version }}
       PHP_VERSION: "${{ matrix.php_version }}"
