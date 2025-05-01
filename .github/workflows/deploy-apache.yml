@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        moodle_version: [400,401,402,403,404,405]
+        moodle_version: [401,402,403,404,405,500]
         php_version: ['8.0','8.1','8.2','8.3','8.4']
         exclude:
           - moodle_version: 400
