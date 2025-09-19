@@ -1,7 +1,7 @@
 #syntax=docker/dockerfile:experimental
 
 ARG PHP_VERSION="7.4"
-FROM  php:${PHP_VERSION}-fpm as base
+FROM  php:${PHP_VERSION}-fpm AS base
 
 # Replace for later version
 
@@ -22,9 +22,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
     MOODLE_DB_NAME= \
     MOODLE_DB_PORT=3306
 
-RUN php -i | grep extension_dir  | cut -d " " -f 5
-
-Upon Image building\
+RUN php -i | grep extension_dir  | cut -d " " -f 5 \
 	/usr/local/bin/install-php-extensions xmlrpc mbstring zip xml intl soap gd opcache &&\
 	echo "PHP_EXTENTION_DIR="$(php -i | grep extension_dir  | cut -d " " -f 5) >> /etc/environment &&\
 	cat /etc/environment &&\
@@ -55,9 +53,9 @@ RUN chown root:root /usr/local/bin/entrypoint.sh &&\
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 CMD ["php-fpm"]
 
-FROM base as multibase
+FROM base AS multibase
 
-ENV MOODLE_DB_TYPE 'all'
+ENV MOODLE_DB_TYPE='all'
 
 RUN --mount=type=bind,from=mlocati/php-extension-installer:latest,source=/usr/bin/install-php-extensions,target=/usr/local/bin/install-php-extensions \
 	/usr/local/bin/install-php-extensions mysqli pdo_mysql pgsql pdo_pgsql &&\
@@ -68,9 +66,9 @@ RUN --mount=type=bind,from=mlocati/php-extension-installer:latest,source=/usr/bi
 	apt-get autoclean &&\
 	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* cache/* /var/lib/log/*
 
-FROM base as mysql_maria
+FROM base AS mysql_maria
 
-ENV MOODLE_DB_TYPE 'mysqli'
+ENV MOODLE_DB_TYPE='mysqli'
 RUN echo 'mysqli' > /etc/db_type;
 
 # Use the argument CACHEBUST to disable caching during build bellow. This contains the build number.
@@ -85,9 +83,9 @@ RUN --mount=type=bind,from=mlocati/php-extension-installer:latest,source=/usr/bi
 	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* cache/* /var/lib/log/*
 
 
-FROM base as postgres
+FROM base AS postgres
 
-ENV MOODLE_DB_TYPE 'pgsql'
+ENV MOODLE_DB_TYPE='pgsql'
 RUN echo 'pgsql' > /etc/db_type;
 
 # Use the argument CACHEBUST to disable caching during build bellow. This contains the build number.

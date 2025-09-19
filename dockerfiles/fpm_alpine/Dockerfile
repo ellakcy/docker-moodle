@@ -2,7 +2,7 @@
 #Original Maintainer Jon Auer <jda@coldshore.com>
 
 ARG PHP_VERSION="7.4"
-FROM  php:${PHP_VERSION}-fpm-alpine as base
+FROM  php:${PHP_VERSION}-fpm-alpine AS base
 
 # Replace for later version
 
@@ -49,9 +49,9 @@ RUN chown root:root /usr/local/bin/entrypoint.sh &&\
 ENTRYPOINT ["/bin/sh","/usr/local/bin/entrypoint.sh"]
 CMD ["php-fpm"]
 
-FROM base as multibase
+FROM base AS multibase
 
-ENV MOODLE_DB_TYPE 'all'
+ENV MOODLE_DB_TYPE='all'
 
 RUN --mount=type=bind,from=mlocati/php-extension-installer:latest,source=/usr/bin/install-php-extensions,target=/usr/local/bin/install-php-extensions \
 	/usr/local/bin/install-php-extensions mysqli pdo_mysql pgsql pdo_pgsql &&\
@@ -59,9 +59,9 @@ RUN --mount=type=bind,from=mlocati/php-extension-installer:latest,source=/usr/bi
 	ls -l /usr/local/etc/php/conf.d/ &&\
 	rm -rf /var/cache/apk/* /var/tmp/* cache/* /var/lib/log/*
 
-FROM base as mysql_maria
+FROM base AS mysql_maria
 
-ENV MOODLE_DB_TYPE 'mysqli'
+ENV MOODLE_DB_TYPE='mysqli'
 RUN echo 'mysqli' > /etc/db_type;
 
 # Use the argument CACHEBUST to disable caching during build bellow. This contains the build number.
@@ -72,9 +72,9 @@ RUN --mount=type=bind,from=mlocati/php-extension-installer:latest,source=/usr/bi
 	ls -l /usr/local/etc/php/conf.d/ &&\
 	rm -rf /var/cache/apk/* /var/tmp/* cache/* /var/lib/log/*
 
-FROM base as postgres
+FROM base AS postgres
 
-ENV MOODLE_DB_TYPE 'pgsql'
+ENV MOODLE_DB_TYPE='pgsql'
 RUN echo 'pgsql' > /etc/db_type;
 
 # Use the argument CACHEBUST to disable caching during build bellow. This contains the build number.
