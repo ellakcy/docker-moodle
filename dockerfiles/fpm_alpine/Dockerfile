@@ -28,16 +28,18 @@ RUN --mount=type=bind,from=mlocati/php-extension-installer:latest,source=/usr/bi
 	echo "max_input_vars=5000" > ${PHP_INI_DIR}/conf.d/moodle.ini
 
 ARG VERSION=311
-RUN \
- 	 echo "Installing moodle" && \
-	 php -r "copy(\"https://packaging.moodle.org/stable${VERSION}/moodle-latest-${VERSION}.tgz\",\"/tmp/moodle-latest.tgz\");" &&\
- 	 rm -rf /var/www/html/index.html && \
- 	 cd /tmp &&\
-	 tar -xvf /tmp/moodle-latest.tgz && cd / \
- 	 mkdir -p /usr/src/moodle && \
- 	 mv /tmp/moodle /usr/src/ && \
- 	 chown www-data:www-data -R /usr/src/moodle && \
-	 rm -rf /var/cache/apk/* /var/tmp/* cache/* /var/lib/log/*
+
+RUN apk add --no-cache curl &&\
+	curl -L -A "Mozilla/5.0" -o /tmp/moodle-latest.tgz "https://packaging.moodle.org/stable${VERSION}/moodle-latest-${VERSION}.tgz" &&\
+ 	rm -rf /var/www/html/index.html && \
+ 	cd /tmp &&\
+	tar -xvf /tmp/moodle-latest.tgz && cd / \
+ 	mkdir -p /usr/src/moodle && \
+ 	mv /tmp/moodle /usr/src/ && \
+ 	chown www-data:www-data -R /usr/src/moodle && \
+	apk del curl && \
+	rm -rf /tmp/* &&\
+	rm -rf /var/cache/apk/* /var/tmp/* cache/* /var/lib/log/*
 
 COPY ./scripts/moodle-config-fpm.php /usr/src/moodle/config.php
 COPY ./scripts/entrypoint.sh /usr/local/bin/entrypoint.sh
