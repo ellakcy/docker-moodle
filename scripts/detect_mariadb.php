@@ -31,7 +31,7 @@ $host=getenv('MOODLE_DB_HOST');
 $port=getenv('MOODLE_DB_PORT');
 $database=getenv('MOODLE_DB_NAME');
 $username=getenv('MOODLE_DB_USER');
-$password=getenv('MOODLE_DB_PASSWORD');
+$password=getenv('MOODLE_DB_PSD');
 
 try {
   $connectionString=gererateDbConnectionString($host,$port,$database);

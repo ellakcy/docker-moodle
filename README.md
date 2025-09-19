@@ -203,7 +203,7 @@ Variable Name | Default value | Description
 Variable Name | Default value | Description
 ---- | ------ | ------
 `MOODLE_DB_HOST` | | The url that the database is accessible
-`MOODLE_DB_PASSWORD` | | The password for the database
+`MOODLE_DB_PSD` | | The password for the database
 `MOODLE_DB_USER` | | The username of the database
 `MOODLE_DB_NAME` | | The database name
 `MOODLE_DB_PORT` | | The port that the database is accessible

@@ -44,7 +44,7 @@ $CFG->dblibrary = 'native';     // 'native' only at the moment
 $CFG->dbhost    = getenv('MOODLE_DB_HOST');  // eg 'localhost' or 'db.isp.com' or IP
 $CFG->dbname    = getenv('MOODLE_DB_NAME');     // database name, eg moodle
 $CFG->dbuser    = getenv('MOODLE_DB_USER');   // your database username
-$CFG->dbpass    = getenv('MOODLE_DB_PASSWORD');   // your database password
+$CFG->dbpass    = getenv('MOODLE_DB_PSD');   // your database password
 
 $CFG->prefix    = 'mdl_';       // prefix to use for all table names
 $CFG->dboptions = array(
