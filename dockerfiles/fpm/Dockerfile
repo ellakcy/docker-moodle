@@ -1,6 +1,6 @@
 #syntax=docker/dockerfile:experimental
 
-ARG PHP_VERSION="7.4"
+ARG PHP_VERSION="8.0"
 FROM  php:${PHP_VERSION}-fpm AS base
 
 # Replace for later version
@@ -21,7 +21,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
     MOODLE_DB_NAME= \
     MOODLE_DB_PORT=3306
 
-RUN php -i | grep extension_dir  | cut -d " " -f 5 \
+RUN --mount=type=bind,from=mlocati/php-extension-installer:latest,source=/usr/bin/install-php-extensions,target=/usr/local/bin/install-php-extensions \
 	/usr/local/bin/install-php-extensions xmlrpc mbstring zip xml intl soap gd opcache &&\
 	echo "PHP_EXTENTION_DIR="$(php -i | grep extension_dir  | cut -d " " -f 5) >> /etc/environment &&\
 	cat /etc/environment &&\
