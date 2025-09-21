@@ -83,7 +83,7 @@ function generateTags(){
 
 }
 
-# Pulling extention installer
+# Pulling extension installer
 docker pull mlocati/php-extension-installer
 
 for DB_FLAVOR in ${DB_FLAVORS[@]}; do
@@ -147,10 +147,43 @@ if [ "$CACHE_ENABLE" == "1" ]; then
     CACHE_ARG=""
 fi
 
-DOCKER_BUILDKIT=1  docker build --target multibase ${CACHE_ARG} --pull --build-arg PHP_VERSION=${PHP_VERSION} --build-arg VERSION=${VERSION} -f ${DOCKERFILE} ${MULTIBASE_PARAMS} .
-DOCKER_BUILDKIT=1  docker build --target postgres  --build-arg CACHEBUST=${BUILD_NUMBER} --build-arg PHP_VERSION=${PHP_VERSION} --build-arg VERSION=${VERSION} -f ${DOCKERFILE} ${POSTGRES_PARAMS} .
-DOCKER_BUILDKIT=1  docker build --target mysql_maria --build-arg CACHEBUST=${BUILD_NUMBER} --build-arg PHP_VERSION=${PHP_VERSION} --build-arg VERSION=${VERSION} -f ${DOCKERFILE} ${MYSQL_PARAMS} .
+# Enable buildx and set up multi-platform
+docker buildx create --use
 
+# Pull the cache from Docker Hub or your registry
+CACHE_FROM="type=registry,ref=ellakcy/moodle:cache"
+CACHE_TO="type=registry,ref=ellakcy/moodle:cache,mode=max"
+
+# Build with docker buildx for multi-platform and caching
+DOCKER_BUILDKIT=1  docker buildx build \
+  --platform linux/amd64,linux/arm64 \
+  --cache-from=${CACHE_FROM} \
+  --cache-to=${CACHE_TO} \
+  --target multibase \
+  ${CACHE_ARG} \
+  --build-arg PHP_VERSION=${PHP_VERSION} \
+  --build-arg VERSION=${VERSION} \
+  -f ${DOCKERFILE} ${MULTIBASE_PARAMS} .
+
+DOCKER_BUILDKIT=1  docker buildx build \
+  --platform linux/amd64,linux/arm64 \
+  --cache-from=${CACHE_FROM} \
+  --cache-to=${CACHE_TO} \
+  --target postgres \
+  --build-arg CACHEBUST=${BUILD_NUMBER} \
+  --build-arg PHP_VERSION=${PHP_VERSION} \
+  --build-arg VERSION=${VERSION} \
+  -f ${DOCKERFILE} ${POSTGRES_PARAMS} .
+
+DOCKER_BUILDKIT=1  docker buildx build \
+  --platform linux/amd64,linux/arm64 \
+  --cache-from=${CACHE_FROM} \
+  --cache-to=${CACHE_TO} \
+  --target mysql_maria \
+  --build-arg CACHEBUST=${BUILD_NUMBER} \
+  --build-arg PHP_VERSION=${PHP_VERSION} \
+  --build-arg VERSION=${VERSION} \
+  -f ${DOCKERFILE} ${MYSQL_PARAMS} .
 
 BRANCH=${GITHUB_REF##*/}
 
