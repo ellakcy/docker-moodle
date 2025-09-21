@@ -1,5 +1,3 @@
-#syntax=docker/dockerfile:experimental
-
 ARG PHP_VERSION="8.0"
 FROM  php:${PHP_VERSION}-fpm AS base
 
@@ -16,7 +14,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
     MOODLE_ADMIN=admin \
     MOODLE_ADMIN_EMAIL= \
     MOODLE_DB_HOST= \
-    MOODLE_DB_PSD= \
+    MOODLE_DB_PASSWORD= \
     MOODLE_DB_USER= \
     MOODLE_DB_NAME= \
     MOODLE_DB_PORT=3306
