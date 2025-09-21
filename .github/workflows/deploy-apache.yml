@@ -33,6 +33,8 @@ jobs:
             php_version: '8.0'
           - moodle_version: 405
             php_version: '8.0'
+          - moodle_version: 500
+            php_version: '8.0'
     env:
       VERSION: ${{ matrix.moodle_version }}
       PHP_VERSION: "${{ matrix.php_version }}"
