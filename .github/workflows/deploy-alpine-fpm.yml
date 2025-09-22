@@ -1,4 +1,4 @@
-name: deploy-alpine-fpm_new
+name: deploy-alpine-fpm
 
 on:
   schedule:
@@ -16,6 +16,8 @@ jobs:
         exclude:
           
           - moodle_version: 404
+            php_version: 8.0
+          - moodle_version: 405
             php_version: 8.0
           - moodle_version: 500
             php_version: 8.0

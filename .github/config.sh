@@ -4,6 +4,7 @@ DEFAULT_PHP="8.0"
 
 declare -A MOODLE_MIN_PHP=(
   [500]=8.2
+  [405]=8.1
   [404]=8.1
   [403]=8.0
   [402]=7.4
@@ -25,7 +26,7 @@ declare -A CRON=(
 )
 
 declare -A ACTION_NAMES=(
-    ['dockerfiles/fpm_alpine/Dockerfile']='deploy-alpine-fpm_new'
-    ['dockerfiles/apache/Dockerfile']='deploy-apache_new'
-    ['dockerfiles/fpm/Dockerfile']='deploy-fpm_new' 
+    ['dockerfiles/fpm_alpine/Dockerfile']='deploy-alpine-fpm'
+    ['dockerfiles/apache/Dockerfile']='deploy-apache'
+    ['dockerfiles/fpm/Dockerfile']='deploy-fpm' 
 )

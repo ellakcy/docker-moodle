@@ -1,8 +1,8 @@
-name: deploy-fpm_new
+name: deploy-apache
 
 on:
   schedule:
-    - cron: 23 20 * * 6 
+    - cron: 23 0 * * 6 
   push:
     branches: [ master, dev ]
 
@@ -16,6 +16,8 @@ jobs:
         exclude:
           
           - moodle_version: 404
+            php_version: 8.0
+          - moodle_version: 405
             php_version: 8.0
           - moodle_version: 500
             php_version: 8.0
