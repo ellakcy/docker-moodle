@@ -23,7 +23,7 @@ SCRIPT=$(readlink -f "${BASH_SOURCE}")
 # Absolute path this script is in, thus /home/user/bin
 BASEDIR=$(dirname ${SCRIPT})
 
-source ${BASEDIR}/config.sh
+source ${BASEDIR}/../tools/config.sh
 
 MIN_PHP=${MOODLE_MIN_PHP[$VERSION]}
 PHP_VERSION=${PHP_VERSION:=${MIN_PHP}}
