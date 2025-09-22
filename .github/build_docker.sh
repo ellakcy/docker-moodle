@@ -25,10 +25,16 @@ BASEDIR=$(dirname ${SCRIPT})
 
 source ${BASEDIR}/config.sh
 
-PHP_VERSION=${PHP_VERSION:=${DEFAULT_PHP}}
+MIN_PHP=${MOODLE_MIN_PHP[$VERSION]}
+PHP_VERSION=${PHP_VERSION:=${MIN_PHP}}
 
 if [ "$PHP_VERSION" == "${DEFAULT_PHP}" ]; then
     echo "$PHP_VERSION is same to ${DEFAULT_PHP}"
+fi
+
+if (( $(echo "$PHP_VERSION < $MIN_PHP" | bc -l) )); then
+    echo "❌ ERROR: Moodle $VERSION requires at least PHP $MIN_PHP, but you set PHP $PHP_VERSION"
+    exit 1
 fi
 
 SERVER_FAVOR="apache"
