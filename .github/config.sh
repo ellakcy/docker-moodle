@@ -12,3 +12,20 @@ declare -A MOODLE_MIN_PHP=(
   [311]=7.2
   [310]=7.1
 )
+
+
+MOODLE_VERSIONS=(401 404 405 500)
+PHP_VERSIONS=(8.0 8.1 8.2 8.3 8.4)
+DOCKERFILES=('dockerfiles/fpm_alpine/Dockerfile' 'dockerfiles/apache/Dockerfile' 'dockerfiles/fpm/Dockerfile')
+
+declare -A CRON=(
+    ['dockerfiles/fpm_alpine/Dockerfile']='23 0 * * 6'
+    ['dockerfiles/apache/Dockerfile']='23 0 * * 6'
+    ['dockerfiles/fpm/Dockerfile']='23 20 * * 6' 
+)
+
+declare -A ACTION_NAMES=(
+    ['dockerfiles/fpm_alpine/Dockerfile']='deploy-alpine-fpm_new'
+    ['dockerfiles/apache/Dockerfile']='deploy-apache_new'
+    ['dockerfiles/fpm/Dockerfile']='deploy-fpm_new' 
+)
