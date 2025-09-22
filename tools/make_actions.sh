@@ -1,8 +1,6 @@
 #!/bin/bash -e
 
-# Absolute path to this script, e.g. /home/user/bin/foo.sh
 SCRIPT=$(readlink -f "${BASH_SOURCE}")
-# Absolute path this script is in, thus /home/user/bin
 BASEDIR=$(dirname ${SCRIPT})
 
 source ${BASEDIR}/config.sh

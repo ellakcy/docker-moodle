@@ -1,0 +1,141 @@
+version: "3.9"
+
+name: ${COMPOSE_PROJECT_NAME}
+
+services:
+  # Shared Nginx front
+  nginx:
+    image: nginx:alpine
+    container_name: ${COMPOSE_PROJECT_NAME}_nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./app1:/var/www/app1
+      - ./app2:/var/www/app2
+      - ./app3:/var/www/app3
+    depends_on:
+      - php-app-mariadb
+      - php-app-postgres
+      - php-app-mysql
+
+  # PHP app with MariaDB
+  php-app-mariadb:
+    build:
+      context: .
+      dockerfile: dockerfiles/fpm/Dockerfile
+      target: multibase
+      args:
+        - PHP_VERSION=${PHP_VERSION}
+        - VERSION=${MOODLE_VERSION}
+    container_name: ${COMPOSE_PROJECT_NAME}_php_mariadb
+    volumes:
+      - ./app1:/var/www/app1
+      - moodledata_app1:/var/moodledata
+    environment:
+      - MOODLE_URL=${MOODLE_URL}
+      - MOODLE_ADMIN=${MOODLE_ADMIN}
+      - MOODLE_ADMIN_PASSWORD=${MOODLE_ADMIN_PASSWORD}
+      - MOODLE_ADMIN_EMAIL=${MOODLE_ADMIN_EMAIL}
+      - MOODLE_DB_TYPE=mysqli
+      - MOODLE_DB_HOST=mariadb
+      - MOODLE_DB_USER=${MARIADB_USER}
+      - MOODLE_DB_PASSWORD=${MARIADB_PASSWORD}
+      - MOODLE_DB_NAME=${MARIADB_DATABASE}
+      - MOODLE_DB_PORT=3306
+    depends_on:
+      - mariadb
+
+  mariadb:
+    image: mariadb:${MARIADB_VERSION}
+    container_name: ${COMPOSE_PROJECT_NAME}_mariadb
+    environment:
+      - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
+      - MARIADB_DATABASE=${MARIADB_DATABASE}
+      - MARIADB_USER=${MARIADB_USER}
+      - MARIADB_PASSWORD=${MARIADB_PASSWORD}
+    volumes:
+      - mariadb_data:/var/lib/mysql
+
+  # PHP app with PostgreSQL
+  php-app-postgres:
+    build:
+      context: .
+      dockerfile: dockerfiles/fpm/Dockerfile
+      target: multibase
+      args:
+        - PHP_VERSION=${PHP_VERSION}
+        - VERSION=${MOODLE_VERSION}
+    container_name: ${COMPOSE_PROJECT_NAME}_php_postgres
+    volumes:
+      - ./app2:/var/www/app2
+      - moodledata_app2:/var/moodledata
+    environment:
+      - MOODLE_URL=${MOODLE_URL}
+      - MOODLE_ADMIN=${MOODLE_ADMIN}
+      - MOODLE_ADMIN_PASSWORD=${MOODLE_ADMIN_PASSWORD}
+      - MOODLE_ADMIN_EMAIL=${MOODLE_ADMIN_EMAIL}
+      - MOODLE_DB_TYPE=pgsql
+      - MOODLE_DB_HOST=postgres
+      - MOODLE_DB_USER=${POSTGRES_USER}
+      - MOODLE_DB_PASSWORD=${POSTGRES_PASSWORD}
+      - MOODLE_DB_NAME=${POSTGRES_DB}
+      - MOODLE_DB_PORT=5432
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:${POSTGRES_VERSION}
+    container_name: ${COMPOSE_PROJECT_NAME}_postgres
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # PHP app with MySQL
+  php-app-mysql:
+    build:
+      context: .
+      dockerfile: dockerfiles/fpm/Dockerfile
+      target: multibase
+      args:
+        - PHP_VERSION=${PHP_VERSION}
+        - VERSION=${MOODLE_VERSION}
+    container_name: ${COMPOSE_PROJECT_NAME}_php_mysql
+    volumes:
+      - ./app3:/var/www/app3
+      - moodledata_app3:/var/moodledata
+    environment:
+      - MOODLE_URL=${MOODLE_URL}
+      - MOODLE_ADMIN=${MOODLE_ADMIN}
+      - MOODLE_ADMIN_PASSWORD=${MOODLE_ADMIN_PASSWORD}
+      - MOODLE_ADMIN_EMAIL=${MOODLE_ADMIN_EMAIL}
+      - MOODLE_DB_TYPE=mysqli
+      - MOODLE_DB_HOST=mysql
+      - MOODLE_DB_USER=${MYSQL_USER}
+      - MOODLE_DB_PASSWORD=${MYSQL_PASSWORD}
+      - MOODLE_DB_NAME=${MYSQL_DATABASE}
+      - MOODLE_DB_PORT=3306
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:${MYSQL_VERSION}
+    container_name: ${COMPOSE_PROJECT_NAME}_mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mariadb_data:
+  postgres_data:
+  mysql_data:
+  moodledata_app1:
+  moodledata_app2:
+  moodledata_app3:
