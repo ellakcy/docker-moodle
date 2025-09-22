@@ -7,16 +7,16 @@ declare -A MOODLE_MIN_PHP=(
   [405]=8.1
   [404]=8.1
   [403]=8.0
-  [402]=7.4
-  [401]=7.3
-  [400]=7.2
-  [311]=7.2
-  [310]=7.1
+  [402]=8.0
+  [401]=7.4
+  [400]=7.3
+  [311]=7.3
+  [310]=7.2
 )
 
 
 MOODLE_VERSIONS=(401 404 405 500)
-PHP_VERSIONS=('7.4','8.0' '8.1' '8.2' '8.3' '8.4')
+PHP_VERSIONS=('7.4' '8.0' '8.1' '8.2' '8.3' '8.4')
 DOCKERFILES=('dockerfiles/fpm_alpine/Dockerfile' 'dockerfiles/apache/Dockerfile' 'dockerfiles/fpm/Dockerfile')
 
 declare -A CRON=(
