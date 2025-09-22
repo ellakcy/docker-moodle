@@ -15,7 +15,7 @@ declare -A MOODLE_MIN_PHP=(
 
 
 MOODLE_VERSIONS=(401 404 405 500)
-PHP_VERSIONS=(8.0 8.1 8.2 8.3 8.4)
+PHP_VERSIONS=('8.0' '8.1' '8.2' '8.3' '8.4')
 DOCKERFILES=('dockerfiles/fpm_alpine/Dockerfile' 'dockerfiles/apache/Dockerfile' 'dockerfiles/fpm/Dockerfile')
 
 declare -A CRON=(

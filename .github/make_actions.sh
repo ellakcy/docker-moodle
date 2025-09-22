@@ -82,8 +82,8 @@ for dockerfile in "${DOCKERFILES[@]}"; do
   content="$TEMPLATE"
   content="${content//\{\{action_name\}\}/$action_name}"
   content="${content//\{\{cron_expression\}\}/$cron}"
-  content="${content//\{\{MOODLE_VERSIONS\}\}/[${MOODLE_VERSIONS[*]}]}"
-  content="${content//\{\{PHP_VERSIONS\}\}/[${PHP_VERSIONS[*]}]}"
+  content="${content//\{\{MOODLE_VERSIONS\}\}/[$(IFS=,; echo "${MOODLE_VERSIONS[*]}")]}"
+  content="${content//\{\{PHP_VERSIONS\}\}/[$(IFS=,; echo "${PHP_VERSIONS[*]}")]}"
   content="${content//\{\{DOCKERFILE\}\}/$df}"
   content="${content//\{\{EXCLUDE_VERSIONS\}\}/$exclude_list}"
 
