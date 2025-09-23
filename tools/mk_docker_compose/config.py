@@ -4,7 +4,6 @@ import yaml
 
 class MoodleConfig:
     def __init__(self):
-        print("INIT")
         contents = self.__get_yaml_contents()
         config = yaml.safe_load(contents)
         for key, value in config.items():
@@ -31,4 +30,3 @@ class MoodleConfig:
        )
 
        return result.stdout
-
