@@ -13,8 +13,8 @@ VOLUME ["/var/moodledata"]
 ENV DEBIAN_FRONTEND=noninteractive \
     MOODLE_URL=http://0.0.0.0 \
     MOODLE_ADMIN=admin \
-    MOODLE_ADMIN_PASSWORD= \
-    MOODLE_ADMIN_EMAIL= \
+    MOODLE_ADMIN_PASSWORD=Admin~1234 \
+    MOODLE_ADMIN_EMAIL=admin@example.com \
     MOODLE_DB_HOST= \
     MOODLE_DB_PASSWORD= \
     MOODLE_DB_USER= \
