@@ -24,7 +24,7 @@ services:
   # PHP app with MariaDB
   php-app-mariadb:
     build:
-      context: .
+      context: ../..
       dockerfile: ${DOCKERFILE}
       target: multibase
       args:
@@ -42,7 +42,7 @@ services:
       - MOODLE_DB_TYPE=mysqli
       - MOODLE_DB_HOST=mariadb
       - MOODLE_DB_USER=${MARIADB_USER}
-      - MOODLE_DB_PASSWORD=${MARIADB_PASSWORD}
+      - MOODLE_DB_PSD=${MARIADB_PASSWORD}
       - MOODLE_DB_NAME=${MARIADB_DATABASE}
       - MOODLE_DB_PORT=3306
     depends_on:
@@ -62,7 +62,7 @@ services:
   # PHP app with PostgreSQL
   php-app-postgres:
     build:
-      context: .
+      context: ../..
       dockerfile: ${DOCKERFILE}
       target: multibase
       args:
@@ -80,7 +80,7 @@ services:
       - MOODLE_DB_TYPE=pgsql
       - MOODLE_DB_HOST=postgres
       - MOODLE_DB_USER=${POSTGRES_USER}
-      - MOODLE_DB_PASSWORD=${POSTGRES_PASSWORD}
+      - MOODLE_DB_PSD=${POSTGRES_PASSWORD}
       - MOODLE_DB_NAME=${POSTGRES_DB}
       - MOODLE_DB_PORT=5432
     depends_on:
@@ -99,7 +99,7 @@ services:
   # PHP app with MySQL
   php-app-mysql:
     build:
-      context: .
+      context: ../..
       dockerfile: ${DOCKERFILE}
       target: multibase
       args:
@@ -117,7 +117,7 @@ services:
       - MOODLE_DB_TYPE=mysqli
       - MOODLE_DB_HOST=mysql
       - MOODLE_DB_USER=${MYSQL_USER}
-      - MOODLE_DB_PASSWORD=${MYSQL_PASSWORD}
+      - MOODLE_DB_PSD=${MYSQL_PASSWORD}
       - MOODLE_DB_NAME=${MYSQL_DATABASE}
       - MOODLE_DB_PORT=3306
     depends_on:

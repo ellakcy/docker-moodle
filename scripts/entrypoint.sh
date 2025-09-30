@@ -60,7 +60,7 @@ $host=getenv('MOODLE_DB_HOST');
 $port=getenv('MOODLE_DB_PORT');
 $database=getenv('MOODLE_DB_NAME');
 $username=getenv('MOODLE_DB_USER');
-$password=getenv('MOODLE_DB_PSD');
+$password=getenv('MOODLE_DB_PASSWORD');
 
 try {
   $connectionString=gererateDbConnectionString($host,$port,$database);
@@ -110,9 +110,9 @@ if [ $HAS_MySQL_SUPPORT -gt 0 ] && [ "${MOODLE_DB_TYPE}" = "mysqli" ]; then
   : ${MOODLE_DB_NAME:=${DB_ENV_MYSQL_DATABASE:-'moodle'}}
 
   if [ "$MOODLE_DB_USER" = 'root' ]; then
-    : ${MOODLE_DB_PSD:=$DB_ENV_MYSQL_ROOT_PASSWORD}
+    : ${MOODLE_DB_PASSWORD:=$DB_ENV_MYSQL_ROOT_PASSWORD}
   else
-    : ${MOODLE_DB_PSD:=$DB_ENV_MYSQL_PASSWORD}
+    : ${MOODLE_DB_PASSWORD:=$DB_ENV_MYSQL_PASSWORD}
   fi
 
   pingdb
@@ -136,9 +136,9 @@ elif [ $HAS_MySQL_SUPPORT -gt 0 ] && [ "${MOODLE_DB_TYPE}" = "mariadb" ]; then
   : ${MOODLE_DB_NAME:=${DB_ENV_MYSQL_DATABASE:-'moodle'}}
 
   if [ "$MOODLE_DB_USER" = 'root' ]; then
-    : ${MOODLE_DB_PSD:=$DB_ENV_MYSQL_ROOT_PASSWORD}
+    : ${MOODLE_DB_PASSWORD:=$DB_ENV_MYSQL_ROOT_PASSWORD}
   else
-    : ${MOODLE_DB_PSD:=$DB_ENV_MYSQL_PASSWORD}
+    : ${MOODLE_DB_PASSWORD:=$DB_ENV_MYSQL_PASSWORD}
   fi
 
   pingdb
@@ -155,7 +155,7 @@ elif [ $HAS_POSTGRES_SUPPORT -gt 0 ] && [ "$MOODLE_DB_TYPE" = "pgsql" ]; then
 
   : ${MOODLE_DB_NAME:=${DB_ENV_POSTGRES_DB:-'moodle'}}
   : ${MOODLE_DB_USER:=${DB_ENV_POSTGRES_USER}}
-  : ${MOODLE_DB_PSD:=$DB_ENV_POSTGRES_PASSWORD}
+  : ${MOODLE_DB_PASSWORD:=$DB_ENV_POSTGRES_PASSWORD}
 
   pingdb
   sed -e "s/trim(getenv('MOODLE_DB_TYPE'))/'pgsql'/" /usr/src/moodle/config.php > /var/www/html/config.php
@@ -166,9 +166,9 @@ else
 fi
 
 
-if [ -z "$MOODLE_DB_PSD" ]; then
-  echo >&2 'error: missing required MOODLE_DB_PSD environment variable'
-  echo >&2 '  Did you forget to -e MOODLE_DB_PSD=... ?'
+if [ -z "$MOODLE_DB_PASSWORD" ]; then
+  echo >&2 'error: missing required MOODLE_DB_PASSWORD environment variable'
+  echo >&2 '  Did you forget to -e MOODLE_DB_PASSWORD=... ?'
   echo >&2
   exit 1
 fi
