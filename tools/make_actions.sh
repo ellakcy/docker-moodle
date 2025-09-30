@@ -42,6 +42,15 @@ jobs:
           docker --version
           chmod +x ".github/build_docker.sh"
           .github/build_docker.sh {{DOCKERFILE}}
+          
+  keepalive-job:
+    name: Keepalive Workflow
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: gautamkrishnar/keepalive-workflow@v2
 '
 
 generate_excludes() {
