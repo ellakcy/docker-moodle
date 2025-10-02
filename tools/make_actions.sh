@@ -27,7 +27,7 @@ jobs:
       PHP_VERSION: "${{ matrix.php_version }}"
     steps:
       - name: Check Out Repo 
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Login to Docker Hub
         if: github.ref != '\''refs/heads/dev'\''

@@ -56,6 +56,7 @@ jobs:
     permissions:
       actions: write
     steps:
+      - run: echo "Hello"
       - uses: actions/checkout@v4
       - uses: gautamkrishnar/keepalive-workflow@v2
 
