@@ -1,12 +1,9 @@
 name: deploy-alpine-fpm
 
-on:
-  schedule:
-    - cron: 23 0 * * 6 
+on: 
   push:
     branches: [ master, dev ]
   workflow_dispatch:
-    
 
 jobs:
   build_images:
@@ -36,7 +33,7 @@ jobs:
       PHP_VERSION: "${{ matrix.php_version }}"
     steps:
       - name: Check Out Repo 
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Login to Docker Hub
         if: github.ref != 'refs/heads/dev'
@@ -60,7 +57,6 @@ jobs:
     permissions:
       actions: write
     steps:
-      - run: echo "Hello"
       - uses: actions/checkout@v4
       - uses: gautamkrishnar/keepalive-workflow@v2
 

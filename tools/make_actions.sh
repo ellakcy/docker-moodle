@@ -7,11 +7,10 @@ source ${BASEDIR}/config.sh
 
 TEMPLATE='name: {{action_name}}
 
-on:
-  schedule:
-    - cron: {{cron_expression}} 
+on: 
   push:
     branches: [ master, dev ]
+  workflow_dispatch:
 
 jobs:
   build_images:
@@ -46,6 +45,8 @@ jobs:
   keepalive-job:
     name: Keepalive Workflow
     runs-on: ubuntu-latest
+    needs:
+      - build_images
     permissions:
       actions: write
     steps:
