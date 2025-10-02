@@ -1,4 +1,5 @@
 
+#!/bin/bash
 
 curl -X POST   
     -H "Accept: application/vnd.github+json" \
