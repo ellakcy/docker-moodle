@@ -10,7 +10,6 @@ class MoodleConfig:
             # Optional: convert key to valid Python identifier if needed
             setattr(self, key, value)
 
-        self.projectBaseNames=self.__project_basenames(self.DOCKERFILES)
         
     def __project_basenames(self,dockerfiles):
         return {

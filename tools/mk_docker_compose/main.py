@@ -1,6 +1,8 @@
 from config import MoodleConfig
 import sys
 import semver
+import inquirer
+import mk_docker_compose
 
 # Dict that wouldbe output as docker-compose
 docker_compose={
@@ -11,38 +13,67 @@ docker_compose={
 # env variables
 env={}
 
-
-
 def pad_semver(ver) -> str:
-
     parts = ver.split(".")
     while len(parts) < 3:
         parts.append("0")
     return ".".join(parts)
 
-if __name__:
-    config = MoodleConfig()
 
-    if len(sys.argv) < 2:
-        print("Usage: python main.py <dockerfile_path> [moodle_version] [php_version]")
-        sys.exit(1)
+def selectPHP(mooddleVersion: str,config: MoodleConfig)->str:
 
-    dockerfile_path = sys.argv[1]
-    moodle_version = sys.argv[2] if len(sys.argv) > 2 else config.LATEST
-    php_version = sys.argv[3] if len(sys.argv) > 3 else str(config.MOODLE_MIN_PHP[int(moodle_version)])
-    
     min_version = config.MOODLE_MIN_PHP[int(moodle_version)]
     min_version_full = pad_semver(str(min_version))
 
-    print("Dockerfile:", dockerfile_path)
+    available_versions=[]
+    print("Select PHP VERSION")
+    prompt_string=""
+    
+    for version in config.PHP_VERSIONS:
+        if semver.compare(pad_semver(version), min_version_full) < 0:
+            continue
+        
+        available_versions.append(version)
+
+    questions = [
+        inquirer.List(
+            'php_version',
+            message="Select PHP version",
+            choices=available_versions
+        ),
+    ]
+
+    return inquirer.prompt(questions)['php_version']
+
+
+if __name__:
+    config = MoodleConfig()
+
+    questions = [
+        inquirer.List(
+            'dockerfile',
+            message="Select Dockerfile",
+            choices=config.DOCKERFILES
+        ),
+        inquirer.List(
+            'moodle_version',
+            message="Select Moodle version",
+            choices=config.MOODLE_VERSIONS
+        ),
+    ]
+    
+    answers=inquirer.prompt(questions)
+    
+    dockerfile=answers['dockerfile']
+    moodle_version=answers['moodle_version']
+
+    print("Dockerfile:", dockerfile)
     print("Moodle version:", moodle_version)
-    print("PHP version:", php_version)
-
-    if semver.compare(pad_semver(php_version), min_version_full) < 0:
-        print(f"PHP version {php_version} is not supported for {moodle_version}. Minimum supported {min_version}")
-        sys.exit(1)
     
+    php_version=selectPHP(moodle_version,config)
     
+    print("PHP Version: ",php_version)
 
-
-
+    print("Creating docker-compose dir")
+    docker_compose_dir=mk_docker_compose.createDockerComposeDir(php_version,dockerfile,moodle_version)
+    print("Docker compose dir",docker_compose_dir)

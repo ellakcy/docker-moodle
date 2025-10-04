@@ -12,9 +12,9 @@
 # 
 # dockerfiles/fpm_alpine/Dockerfile : for fpm using alpine
 # dockerfiles/fpm/Dockerfile : for debian based fpm
-# dockerfiles/fpm_alpine/Dockerfile: for apache
+# dockerfiles/apache/Dockerfile: for apache
 #
-# If not provided is it assumes as an apache image
+# If not provided dockerfiles/apache/Dockerfile is assumed
 # ###########################################################################
 
 
@@ -46,8 +46,6 @@ case $DOCKERFILE in
     "dockerfiles/fpm/Dockerfile") SERVER_FAVOR="fpm";;
     *) DOCKERFILE="dockerfiles/apache/Dockerfile"; SERVER_FAVOR="apache";;
 esac
-
-DB_FLAVORS=("mysql_maria" "postgresql" "multibase")
 
 BUILD_NUMBER=$(date +"%Y%m%d%H%M")
 

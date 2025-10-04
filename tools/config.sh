@@ -18,6 +18,7 @@ declare -A MOODLE_MIN_PHP=(
 MOODLE_VERSIONS=(401 404 405 500)
 PHP_VERSIONS=('7.4' '8.0' '8.1' '8.2' '8.3' '8.4')
 DOCKERFILES=('dockerfiles/fpm_alpine/Dockerfile' 'dockerfiles/apache/Dockerfile' 'dockerfiles/fpm/Dockerfile')
+DB_FLAVORS=("mysql_maria" "postgresql" "multibase")
 
 declare -A CRON=(
     ['dockerfiles/fpm_alpine/Dockerfile']='23 0 * * 6'
