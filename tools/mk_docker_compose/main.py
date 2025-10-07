@@ -77,4 +77,6 @@ if __name__:
     docker_compose_dir=mk_docker_compose.createDockerComposeDir(php_version,execution_type,moodle_version)
     print("Docker compose dir",docker_compose_dir)
 
+    mk_docker_compose.createDockerCompose(docker_compose_dir,dockerfile,php_version,moodle_version,config)
+
 
