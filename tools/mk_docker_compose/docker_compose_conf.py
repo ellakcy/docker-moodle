@@ -96,7 +96,7 @@ docker_compose_db_services = {
             "MYSQL_PASSWORD":db_pass
         },
         "volumes": [
-            db_volumes[mariadb_db_service_name]+"_data:/var/lib/mysql"
+            db_volumes[mariadb_db_service_name]+":/var/lib/mysql"
         ]
     },
     mysql_db_service_name:{
