@@ -16,8 +16,8 @@ db_pass="moodlepass"
 db_user="moodledbusr"
 root_db_pass="rootpass"
 
-moodle_admin="admin",
-moodle_admin_password="StrongPassword123",
+moodle_admin="admin"
+moodle_admin_password="StrongPassword123"
 moodle_admin_email="admin@example.com"
 
 # Service env variables

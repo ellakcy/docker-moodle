@@ -72,11 +72,14 @@ if __name__:
     print("PHP Version: ",php_version)
 
     print("Creating docker-compose dir")
+    generator = mk_docker_compose.DockerComposeCreator(
+        moodle_version,
+        php_version,
+        dockerfile,
+        config
+    )
 
-    execution_type=mk_docker_compose.getPHPExecutionType(dockerfile)
-    docker_compose_dir=mk_docker_compose.createDockerComposeDir(php_version,execution_type,moodle_version)
-    print("Docker compose dir",docker_compose_dir)
+    generator.create()
 
-    mk_docker_compose.createDockerCompose(docker_compose_dir,dockerfile,php_version,moodle_version,config)
 
 
