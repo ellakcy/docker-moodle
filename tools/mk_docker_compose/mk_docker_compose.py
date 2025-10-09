@@ -4,7 +4,7 @@ import time
 import yaml
 
 from config import MoodleConfig
-from netconf import get_non_listening_tcp_port
+from netconf import PortService
 import docker_compose_conf
 
 def get_db_version(config:MoodleConfig,db_service_name:str,moodle_version:str)->str:
@@ -19,16 +19,23 @@ def get_db_version(config:MoodleConfig,db_service_name:str,moodle_version:str)->
     return str(version)
 
 class NginxServiceGenerator:
+
     def __init__(self, dockerfile:str):
+
         self.__dockerfile = dockerfile
         self.__fpm_services={}
     
-    def setPort(php_service_name:str,port:int):
+    def setPort(self,php_service_name:str,port:int):
         self.__fpm_services[php_service_name]['http_port']=port
     
-    def setVolume(php_service_name:str,volume:str):
+    def setVolume(self,php_service_name:str,volume:str):
         pass
+    
+    def generate(self):
+        if self.__dockerfile == 'dockerfiles/apache/Dockerfile':
+            return None
 
+        return {}
 
 class DockerComposeCreator:
 
@@ -41,11 +48,9 @@ class DockerComposeCreator:
 
         self.__basedir = self.__createDockerComposeDir()
         
-        self.__create_nginx = True
+        self.__port_service = PortService('localhost',8000,9000)
+        self.__nginx_generator = NginxServiceGenerator(self.__dockerfile)
 
-        if self.__dockerfile == 'dockerfiles/apache/Dockerfile':
-            self.__create_nginx=False
-        
    
     def __createDockerComposeDir(self)->str:
 
@@ -81,8 +86,6 @@ class DockerComposeCreator:
             "volumes":{}
         }
 
-        last_port = 8000
-
         for db_service_name in docker_compose_conf.db_services:
 
             db_service = docker_compose_conf.docker_compose_db_services[db_service_name]
@@ -107,10 +110,10 @@ class DockerComposeCreator:
 
             moodle_service_name='php_'+db_service_name
 
-            last_port=get_non_listening_tcp_port("localhost",last_port,9000)
-            last_port=str(last_port)
+            port=self.__port_service.next_free()
+            # self.__nginx_generator.setPort(moodle_service_name,last_port)
 
-            php_env={"MOODLE_URL":"http://localhost:"+last_port}|docker_compose_conf.moodle_service_env_vars['common']|docker_compose_conf.moodle_service_env_vars['db'][db_service_name]
+            php_env={"MOODLE_URL":"http://localhost:"+str(port)}|docker_compose_conf.moodle_service_env_vars['common']|docker_compose_conf.moodle_service_env_vars['db'][db_service_name]
             
             php_base_service = {
                 "build": {
@@ -128,7 +131,7 @@ class DockerComposeCreator:
                     www_volume+":/var/www"
                 ],
                 "ports":[
-                    last_port+":80"
+                   f"{port}:80"
                 ],
                 'depends_on':[db_service_name],
                 "environment":php_env,
