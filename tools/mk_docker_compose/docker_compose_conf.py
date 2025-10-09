@@ -82,8 +82,8 @@ moodle_www_volumes={
 
 # Service Config
 docker_compose_db_services = {
-    mariadb_db_service_name:{
-        "image": "mariadb",
+    mysql_db_service_name:{
+        "image": "mysql",
         "command": [
             "mysqld",
             "--character-set-server=utf8mb4",
@@ -96,11 +96,12 @@ docker_compose_db_services = {
             "MYSQL_PASSWORD":db_pass
         },
         "volumes": [
-            db_volumes[mariadb_db_service_name]+":/var/lib/mysql"
+            db_volumes[mysql_db_service_name]+":/var/lib/mysql"
         ]
     },
-    mysql_db_service_name:{
-        "image": "mysql",
+    
+    mariadb_db_service_name:{
+        "image": "mariadb",
         "command": [
             "mysqld",
             "--character-set-server=utf8mb4",
@@ -113,7 +114,7 @@ docker_compose_db_services = {
             "MARIADB_PASSWORD":db_pass
         },
         "volumes": [
-            db_volumes[mysql_db_service_name]+":/var/lib/mysql"
+            db_volumes[mariadb_db_service_name]+":/var/lib/mysql"
         ]
     },
     postgres_db_service_name:{
