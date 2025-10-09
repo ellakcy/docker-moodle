@@ -1,6 +1,43 @@
 import socket
 import os
+import yaml
 
+def collect_used_ports(base_dir: str) -> list[int]:
+    """
+    Scan all docker-compose.yml files under base_dir and collect host ports.
+    """
+    used_ports = []
+
+    print(base_dir)
+    for root, dirs, files in os.walk(base_dir):
+        if "docker-compose.yml" in files:
+            compose_path = os.path.join(root, "docker-compose.yml")
+            try:
+                with open(compose_path, "r") as f:
+                    data = yaml.safe_load(f)
+                    if not data or "services" not in data:
+                        continue
+                    
+                    for service_name, service_def in data["services"].items():
+                        ports = service_def.get("ports", [])
+                        for p in ports:
+                            # Handle both "8080:80" and YAML list form [8080:80]
+                            if isinstance(p, str) and ":" in p:
+                                host_port = p.split(":")[0]
+                            elif isinstance(p, int):
+                                host_port = p
+                            else:
+                                continue
+                            
+                            try:
+                                used_ports.append(int(host_port))
+                            except ValueError:
+                                pass  # skip if not a valid int
+
+            except Exception as e:
+                print(f"⚠️ Could not read {compose_path}: {e}")
+
+    return used_ports
 
 class PortService:
     def __init__(self,host, from_port=0, to_port=0,used_ports=list()):

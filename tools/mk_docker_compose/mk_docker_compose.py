@@ -4,7 +4,7 @@ import time
 import yaml
 
 from config import MoodleConfig
-from netconf import PortService
+from netconf import PortService,collect_used_ports
 import docker_compose_conf
 
 def get_db_version(config:MoodleConfig,db_service_name:str,moodle_version:str)->str:
@@ -48,7 +48,8 @@ class DockerComposeCreator:
 
         self.__basedir = self.__createDockerComposeDir()
         
-        self.__port_service = PortService('localhost',8000,9000)
+        used_ports = collect_used_ports(os.path.join(self.__basedir,'..'))
+        self.__port_service = PortService('localhost',8000,9000,used_ports)
         self.__nginx_generator = NginxServiceGenerator(self.__dockerfile)
 
    
