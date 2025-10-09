@@ -18,6 +18,17 @@ def get_db_version(config:MoodleConfig,db_service_name:str,moodle_version:str)->
     
     return str(version)
 
+class NginxServiceGenerator:
+    def __init__(self, dockerfile:str):
+        self.__dockerfile = dockerfile
+        self.__fpm_services={}
+    
+    def setPort(php_service_name:str,port:int):
+        self.__fpm_services[php_service_name]['http_port']=port
+    
+    def setVolume(php_service_name:str,volume:str):
+        pass
+
 
 class DockerComposeCreator:
 
@@ -60,6 +71,7 @@ class DockerComposeCreator:
             yaml.dump(docker_compose,file, sort_keys=False)
     
     def __generateDockerComposeDict(self)->dict:
+
         project_name=Path(self.__basedir).name.replace(".","_")
 
         docker_compose={
