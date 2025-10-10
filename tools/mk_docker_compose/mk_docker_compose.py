@@ -1,6 +1,8 @@
 import os
 from pathlib import Path
 import time
+from collections import defaultdict
+
 import yaml
 
 from config import MoodleConfig
@@ -20,22 +22,46 @@ def get_db_version(config:MoodleConfig,db_service_name:str,moodle_version:str)->
 
 class NginxServiceGenerator:
 
-    def __init__(self, dockerfile:str):
+    def __init__(self, basedir:str):
 
-        self.__dockerfile = dockerfile
-        self.__fpm_services={}
+        self.__basedir = basedir
+        self.__fpm_services=defaultdict(dict)
     
+    def __generate_bind_mount(self)->str:
+        dirname = os.path.join(self.__basedir,"nginx")
+        os.mkdir(dirname)
+
+        return dirname
+
+
     def setPort(self,php_service_name:str,port:int):
         self.__fpm_services[php_service_name]['http_port']=port
     
     def setVolume(self,php_service_name:str,volume:str):
-        pass
+        self.__fpm_services[php_service_name]['www_volume']=volume
+        
     
-    def generate(self):
-        if self.__dockerfile == 'dockerfiles/apache/Dockerfile':
-            return None
+    def generate(self)->dict:
 
-        return {}
+        service = {
+            'image':'nginx:alpine',
+            'ports':[],
+            "volumes":[],
+            "depends_on":[]
+        }
+
+        bind_mount_dir=self.__generate_bind_mount()
+        
+        for service,options in self.__fpm_services.items():
+            www_volume=f"{options[service]['www_volume']}:/var/www/{service}"
+            service['volumes'].append(www_volume)
+            service['ports'].append(f"{options[service]['http_port']}:{options[service]['http_port']}")
+            service['depends_on'].append(service)
+            # TODO: Create vhost
+
+
+        return service
+
 
 class DockerComposeCreator:
 
@@ -50,7 +76,9 @@ class DockerComposeCreator:
         
         used_ports = collect_used_ports(os.path.join(self.__basedir,'..'))
         self.__port_service = PortService('localhost',8000,9000,used_ports)
-        self.__nginx_generator = NginxServiceGenerator(self.__dockerfile)
+        self.__nginx_generator = None
+        if  self.__dockerfile != 'dockerfiles/apache/Dockerfile':
+            self.__nginx_generator = NginxServiceGenerator(self.__basedir)
 
    
     def __createDockerComposeDir(self)->str:
@@ -112,7 +140,9 @@ class DockerComposeCreator:
             moodle_service_name='php_'+db_service_name
 
             port=self.__port_service.next_free()
-            # self.__nginx_generator.setPort(moodle_service_name,last_port)
+            if self.__nginx_generator is not None:
+                self.__nginx_generator.setPort(moodle_service_name,port)
+                self.__nginx_generator.setVolume(moodle_service_name,www_volume)
 
             php_env={"MOODLE_URL":"http://localhost:"+str(port)}|docker_compose_conf.moodle_service_env_vars['common']|docker_compose_conf.moodle_service_env_vars['db'][db_service_name]
             
@@ -129,7 +159,7 @@ class DockerComposeCreator:
                 "container_name":project_name+"_"+moodle_service_name,
                 'volumes': [
                     data_volume+":/var/moodledata",
-                    www_volume+":/var/www"
+                    www_volume+":/var/www/html"
                 ],
                 "ports":[
                    f"{port}:80"
@@ -137,8 +167,14 @@ class DockerComposeCreator:
                 'depends_on':[db_service_name],
                 "environment":php_env,
             }
-                
+
+            
+
             docker_compose['services'][moodle_service_name]=php_base_service
+
+        nginx_service = self.__nginx_generator.generate()
+        if nginx_service is not None:
+            docker_compose['services']=nginx_service
 
         return docker_compose
 

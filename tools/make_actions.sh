@@ -10,6 +10,14 @@ TEMPLATE='name: {{action_name}}
 on: 
   push:
     branches: [ master, dev ]
+    paths-ignore:
+      - *.md
+      - tools/*
+      - conf/*
+      - vagrant_provision/*
+      - Vagrantfile
+      - Licence.txt
+      - VERSION
   workflow_dispatch:
 
 jobs:
@@ -41,17 +49,7 @@ jobs:
           docker --version
           chmod +x ".github/build_docker.sh"
           .github/build_docker.sh {{DOCKERFILE}}
-          
-  keepalive-job:
-    name: Keepalive Workflow
-    runs-on: ubuntu-latest
-    needs:
-      - build_images
-    permissions:
-      actions: write
-    steps:
-      - uses: actions/checkout@v4
-      - uses: gautamkrishnar/keepalive-workflow@v2
+
 '
 
 generate_excludes() {
