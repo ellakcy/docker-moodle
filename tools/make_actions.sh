@@ -11,7 +11,7 @@ on:
   push:
     branches: [ master, dev ]
     paths-ignore:
-      - *.md
+      - ./*.md
       - tools/*
       - conf/*
       - vagrant_provision/*
