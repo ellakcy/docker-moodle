@@ -40,7 +40,9 @@ class NginxServiceGenerator:
     def setVolume(self,php_service_name:str,volume:str):
         self.__fpm_services[php_service_name]['www_volume']=volume
         
-    
+    def __create_vhost(service_name:str,port:int)
+        pass
+
     def generate(self)->dict:
 
         service = {
