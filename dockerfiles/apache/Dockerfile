@@ -7,7 +7,7 @@ FROM  php:${PHP_VERSION}-apache AS base
 
 # Replace for later version
 
-VOLUME ["/var/moodledata"]
+VOLUME ["/var/moodledata","/var/www/html"]
 
 # Let the container know that there is no tty
 ENV DEBIAN_FRONTEND=noninteractive \
