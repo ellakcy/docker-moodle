@@ -174,18 +174,28 @@ class DockerComposeCreator:
                     data_volume+":/var/moodledata",
                     www_volume+":/var/www/html"
                 ],
-                "ports":[
-                   f"{port}:80"
-                ],
                 'depends_on':[db_service_name],
                 "environment":php_env,
             }
+
+            
+
+            if  self.__dockerfile == 'dockerfiles/apache/Dockerfile': 
+                docker_compose = {
+                    **docker_compose,
+                    "ports":[
+                        f"{port}:80"
+                    ],
+                }
 
             docker_compose['services'][moodle_service_name]=php_base_service
 
         nginx_service = self.__nginx_generator.generate()
         if nginx_service is not None:
-            docker_compose['services']['nginx']=nginx_service
+            docker_compose['services']={
+                'nginx':nginx_service,
+                **docker_compose['services']
+            }
 
         return docker_compose
 
