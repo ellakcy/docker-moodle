@@ -12,9 +12,9 @@
 # 
 # dockerfiles/fpm_alpine/Dockerfile : for fpm using alpine
 # dockerfiles/fpm/Dockerfile : for debian based fpm
-# dockerfiles/fpm_alpine/Dockerfile: for apache
+# dockerfiles/apache/Dockerfile: for apache
 #
-# If not provided is it assumes as an apache image
+# If not provided dockerfiles/apache/Dockerfile is assumed
 # ###########################################################################
 
 
@@ -23,12 +23,18 @@ SCRIPT=$(readlink -f "${BASH_SOURCE}")
 # Absolute path this script is in, thus /home/user/bin
 BASEDIR=$(dirname ${SCRIPT})
 
-source ${BASEDIR}/config.sh
+source ${BASEDIR}/../tools/config.sh
 
-PHP_VERSION=${PHP_VERSION:=${DEFAULT_PHP}}
+MIN_PHP=${MOODLE_MIN_PHP[$VERSION]}
+PHP_VERSION=${PHP_VERSION:=${MIN_PHP}}
 
 if [ "$PHP_VERSION" == "${DEFAULT_PHP}" ]; then
     echo "$PHP_VERSION is same to ${DEFAULT_PHP}"
+fi
+
+if (( $(echo "$PHP_VERSION < $MIN_PHP" | bc -l) )); then
+    echo "❌ ERROR: Moodle $VERSION requires at least PHP $MIN_PHP, but you set PHP $PHP_VERSION"
+    exit 1
 fi
 
 SERVER_FAVOR="apache"
@@ -40,8 +46,6 @@ case $DOCKERFILE in
     "dockerfiles/fpm/Dockerfile") SERVER_FAVOR="fpm";;
     *) DOCKERFILE="dockerfiles/apache/Dockerfile"; SERVER_FAVOR="apache";;
 esac
-
-DB_FLAVORS=("mysql_maria" "postgresql" "multibase")
 
 BUILD_NUMBER=$(date +"%Y%m%d%H%M")
 
