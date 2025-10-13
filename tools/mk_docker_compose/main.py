@@ -1,4 +1,4 @@
-from config import MoodleConfig
+from conf.config import MoodleConfig
 import sys
 import semver
 import inquirer

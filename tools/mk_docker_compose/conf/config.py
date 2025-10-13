@@ -20,7 +20,7 @@ class MoodleConfig:
     def __get_yaml_contents(self):
        script_dir = Path(__file__).parent 
        # Resolve the relative path to the shell script
-       sh_script = (script_dir / "../conf_to_yaml.sh").resolve()
+       sh_script = (script_dir / "../../conf_to_yaml.sh").resolve()
        result = subprocess.run(
          ["bash",sh_script],
          capture_output=True,

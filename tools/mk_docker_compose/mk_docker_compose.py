@@ -5,17 +5,17 @@ from collections import defaultdict
 
 import yaml
 
-from config import MoodleConfig
 from netconf import PortService,collect_used_ports
-from nginx_conf import nginx_vhost
 
-import docker_compose_conf
+from conf.config import MoodleConfig
+from conf.nginx_conf import nginx_vhost
+import conf.docker_compose_conf
 
 def get_db_version(config:MoodleConfig,db_service_name:str,moodle_version:str)->str:
 
-    if(db_service_name == docker_compose_conf.mysql_db_service_name):
+    if(db_service_name == conf.docker_compose_conf.mysql_db_service_name):
         version=config.MIN_MYSQL_VERSION[moodle_version]
-    elif(db_service_name == docker_compose_conf.mariadb_db_service_name):
+    elif(db_service_name == conf.docker_compose_conf.mariadb_db_service_name):
         version=config.MIN_MARIADB_VERSION[moodle_version]
     else:
         version=config.MIN_POSTGRES_VERSION[moodle_version]
@@ -127,9 +127,9 @@ class DockerComposeCreator:
             "volumes":{}
         }
 
-        for db_service_name in docker_compose_conf.db_services:
+        for db_service_name in conf.docker_compose_conf.db_services:
 
-            db_service = docker_compose_conf.docker_compose_db_services[db_service_name]
+            db_service = conf.docker_compose_conf.docker_compose_db_services[db_service_name]
             db_service['container_name']=project_name+'_'+db_service_name
             db_service['image']=db_service['image']+":"+get_db_version(self.__config,db_service_name,self.__moodle_version)
 
@@ -141,10 +141,10 @@ class DockerComposeCreator:
                 'volumes':db_service['volumes']
             }
 
-            docker_compose['volumes'][docker_compose_conf.db_volumes[db_service_name]]=None
+            docker_compose['volumes'][conf.docker_compose_conf.db_volumes[db_service_name]]=None
 
-            data_volume = docker_compose_conf.moodle_data_volumes[db_service_name]
-            www_volume = docker_compose_conf.moodle_www_volumes[db_service_name]
+            data_volume = conf.docker_compose_conf.moodle_data_volumes[db_service_name]
+            www_volume = conf.docker_compose_conf.moodle_www_volumes[db_service_name]
 
             docker_compose['volumes'][www_volume]=None
             docker_compose['volumes'][data_volume]=None
@@ -157,7 +157,7 @@ class DockerComposeCreator:
                 self.__nginx_generator.setPort(moodle_service_name,port)
                 self.__nginx_generator.setVolume(moodle_service_name,www_volume)
 
-            php_env={"MOODLE_URL":"http://localhost:"+str(port)}|docker_compose_conf.moodle_service_env_vars['common']|docker_compose_conf.moodle_service_env_vars['db'][db_service_name]
+            php_env={"MOODLE_URL":"http://localhost:"+str(port)}|conf.docker_compose_conf.moodle_service_env_vars['common']|conf.docker_compose_conf.moodle_service_env_vars['db'][db_service_name]
             
             php_base_service = {
                 "build": {
