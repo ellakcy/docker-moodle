@@ -45,7 +45,7 @@ class NginxServiceGenerator:
     def __create_vhost(self,basedir:str,service_name:str,port:int,www_dir:str)->str:
         
         config_content = nginx_vhost.format(port=port,service_name=service_name,nginx_www=www_dir)
-        config_filename = os.path.join(basedir,"{service_name}.conf")
+        config_filename = os.path.join(basedir,f"{service_name}.conf")
         with open(config_filename,"w") as file:
             file.write(config_content)
 
@@ -58,7 +58,7 @@ class NginxServiceGenerator:
         nginx_service = {
             'image':'nginx:alpine',
             'ports':[],
-            "volumes":[f"{bind_mount_dir}:/etc/nginx/conf.d:ro"],
+            "volumes":[f"./nginx:/etc/nginx/conf.d:ro"],
             "depends_on":[]
         }
         
@@ -185,7 +185,7 @@ class DockerComposeCreator:
 
         nginx_service = self.__nginx_generator.generate()
         if nginx_service is not None:
-            docker_compose['services']=nginx_service
+            docker_compose['services']['nginx']=nginx_service
 
         return docker_compose
 
