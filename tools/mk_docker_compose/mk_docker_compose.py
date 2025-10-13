@@ -7,6 +7,8 @@ import yaml
 
 from config import MoodleConfig
 from netconf import PortService,collect_used_ports
+from nginx_conf import nginx_vhost
+
 import docker_compose_conf
 
 def get_db_version(config:MoodleConfig,db_service_name:str,moodle_version:str)->str:
@@ -40,29 +42,37 @@ class NginxServiceGenerator:
     def setVolume(self,php_service_name:str,volume:str):
         self.__fpm_services[php_service_name]['www_volume']=volume
         
-    def __create_vhost(service_name:str,port:int)
-        pass
+    def __create_vhost(self,basedir:str,service_name:str,port:int,www_dir:str)->str:
+        
+        config_content = nginx_vhost.format(port=port,service_name=service_name,nginx_www=www_dir)
+        config_filename = os.path.join(basedir,"{service_name}.conf")
+        with open(config_filename,"w") as file:
+            file.write(config_content)
+
+        return config_filename
 
     def generate(self)->dict:
 
-        service = {
+        bind_mount_dir=self.__generate_bind_mount()
+
+        nginx_service = {
             'image':'nginx:alpine',
             'ports':[],
-            "volumes":[],
+            "volumes":[f"{bind_mount_dir}:/etc/nginx/conf.d:ro"],
             "depends_on":[]
         }
-
-        bind_mount_dir=self.__generate_bind_mount()
         
         for service,options in self.__fpm_services.items():
-            www_volume=f"{options[service]['www_volume']}:/var/www/{service}"
-            service['volumes'].append(www_volume)
-            service['ports'].append(f"{options[service]['http_port']}:{options[service]['http_port']}")
-            service['depends_on'].append(service)
-            # TODO: Create vhost
+            www_dir = f"/var/www/{service}"
+            www_volume=f"{options['www_volume']}:{www_dir}"
 
+            nginx_service['volumes'].append(www_volume)
+            port=options['http_port']
+            nginx_service['ports'].append(f"{port}:{port}")
+            nginx_service['depends_on'].append(service)
+            vhost_file = self.__create_vhost(basedir=bind_mount_dir,service_name=service,port=port,www_dir=www_dir)
 
-        return service
+        return nginx_service
 
 
 class DockerComposeCreator:
@@ -142,6 +152,7 @@ class DockerComposeCreator:
             moodle_service_name='php_'+db_service_name
 
             port=self.__port_service.next_free()
+
             if self.__nginx_generator is not None:
                 self.__nginx_generator.setPort(moodle_service_name,port)
                 self.__nginx_generator.setVolume(moodle_service_name,www_volume)
@@ -169,8 +180,6 @@ class DockerComposeCreator:
                 'depends_on':[db_service_name],
                 "environment":php_env,
             }
-
-            
 
             docker_compose['services'][moodle_service_name]=php_base_service
 
